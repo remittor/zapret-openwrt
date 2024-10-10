@@ -1,5 +1,5 @@
 #
-# Copyright (ñ) 2024 remittor
+# Copyright (ï¿½) 2024 remittor
 #
 
 include $(TOPDIR)/rules.mk
@@ -52,7 +52,12 @@ endef
 define Package/$(PKG_NAME)/conffiles
 /etc/config/zapret
 /opt/zapret/config
-/opt/zapret/youtube.txt
+/opt/zapret/ipset/zapret-hosts-user.txt
+/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+/opt/zapret/ipset/zapret-hosts-user-ipban.txt
+/opt/zapret/ipset/zapret-ip-user.txt
+/opt/zapret/ipset/zapret-ip-user-exclude.txt
+/opt/zapret/ipset/zapret-ip-user-ipban.txt
 endef
 
 #define Build/Configure
@@ -73,8 +78,8 @@ define Package/$(PKG_NAME)/install
 	$(CP) $(PKG_BUILD_DIR)/files/* $(1)/opt/zapret/files/
 	$(INSTALL_DIR) $(1)/opt/zapret/ipset
 	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)/opt/zapret/ipset/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/blockcheck.sh  $(1)/opt/zapret/blockcheck.sh
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret/config.default
+	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck.sh  $(1)/opt/zapret/blockcheck.sh
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret/config.default
 	$(INSTALL_DIR) $(1)/opt/zapret/tmp
 	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt
 	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)/opt/zapret/init.d/openwrt/
@@ -85,7 +90,15 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./zapret.config $(1)/etc/config/zapret
 	$(INSTALL_CONF) ./config        $(1)/opt/zapret/config
-	$(INSTALL_CONF) ./youtube.txt   $(1)/opt/zapret/youtube.txt
+	#$(INSTALL_CONF) ./ipset/zapret-hosts-auto.txt         $(1)/opt/zapret/ipset/zapret-hosts-auto.txt
+	$(INSTALL_CONF) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
+	$(INSTALL_CONF) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+	$(INSTALL_CONF) ./ipset/zapret-hosts-user-ipban.txt   $(1)/opt/zapret/ipset/zapret-hosts-user-ipban.txt
+	#$(INSTALL_CONF) ./ipset/zapret-ip.txt                 $(1)/opt/zapret/ipset/zapret-ip.txt
+	$(INSTALL_CONF) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
+	$(INSTALL_CONF) ./ipset/zapret-ip-user.txt            $(1)/opt/zapret/ipset/zapret-ip-user.txt
+	$(INSTALL_CONF) ./ipset/zapret-ip-user-exclude.txt    $(1)/opt/zapret/ipset/zapret-ip-user-exclude.txt
+	$(INSTALL_CONF) ./ipset/zapret-ip-user-ipban.txt      $(1)/opt/zapret/ipset/zapret-ip-user-ipban.txt
 endef
 
 define Package/$(PKG_NAME)/postinst
