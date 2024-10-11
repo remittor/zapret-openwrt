@@ -1,5 +1,5 @@
 #
-# Copyright (�) 2024 remittor
+# Copyright (c) 2024 remittor
 #
 
 include $(TOPDIR)/rules.mk
@@ -99,6 +99,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_CONF) ./ipset/zapret-ip-user.txt            $(1)/opt/zapret/ipset/zapret-ip-user.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-user-exclude.txt    $(1)/opt/zapret/ipset/zapret-ip-user-exclude.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-user-ipban.txt      $(1)/opt/zapret/ipset/zapret-ip-user-ipban.txt
+	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
 endef
 
 define Package/$(PKG_NAME)/postinst

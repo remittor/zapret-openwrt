@@ -1,0 +1,36 @@
+{
+	"admin/services/zapret": {
+		"title": "Zapret",
+		"order": 61,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/zapret/service"
+		},
+		"depends": {
+			"acl": [ "luci-app-zapret" ],
+			"fs": {
+				"/opt/zapret/sync_config.sh": "executable",
+				"/etc/init.d/zapret": "executable"
+			},
+			"uci": { "zapret": true }
+		}
+	},
+
+	"admin/services/zapret/service": {
+		"title": "Service",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "zapret/service"
+		}
+	},
+
+	"admin/services/zapret/settings": {
+		"title": "Settings",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "zapret/settings"
+		}
+	}
+}

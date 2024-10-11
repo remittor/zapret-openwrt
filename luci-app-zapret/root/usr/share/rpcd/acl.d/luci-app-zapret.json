@@ -1,0 +1,27 @@
+{
+	"luci-app-zapret": {
+		"description": "Grant access to zapret procedures",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/opt/zapret/config": [ "read" ],
+				"/opt/zapret/ipset/*": [ "read" ],
+				"/etc/crontabs/root": [ "read" ],
+				"/etc/init.d/zapret*": [ "exec" ],
+                "/opt/zapret/sync_config.sh": [ "exec" ]
+			},
+			"uci": [ "zapret", "network", "firewall" ],
+			"ubus": {
+				"luci": [ "getInitList", "setInitAction" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/opt/zapret/config": [ "write" ],
+				"/opt/zapret/ipset/*.txt": [ "write" ],
+				"/etc/crontabs/root": [ "write" ]
+			},
+			"uci": [ "zapret" ]
+		}
+	}
+}
