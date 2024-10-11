@@ -8,9 +8,9 @@
 				"/opt/zapret/ipset/*": [ "read" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/etc/init.d/zapret*": [ "exec" ],
-                "/opt/zapret/sync_config.sh": [ "exec" ]
+				"/opt/zapret/sync_config.sh*": [ "exec" ]
 			},
-			"uci": [ "zapret", "network", "firewall" ],
+			"uci": [ "zapret", "network" ],
 			"ubus": {
 				"luci": [ "getInitList", "setInitAction" ]
 			}

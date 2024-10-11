@@ -134,6 +134,11 @@ return view.extend({
                     name = "<EMPTY>";
                 return name;
             };
+            o.validate = function(section_id, value) {
+                if (!value)
+                    return "";
+                return value;
+            };
         };
 
         add_delim();
@@ -170,29 +175,27 @@ return view.extend({
         tabname = 'blacklist_tab'; 
         s.tab(tabname, _('Blacklist settings'));
 
-        let user_entries_edit = new tools.fileEditDialog(            
+        o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.onclick = () => new tools.fileEditDialog(            
             tools.userEntriesFile,
             _('User entries'),
             _('One hostname per line.<br />Examples:'),
             '<code>domain.net<br />sub.domain.com<br />googlevideo.com</code>',
             15
-        );
-        o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries'));
-        o.onclick    = () => user_entries_edit.show();
+        ).show();
+
+        o = s.taboption(tabname, form.Button, '_ip_filter_btn', _('User IP entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
-
-        let ip_filter_edit = new tools.fileEditDialog(
+        o.onclick = () => new tools.fileEditDialog(
             tools.ipFilterFile,
             _('IP filter'),
             _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
             '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
             15
-        );
-        o = s.taboption(tabname, form.Button, '_ip_filter_btn', _('User IP entries'));
-        o.onclick    = () => ip_filter_edit.show();
-        o.inputtitle = _('Edit');
-        o.inputstyle = 'edit btn';        
+        ).show();
 
         let map_promise = m.render();
         map_promise.then(node => node.classList.add('fade-in'));
@@ -202,9 +205,9 @@ return view.extend({
     handleSaveApply: function(ev, mode) {
         return this.handleSave(ev).then(() => {
             ui.changes.apply(mode == '0');
-            if (this.appStatusCode != 1 && this.appStatusCode != 2) {
-                window.setTimeout(() => fs.exec(tools.execPath, [ 'restart' ]), 3000);
-            }
+            //if (this.appStatusCode != 1 && this.appStatusCode != 2) {
+            //    window.setTimeout(() => fs.exec(tools.execPath, [ 'restart' ]), 3000);
+            //}
         });
     },
 });

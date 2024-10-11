@@ -91,7 +91,7 @@ return baseclass.extend({
     makeStatusString: function(app_status_code, fwtype, bllist_preset) {
         let app_status_label;
         let spinning = '';
-
+        /*
         switch(app_status_code) {
             case 0:
                 app_status_label = this.infoLabelRunning;
@@ -120,7 +120,7 @@ return baseclass.extend({
                             </tr>
                         </table>`;
         }
-
+        */
         return `<table class="table">
                     <tr class="tr">
                         <td class="td left" style="min-width:33%%">
@@ -307,9 +307,13 @@ return baseclass.extend({
             let value = txt.value.trim().replace(/\r\n/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trim();
 
             uci.set('zapret', this.cfgsec, this.cfgparam, value);
-            
+            uci.save();
+            ui.hideModal();
+            //ui.refreshPage(); // TODO
+            /*
             return uci.save()
             .then(L.bind(ui.changes.init, ui.changes))
+            .then(L.bind(ui.changes.displayChanges, ui.changes))
             //.then(L.bind(ui.changes.apply, ui.changes))
             .then(ui.addNotification(null, E('p', _('Contents have been saved.')), 'info'))
             .catch(e => {
@@ -317,6 +321,7 @@ return baseclass.extend({
             }).finally(() => {
                 ui.hideModal();
             });
+            */
         },
 
         error: function(e) {
@@ -335,10 +340,10 @@ return baseclass.extend({
         },
 
         show: function() {
-            ui.showModal(null, E('p', { 'class': 'spinning' }, _('Loading')) );
+            //ui.showModal(null, E('p', { 'class': 'spinning' }, _('Loading')) );
             let content = this.load();
-            ui.hideModal();
-            if (content == null) {
+            //ui.hideModal();
+            if (content === null) {
                 return this.error('Cannot load parameter');
             }    
             return this.render(content);

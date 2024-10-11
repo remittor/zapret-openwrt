@@ -10,18 +10,19 @@ const btn_style_neutral  = 'btn';
 const btn_style_action   = 'btn cbi-button-action';
 const btn_style_positive = 'btn cbi-button-save important';
 const btn_style_negative = 'btn cbi-button-reset important';
-const btn_style_warning  = 'btn cbi-button-negative important';
+const btn_style_warning  = 'btn cbi-button-negative';
+const btn_style_success  = 'btn cbi-button-success important';
 
 return view.extend({
     disableButtons: function(flag, btn, elems = [ ]) {
         let btn_start   = elems[1] || document.getElementById("btn_start");
-        let btn_destroy = elems[4] || document.getElementById("btn_destroy");
+        //let btn_destroy = elems[4] || document.getElementById("btn_destroy");
         let btn_enable  = elems[2] || document.getElementById("btn_enable");
         let btn_update  = elems[3] || document.getElementById("btn_update");
 
         btn_start.disabled   = flag;
         btn_update.disabled  = true; // TODO
-        btn_destroy.disabled = flag;
+        //btn_destroy.disabled = flag;
         if (btn === btn_update) {
             btn_enable.disabled = false;
         } else {
@@ -34,6 +35,7 @@ return view.extend({
             { code: -1 }, //fs.exec(tools.execPath, [ 'raw-status' ]),
             { code: -1 }, //fs.exec(tools.execPath, [ 'vpn-route-status' ]),
             tools.getInitStatus(tools.appName),
+            //L.resolveDefault(fs.read(tools.tokenFile), 0),
             uci.load(tools.appName),
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
@@ -60,6 +62,7 @@ return view.extend({
         let bllist_preset         = 'user_only';
 
         let btn_enable = elems[2] || document.getElementById('btn_enable');
+        /*
         if (enabled_flag == true) {
             btn_enable.onclick     = ui.createHandlerFn(this, this.serviceAction, 'disable', 'btn_enable');
             btn_enable.textContent = _('Enabled');
@@ -69,21 +72,21 @@ return view.extend({
             btn_enable.textContent = _('Disabled');
             btn_enable.className   = btn_style_negative;
         }
-
+        */
         let btn_start   = elems[1] || document.getElementById('btn_start');
         let btn_update  = elems[3] || document.getElementById('btn_update');
-        let btn_destroy = elems[4] || document.getElementById('btn_destroy');
+        //let btn_destroy = elems[4] || document.getElementById('btn_destroy');
 
         let btnStartStateOn = () => {
-            btn_start.onclick     = ui.createHandlerFn(this, this.appAction, 'stop', 'btn_start');
-            btn_start.textContent = _('Enabled');
-            btn_start.className   = btn_style_positive;
+            //btn_start.onclick     = ui.createHandlerFn(this, this.appAction, 'stop', 'btn_start');
+            //btn_start.textContent = _('Enabled');
+            //btn_start.className   = btn_style_positive;
         };
 
         let btnStartStateOff = () => {
-            btn_start.onclick     = ui.createHandlerFn(this, this.appAction, 'start', 'btn_start');
-            btn_start.textContent = _('Disabled');
-            btn_start.className   = btn_style_negative;
+            //btn_start.onclick     = ui.createHandlerFn(this, this.appAction, 'start', 'btn_start');
+            //btn_start.textContent = _('Disabled');
+            //btn_start.className   = btn_style_negative;
         };
 
         if (app_status_code == -1) {
@@ -93,7 +96,7 @@ return view.extend({
         else if (app_status_code == 0) {
             this.disableButtons(false, null, elems);
             btnStartStateOn();
-            btn_destroy.disabled = false;
+            //btn_destroy.disabled = false;
             btn_update.disabled  = false;
         }
         else if (app_status_code == 2) {
@@ -129,7 +132,12 @@ return view.extend({
         }
 
         poll.stop();
-
+        
+        let res = fs.exec('/opr/zapret/sync_config.sh');
+        if (res.code != 0) {
+            ui.addNotification(null, E('p', _('Unable to run sync_config.sh') + '  [code: '+res.code+']'));
+            return res;
+        }
         return tools.handleServiceAction(tools.appName, action).then(() => {
             return this.getAppStatus().then(
                 (status_array) => {
@@ -217,55 +225,62 @@ return view.extend({
 
         let layout = E('div', { 'class': 'cbi-section-node' });
 
-        function layout_append(elem, title, descr) {
+        function layout_append(title, descr, elem) {
             descr = (descr) ? E('div', { 'class': 'cbi-value-description' }, descr) : '';
+            let elist;
+            if (elem instanceof E) {
+                elist = [ elem ];
+            } else {
+                elist = elem;
+            }
+            let vlist = [ E('div', {}, elist ) ];
+            for (let i = 0; i < elist.length; i++) {
+                let input = E('input', {
+                    'id'  : elist[i].id + '_hidden',
+                    'type': 'hidden',
+                });
+                vlist.push(input);
+            }
             layout.append(
                 E('div', { 'class': 'cbi-value' }, [
                     E('label', { 'class': 'cbi-value-title', 'for': elem.id + '_hidden' || null }, title),
-                    E('div', { 'class': 'cbi-value-field' }, [
-                        E('div', {}, elem),
-                        E('input', {
-                            'id'  : elem.id + '_hidden',
-                            'type': 'hidden',
-                        }),
-                        descr,
-                    ]),
+                    E('div', { 'class': 'cbi-value-field' }, vlist),
                 ])
             );
         }
 
-        let btn_start = E('button', {
-            'id'   : 'btn_start',
-            'name' : 'btn_start',
-            'class': btn_style_action,
-        }, _('Enable'));
-        layout_append(btn_start, _('Service'));
+        let create_btn = function(name, _class, locname) {
+            return E('button', {
+                'id'   : name,
+                'name' : name,
+                'class': _class,
+            }, locname);
+        };
+        
+        let btn_enable      = create_btn('btn_enable',  btn_style_success, _('Enable'));
+        btn_enable.onclick  = ui.createHandlerFn(this, this.serviceAction, 'enable', 'btn_enable');
+        let btn_disable     = create_btn('btn_disable', btn_style_warning, _('Disable'));
+        btn_disable.onclick = ui.createHandlerFn(this, this.serviceAction, 'disable', 'btn_disable');
+        layout_append(_('Service Status'), null, [ btn_enable, btn_disable ] );
 
-        let btn_enable = E('button', {
-            'id'   : 'btn_enable',
-            'name' : 'btn_enable',
-            'class': btn_style_positive,
-        }, _('Enable'));
-        layout_append(btn_enable, _('Run at startup'));
+        let btn_start       = create_btn('btn_start',   btn_style_action, _('Start'));
+        btn_start.onclick   = ui.createHandlerFn(this, this.serviceAction, 'start', 'btn_start');
+        let btn_restart     = create_btn('btn_restart', btn_style_action, _('Restart'));
+        btn_restart.onclick = ui.createHandlerFn(this, this.serviceAction, 'restart', 'btn_restart');
+        let btn_stop        = create_btn('btn_stop',    btn_style_warning, _('Stop'));
+        btn_stop.onclick    = ui.createHandlerFn(this, this.serviceAction, 'stop', 'btn_stop');
+        layout_append(_('Service Control'), null, [ btn_start, btn_restart, btn_stop ] );
 
-        let btn_update = E('button', {
-            'id'   : 'btn_update',
-            'name' : 'btn_update',
-            'class': btn_style_action,
-        }, _('Update'));
-        btn_update.onclick = ui.createHandlerFn(this, () => { this.appAction('update', 'btn_update') });
-        layout_append(btn_update, _('Update blacklist'));
-
-        let btn_destroy = E('button', {
-            'id'   : 'btn_destroy',
-            'name' : 'btn_destroy',
-            'class': btn_style_negative,
-        }, _('Shutdown'));
+        let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
+        btn_update.onclick  = ui.createHandlerFn(this, () => { this.appAction('update', 'btn_update') });
+        layout_append(_('Update blacklist'), null, btn_update);
+        
+        let btn_destroy     = create_btn('btn_destroy', btn_style_negative, _('Shutdown'));
         btn_destroy.onclick = L.bind(this.dialogDestroy, this);
+        //layout_append(_('Shutdown'), _('Complete service shutdown'), btn_destroy);
 
-        layout_append(btn_destroy, _('Shutdown'), _('Complete service shutdown'));
-
-        let elems = [ status_string, btn_start, btn_enable, btn_update, btn_destroy ];
+        //let elems = [ status_string, btn_start, btn_enable, btn_update, btn_destroy ];
+        let elems = [ status_string, btn_start, btn_enable, btn_update ];
         this.setAppStatus(status_array, elems);
 
         poll.add(L.bind(this.statusPoll, this));
