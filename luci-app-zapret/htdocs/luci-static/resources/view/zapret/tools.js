@@ -308,8 +308,11 @@ return baseclass.extend({
 
             uci.set('zapret', this.cfgsec, this.cfgparam, value);
             uci.save();
+            let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
+            if (elem) {
+                elem.querySelector('div').textContent = value;
+            }
             ui.hideModal();
-            //ui.refreshPage(); // TODO
             /*
             return uci.save()
             .then(L.bind(ui.changes.init, ui.changes))

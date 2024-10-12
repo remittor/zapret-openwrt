@@ -113,62 +113,62 @@ return view.extend({
         tabname = 'nfqws_params';
         s.tab(tabname, _('NFQWS options'));
 
-        let add_delim = function() {
-            o = s.taboption(tabname, form.DummyValue, '_hr');
+        let add_delim = function(sec) {
+            let o = sec.taboption(tabname, form.DummyValue, '_hr');
             o.rawhtml = true;
             o.default = '<hr style="width: 620px; height: 1px; margin: 1px 0 1px; border-top: 1px solid;">';
         };
 
-        let add_param = function(param, locname = null, rows = 10) {
+        let add_param = function(sec, param, locname = null, rows = 10) {
             if (!locname)
                 locname = param;
-            o = s.taboption(tabname, form.Button, '_' + param + '_btn', locname);
-            o.onclick = () => new tools.longstrEditDialog('config', param, param, locname, rows).show();
-            o.inputtitle = _('Edit');
-            o.inputstyle = 'edit btn';
-            o = s.taboption(tabname, form.DummyValue, '_' + param);
-            o.rawhtml = false;
-            o.cfgvalue = function(section_id) {
-                var name = uci.get(tools.appName, section_id, param);
+            let btn = sec.taboption(tabname, form.Button, '_' + param + '_btn', locname);
+            btn.inputtitle = _('Edit');
+            btn.inputstyle = 'edit btn';
+            let val = sec.taboption(tabname, form.DummyValue, '_' + param);
+            val.rawhtml = false;
+            val.cfgvalue = function(section_id) {
+                let name = uci.get(tools.appName, section_id, param);
                 if (name == null || name == "")
-                    name = "<EMPTY>";
+                    name = "";
                 return name;
             };
-            o.validate = function(section_id, value) {
+            val.validate = function(section_id, value) {
                 if (!value)
                     return "";
-                return value;
+                return value.trim();
             };
+            btn.onclick = () => new tools.longstrEditDialog('config', param, param, locname, rows).show();
         };
 
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_SUFFIX');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTP');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTP_SUFFIX');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTPS');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTPS_SUFFIX');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTP6');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTP6_SUFFIX');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTPS6');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_HTTPS6_SUFFIX');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_QUIC');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_QUIC_SUFFIX');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_QUIC6');
-        add_delim();
-        add_param('NFQWS_OPT_DESYNC_QUIC6_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTP');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTP_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTP6');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTP6_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS6');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS6_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_QUIC');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_QUIC_SUFFIX');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_QUIC6');
+        add_delim(s);
+        add_param(s, 'NFQWS_OPT_DESYNC_QUIC6_SUFFIX');
         
         /* Blacklist settings */
 

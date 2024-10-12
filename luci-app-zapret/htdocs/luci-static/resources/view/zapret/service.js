@@ -133,17 +133,28 @@ return view.extend({
 
         poll.stop();
         
-        let res = fs.exec('/opr/zapret/sync_config.sh');
-        if (res.code != 0) {
-            ui.addNotification(null, E('p', _('Unable to run sync_config.sh') + '  [code: '+res.code+']'));
-            return res;
-        }
-        return tools.handleServiceAction(tools.appName, action).then(() => {
-            return this.getAppStatus().then(
-                (status_array) => {
-                    this.setAppStatus(status_array);
-                }
-            );
+        let _this = this;
+        
+        return fs.exec('/opt/zapret/sync_config.sh')
+        .then(function(res) { 
+            if (res.code != 0) {
+                ui.addNotification(null, E('p', _('Unable to run sync_config.sh script.') + ' res.code = ' + res.code));
+                return _this.getAppStatus().then(
+                    (status_array) => {
+                        _this.setAppStatus(status_array);
+                    }
+                );
+            }
+            return tools.handleServiceAction(tools.appName, action).then(() => {
+                return _this.getAppStatus().then(
+                    (status_array) => {
+                        _this.setAppStatus(status_array);
+                    }
+                );
+            });
+        })
+        .catch(e => { 
+            ui.addNotification(null, E('p', _('Unable to run sync_config.sh script.') + ' Error: ' + e.message));
         });
     },
 
