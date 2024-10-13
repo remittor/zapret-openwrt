@@ -1,0 +1,223 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.gh.outputs.tag }}
+      date: ${{ steps.gh.outputs.date }}
+      sha: ${{ steps.gh.outputs.sha }}
+      url: ${{ steps.gh.outputs.url }}
+      message: ${{ steps.gh.outputs.message }}
+      is_active: ${{ steps.activity.outputs.is_active }}
+    steps:
+      - name: Get repo data via GH API
+        id: gh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: 'remittor/zapret-openwrt'
+        run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{ github.ref_name }}"
+          BRANCH=$(gh api repos/$REPO --jq '.default_branch')
+          DATE=$(gh api repos/$REPO/commits/$BRANCH --jq '.commit.committer.date')
+          {
+            echo "tag=$GITHUB_REF_NAME"
+            echo "date=$(date --utc -d $DATE +%Y%m%d)"
+            echo "sha=$(gh api repos/$REPO/commits/$BRANCH --jq '.sha[0:7]')"
+            echo "url=$(gh api repos/$REPO/commits/$BRANCH --jq '.html_url')"
+            echo "message<<EOF"
+            gh api repos/$REPO/commits/$BRANCH --jq '.commit.message'
+            echo EOF
+          } >> $GITHUB_OUTPUT
+          echo "DATE=$DATE" >> $GITHUB_ENV
+
+      - name: Check for repo activity
+        id: activity
+        env:
+          DATE: ${{ env.DATE }}
+          URL: ${{ steps.gh.outputs.url }}
+        run: |
+          TIMESTAMP=$(date --utc -d $DATE +%s)
+          DAYS=$(( ( $(date --utc +%s) - $TIMESTAMP ) / 86400 ))
+          echo "Repository activity: $(date --utc -d $DATE)"
+          echo "Commit: $URL"
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            is_active=true
+          elif [[ $DAYS -lt 1 ]] ; then
+            is_active=true
+          else
+            echo "Repository not updated within last 24 hours."
+            is_active=false
+          fi
+          echo "is_active=$is_active" >> $GITHUB_OUTPUT
+
+  build:
+    needs: check
+    #if: needs.check.outputs.is_active == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        #branch: [ openwrt-22.03, openwrt-23.05 ]
+        branch: [ openwrt-23.05 ]
+        arch:
+          - aarch64_cortex-a53
+          - aarch64_cortex-a72
+          - aarch64_generic
+          - arm_arm1176jzf-s_vfp
+          - arm_arm926ej-s
+          - arm_cortex-a15_neon-vfpv4
+          - arm_cortex-a5_vfpv4
+          - arm_cortex-a7
+          - arm_cortex-a7_neon-vfpv4
+          - arm_cortex-a7_vfpv4
+          - arm_cortex-a8_vfpv3
+          - arm_cortex-a9
+          - arm_cortex-a9_neon
+          - arm_cortex-a9_vfpv3-d16
+          - arm_fa526
+          - arm_mpcore
+          - arm_xscale
+          - mips64_octeonplus
+          - mips_24kc
+          - mips_4kec
+          - mips_mips32
+          - mipsel_24kc
+          - mipsel_24kc_24kf
+          - mipsel_74kc
+          - mipsel_mips32
+          - x86_64
+        #include:
+        #  - branch: SNAPSHOT
+        #    arch: x86_64
+        #exclude:
+        #  - branch: openwrt-22.03
+        #    arch: arm_fa526
+        #  - branch: openwrt-22.03
+        #    arch: arm_mpcore
+    container:
+      image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
+      options: --user root
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: 'remittor/zapret-openwrt'
+          path: zapret-openwrt
+
+      - name: Setup ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt/.ccache' || '/builder/.ccache' }}
+          key: ccache-${{ matrix.arch }}-${{ matrix.branch }}-${{ github.run_id }}
+          restore-keys: |
+            ccache-${{ matrix.arch }}-${{ matrix.branch }}-
+
+      - name: Build packages
+        id: build
+        working-directory: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt' || '/builder' }}
+        env:
+          DATE: ${{ needs.check.outputs.date }}
+          SHA: ${{ needs.check.outputs.sha }}
+          ARCH: ${{ matrix.arch }}
+          BRANCH: ${{ matrix.branch }}
+          SIGN_KEY: ${{ secrets.SIGN_PRIVATE_KEY }}
+          CCACHE_DIR: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt/.ccache' || '/builder/.ccache' }}
+        shell: bash
+        run: |
+          #export PKG_VERSION=$(date --utc -d $DATE +%Y%m%d)
+          #find $GITHUB_WORKSPACE/zapret-openwrt -type d -path '*/package/zapret' -exec cp -r {} ./package \;
+          cp -r $GITHUB_WORKSPACE/zapret-openwrt ./package/zapret-openwrt/
+
+          mv feeds.conf.default feeds.conf
+          sed -i -e 's|base.*\.git|base https://github.com/openwrt/openwrt.git|' feeds.conf
+          sed -i -e 's|packages.*\.git|packages https://github.com/openwrt/packages.git|' feeds.conf
+          sed -i -e 's|luci.*\.git|luci https://github.com/openwrt/luci.git|' feeds.conf
+
+          ./scripts/feeds update base packages luci
+          ./scripts/feeds install -a
+          
+          make defconfig
+
+          echo "------------- .config BEG -------------------"
+          cat .config
+          echo "------------- .config END -------------------"
+
+          PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
+          make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
+          
+          find ./bin/packages/*/base -type f ! -regex ".*\(zapret\).*\.ipk$" -delete
+          echo "$SIGN_KEY" | base64 -d > key-build
+          
+          #make package/index
+          tar -C ./bin/packages/*/base -cvf $GITHUB_WORKSPACE/ipk-$BRANCH-$ARCH.tar --transform "s|^\./|${BRANCH/openwrt-}/$ARCH/|" --show-transformed-names .
+          ./staging_dir/host/bin/ccache --max-size=10M --show-stats
+
+      - name: Compress build logs
+        if: always()
+        env:
+          ARCH: ${{ matrix.arch }}
+          BRANCH: ${{ matrix.branch }}
+          LOGS_DIR: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt/logs' || '/builder/logs' }}
+        run: |
+          tar -cJvf logs-$BRANCH-$ARCH.tar.xz $LOGS_DIR
+
+      - name: Upload packages
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipk-${{ matrix.branch }}-${{ matrix.arch }}
+          path: ./**/ipk-${{ matrix.branch }}-${{ matrix.arch }}.tar
+          if-no-files-found: error
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.branch }}-${{ matrix.arch }}
+          path: ./**/logs-*.tar.xz
+
+  release:
+    needs: [ check, build ]
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        #branch: [ '22.03', '23.05' ]
+        branch: [ '23.05' ]
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ipk-*
+
+      - name: Put ipk into zip
+        env:
+          BRANCH: ${{ matrix.branch }}
+          TAG: ${{ needs.check.outputs.tag }}
+          DATE: ${{ needs.check.outputs.date }}
+        run: |
+          mkdir -p public
+          find . -name "ipk-openwrt-$BRANCH-*.tar" -exec tar -xvf {} --wildcards '*.ipk' \;
+          find $BRANCH -mindepth 1 -type d -exec sh -c 'zip -0 ./public/zapret_${TAG}_$(basename {}).ipk.zip -j {} {}/*' \;
+          ls -lh ./public/*.zip
+
+      - name: Upload assets
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prerelease: false
+          tag_name: ${{ matrix.branch }}
+          name: '${{ needs.check.outputs.tag }} for OpenWrt ${{ matrix.branch }}'
+          body: |
+            ${{ needs.check.outputs.url }}: ${{ needs.check.outputs.message }}
+          files: ./public/*.zip
