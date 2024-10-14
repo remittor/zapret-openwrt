@@ -6,11 +6,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret
 PKG_VERSION:=64
-PKG_RELEASE:=20241012
+PKG_RELEASE:=20241014
 
 PKG_MAINTAINER:=bol-van
 PKG_LICENSE:=MIT
-PKG_LICENSE_FILES:=opt/zapret/docs/LICENSE.txt
+PKG_LICENSE_FILES:=docs/LICENSE.txt
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/bol-van/zapret/archive/refs/tags/v$(PKG_VERSION).tar.gz?
@@ -29,7 +29,8 @@ define Package/$(PKG_NAME)
 	TITLE:=$(PKG_NAME)
 	SUBMENU:=Zapret
 	URL:=https://github.com/bol-van/zapret
-	DEPENDS:= +nftables +curl +gzip +coreutils +coreutils-sort +coreutils-sleep
+	DEPENDS:= +nftables +curl +gzip
+	DEPENDS+= +coreutils +coreutils-sort +coreutils-sleep
 	DEPENDS+= +kmod-nft-nat +kmod-nft-offload +kmod-nft-queue
 	DEPENDS+= +libnetfilter-queue +libcap +zlib
 endef

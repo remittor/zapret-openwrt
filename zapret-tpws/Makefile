@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret-tpws
 PKG_VERSION:=64
-PKG_RELEASE:=20241012
+PKG_RELEASE:=20241014
 
 PKG_MAINTAINER:=bol-van
 PKG_LICENSE:=MIT
@@ -24,7 +24,7 @@ define Package/$(PKG_NAME)
 	CATEGORY:=Network
 	TITLE:=tpws
 	SUBMENU:=Zapret
-	DEPENDS:=+zlib +zapret
+	DEPENDS:=+zlib +libcap +zapret
 endef
 
 define Build/Prepare
