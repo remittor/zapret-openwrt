@@ -63,8 +63,8 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws $(1)/opt/zapret/$(MAKE_PATH)/	
 	$(INSTALL_DIR) $(1)/opt/zapret/common
 	$(CP) $(PKG_BUILD_DIR)/common/* $(1)/opt/zapret/common/
-	$(INSTALL_DIR) $(1)/opt/zapret/docs
-	$(CP) $(PKG_BUILD_DIR)/docs/* $(1)/opt/zapret/docs/
+	#$(INSTALL_DIR) $(1)/opt/zapret/docs
+	#$(CP) $(PKG_BUILD_DIR)/docs/* $(1)/opt/zapret/docs/
 	$(INSTALL_DIR) $(1)/opt/zapret/files
 	$(CP) $(PKG_BUILD_DIR)/files/* $(1)/opt/zapret/files/
 	$(INSTALL_DIR) $(1)/opt/zapret/ipset
