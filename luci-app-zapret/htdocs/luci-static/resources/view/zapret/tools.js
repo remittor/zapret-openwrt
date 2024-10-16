@@ -42,6 +42,8 @@ return baseclass.extend({
     iplstExcludeFN    : '/opt/zapret/ipset/zapret-ip-exclude.txt',
     iplstUserFN       : '/opt/zapret/ipset/zapret-ip-user.txt',
     iplstUserExcludeFN: '/opt/zapret/ipset/zapret-ip-user-exclude.txt',
+    custFileMax       : 4,
+    custFileTemplate  : '/opt/zapret/ipset/cust%s.txt',
 
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
     infoLabelRunning  : '<span class="label-status running">' + _('Enabled') + '</span>',

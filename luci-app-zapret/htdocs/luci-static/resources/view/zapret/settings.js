@@ -247,6 +247,18 @@ return view.extend({
             15
         ).show();
         
+        add_delim(s);
+        
+        for (let num = 1; num <= tools.custFileMax; num++) {
+            let fn = tools.custFileTemplate.format(num.toString());
+            let name = _('Custom file #' + num);
+            o = s.taboption(tabname, form.Button, '_cust_file%d_btn'.format(num), name);
+            o.inputtitle = _('Edit');
+            o.inputstyle = 'edit btn';
+            o.description = fn;
+            o.onclick = () => new tools.fileEditDialog(fn, name, '', '', 15).show();
+        }
+
         let map_promise = m.render();
         map_promise.then(node => node.classList.add('fade-in'));
         return map_promise;
