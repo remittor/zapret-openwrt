@@ -1,21 +1,26 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret-mdig
-PKG_VERSION:=64
-PKG_RELEASE:=20241014
+PKG_VERSION:=65
+PKG_RELEASE:=20241016
 
 PKG_MAINTAINER:=bol-van
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=docs/LICENSE.txt
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/bol-van/zapret/archive/refs/tags/v$(PKG_VERSION).tar.gz?
-PKG_HASH:=skip
+PKG_SOURCE_URL:=https://github.com/bol-van/zapret.git
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_VERSION:=fc0b8266e3e02c62af699b18c032800b0032866f
+PKG_SOURCE_DATE:=2024-10-16
+
+#PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+#PKG_SOURCE_URL:=https://github.com/bol-van/zapret/archive/refs/tags/v$(PKG_VERSION).tar.gz?
+#PKG_HASH:=skip
 
 include $(INCLUDE_DIR)/package.mk
 
-TAR_OPTIONS:=--strip-components 1 $(TAR_OPTIONS)
-TAR_CMD=$(HOST_TAR) -C $(1) $(TAR_OPTIONS)
+#TAR_OPTIONS:=--strip-components 1 $(TAR_OPTIONS)
+#TAR_CMD=$(HOST_TAR) -C $(1) $(TAR_OPTIONS)
 
 MAKE_PATH:=mdig
 
