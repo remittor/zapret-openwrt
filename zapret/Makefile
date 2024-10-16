@@ -40,22 +40,17 @@ define Build/Prepare
 	rm -f $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws
 endef
 
-define Package/$(PKG_NAME)/conffiles
-/etc/config/zapret
-/opt/zapret/config
-/opt/zapret/ipset/zapret-hosts-user.txt
-/opt/zapret/ipset/zapret-hosts-user-exclude.txt
-/opt/zapret/ipset/zapret-hosts-user-ipban.txt
-/opt/zapret/ipset/zapret-ip-user.txt
-/opt/zapret/ipset/zapret-ip-user-exclude.txt
-/opt/zapret/ipset/zapret-ip-user-ipban.txt
-endef
-
 #define Build/Configure
 #endef
 
 #define Build/Compile
 #endef
+
+define Package/$(PKG_NAME)/conffiles
+/etc/config/zapret
+/opt/zapret/config
+/opt/zapret/ipset/
+endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/opt/zapret
@@ -93,14 +88,51 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
 endef
 
+define Package/$(PKG_NAME)/preinst
+#!/bin/sh
+# check if we are on real system
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	if [ "$${PKG_UPGRADE}" = "1" ]; then
+		# stop service if PKG_UPGRADE
+		[ -x "/etc/init.d/zapret" ] && /etc/init.d/zapret stop >/dev/null 2>&1
+	fi
+fi	
+exit 0
+endef
+
 define Package/$(PKG_NAME)/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
+	NEWCFGNAME=zapret-opkg
+	NEWCFGFILE=/etc/config/$${NEWCFGNAME}
+	if [ -f "$${NEWCFGFILE}" ]; then
+		uci -m -f /etc/config/zapret import "$${NEWCFGNAME}"
+		uci commit "$${NEWCFGNAME}"
+		uci -m -f "$${NEWCFGFILE}" import zapret
+		uci commit zapret
+		rm -f "$${NEWCFGFILE}"
+		echo "File /etc/config/zapret merged from IPK"
+	fi
+	NEWCONFIG=/opt/zapret/config-opkg
+	if [ -f "$${NEWCONFIG}" ]; then
+		# backup current main config
+		mv -f /opt/zapret/config /opt/zapret/config.backup
+		# renew main config
+		mv -f "$${NEWCONFIG}" /opt/zapret/config
+		echo "File /opt/zapret/config replaced from IPK"
+	fi
+	# synchnonize main config
+	/opt/zapret/sync_config.sh
+	# enable main service
 	/etc/init.d/zapret enable
+	# stop all
 	/etc/init.d/zapret stop_fw
 	/etc/init.d/zapret stop_daemons
+	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $1}' | xargs -r kill -9
+	# start main service
 	/etc/init.d/zapret start
+	# restart firewall
 	[ -x /sbin/fw4 ] && fw4 -q restart || fw3 -q restart
 fi
 exit 0
@@ -109,20 +141,34 @@ endef
 define Package/$(PKG_NAME)/prerm
 #!/bin/sh
 # check if we are on real system
-if [ -n "$${IPKG_INSTROOT}" ]; then
+if [ -z "$${IPKG_INSTROOT}" ]; then
 	EXEDIR=/opt/zapret
 	ZAPRET_BASE=/opt/zapret
 	ZAPRET_CONFIG=/opt/zapret/config
 	OPENWRT_FW_INCLUDE=/etc/firewall.zapret
-	. "$ZAPRET_CONFIG"
-	. "$ZAPRET_BASE/common/base.sh"
-	. "$ZAPRET_BASE/common/fwtype.sh"
-	. "$ZAPRET_BASE/common/installer.sh"
+	. "$${ZAPRET_CONFIG}"
+	. "$${ZAPRET_BASE}/common/base.sh"
+	. "$${ZAPRET_BASE}/common/fwtype.sh"
+	. "$${ZAPRET_BASE}/common/nft.sh"
+	. "$${ZAPRET_BASE}/common/installer.sh"
 	/etc/init.d/zapret disable
 	/etc/init.d/zapret stop
+	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $1}' | xargs -r kill -9
 	remove_openwrt_firewall
 	nft_del_table
 	restart_openwrt_firewall
+fi
+exit 0
+endef
+
+define Package/$(PKG_NAME)/postrm
+#!/bin/sh
+# check if we are on real system
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	[ -f "/etc/config/zapret-opkg" ] && rm -f "/etc/config/zapret-opkg"
+	[ -f "/opt/zapret/config" ] && cp -f /opt/zapret/config "/opt/zapret/config.backup2"
+	#rm -rf /opt/zapret
+	#echo "Directory /opt/zapret removed!"
 fi
 exit 0
 endef
