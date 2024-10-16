@@ -108,6 +108,16 @@ return view.extend({
         o.rmempty = false;
         o.default = 0;
 
+        o = s.taboption(tabname, form.Value, 'DESYNC_MARK', _('DESYNC_MARK'));
+        //o.description = _("nfqws option for DPI desync attack");
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'DESYNC_MARK_POSTNAT', _('DESYNC_MARK_POSTNAT'));
+        //o.description = _("nfqws option for DPI desync attack");
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
         /* NFQWS_OPT_DESYNC tab */
 
         tabname = 'nfqws_params';

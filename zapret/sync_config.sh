@@ -46,6 +46,8 @@ sync_param INIT_APPLY_FW
 sync_param DISABLE_IPV4
 sync_param DISABLE_IPV6
 sync_param MODE_FILTER
+sync_param DESYNC_MARK
+sync_param DESYNC_MARK_POSTNAT
 sync_param NFQWS_OPT_DESYNC str
 sync_param NFQWS_OPT_DESYNC_SUFFIX str
 sync_param MODE_HTTP
