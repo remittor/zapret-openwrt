@@ -197,6 +197,32 @@ return view.extend({
             15
         ).show();
 
+        o = s.taboption(tabname, form.Button, '_user_excluded_entries_btn', _('User excluded hostname entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.description = tools.hostsUserExcludeFN;
+        o.onclick = () => new tools.fileEditDialog(            
+            tools.hostsUserExcludeFN,
+            _('User excluded entries'),
+            _('One hostname per line.<br />Examples:'),
+            '<code>domain.net<br />sub.domain.com<br />googlevideo.com</code>',
+            15
+        ).show();
+        
+        add_delim(s);
+
+        o = s.taboption(tabname, form.Button, '_ip_exclude_filter_btn', _('Excluded IP entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.description = tools.iplstExcludeFN;
+        o.onclick = () => new tools.fileEditDialog(
+            tools.iplstExcludeFN,
+            _('Excluded IP filter'),
+            _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
+            '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
+            15
+        ).show();
+
         o = s.taboption(tabname, form.Button, '_user_ip_filter_btn', _('User IP entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
@@ -209,6 +235,18 @@ return view.extend({
             15
         ).show();
 
+        o = s.taboption(tabname, form.Button, '_user_excluded_ip_filter_btn', _('User excluded IP entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.description = tools.iplstUserExcludeFN;
+        o.onclick = () => new tools.fileEditDialog(
+            tools.iplstUserExcludeFN,
+            _('User excluded IP filter'),
+            _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
+            '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
+            15
+        ).show();
+        
         let map_promise = m.render();
         map_promise.then(node => node.classList.add('fade-in'));
         return map_promise;

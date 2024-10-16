@@ -38,7 +38,10 @@ return baseclass.extend({
     appName           : 'zapret',
     execPath          : '/opt/zapret/init.d/openwrt/zapret',
     hostsUserFN       : '/opt/zapret/ipset/zapret-hosts-user.txt',
+    hostsUserExcludeFN: '/opt/zapret/ipset/zapret-hosts-user-exclude.txt',
+    iplstExcludeFN    : '/opt/zapret/ipset/zapret-ip-exclude.txt',
     iplstUserFN       : '/opt/zapret/ipset/zapret-ip-user.txt',
+    iplstUserExcludeFN: '/opt/zapret/ipset/zapret-ip-user-exclude.txt',
 
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
     infoLabelRunning  : '<span class="label-status running">' + _('Enabled') + '</span>',
