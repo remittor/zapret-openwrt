@@ -60,8 +60,8 @@ return view.extend({
         s.tab(tabname, _('Main settings'));
 
         o = s.taboption(tabname, form.ListValue, 'FWTYPE', _('FWTYPE'));
-        o.value('nftables', 'NFTables');
-        //o.value('iptables', 'IPTables');
+        o.value('nftables', 'nftables');
+        //o.value('iptables', 'iptables');
         //o.value('ipfw',     'ipfw');
 
         o = s.taboption(tabname, form.ListValue, 'MODE', _('MODE'));
@@ -74,17 +74,17 @@ return view.extend({
         o.value('software',  'software');
         o.value('hardware',  'hardware');
 
-        o = s.taboption(tabname, form.ListValue, 'INIT_APPLY_FW', _('INIT_APPLY_FW'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'INIT_APPLY_FW', _('INIT_APPLY_FW'));
+        o.rmempty = false;
+        o.default = 0;
 
-        o = s.taboption(tabname, form.ListValue, 'DISABLE_IPV4', _('DISABLE_IPV4'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'DISABLE_IPV4', _('DISABLE_IPV4'));
+        o.rmempty = false;
+        o.default = 1;
 
-        o = s.taboption(tabname, form.ListValue, 'DISABLE_IPV6', _('DISABLE_IPV6'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'DISABLE_IPV6', _('DISABLE_IPV6'));
+        o.rmempty = false;
+        o.default = 0;
 
         o = s.taboption(tabname, form.ListValue, 'MODE_FILTER', _('MODE_FILTER'));
         //o.value('none',         'none');
@@ -92,21 +92,21 @@ return view.extend({
         o.value('hostlist',     'hostlist');
         o.value('autohostlist', 'autohostlist');
 
-        o = s.taboption(tabname, form.ListValue, 'MODE_HTTP', _('MODE_HTTP'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'MODE_HTTP', _('MODE_HTTP'));
+        o.rmempty = false;
+        o.default = 0;
 
-        o = s.taboption(tabname, form.ListValue, 'MODE_HTTP_KEEPALIVE', _('MODE_HTTP_KEEPALIVE'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'MODE_HTTP_KEEPALIVE', _('MODE_HTTP_KEEPALIVE'));
+        o.rmempty = false;
+        o.default = 0;
 
-        o = s.taboption(tabname, form.ListValue, 'MODE_HTTPS', _('MODE_HTTPS'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'MODE_HTTPS', _('MODE_HTTPS'));
+        o.rmempty = false;
+        o.default = 0;
 
-        o = s.taboption(tabname, form.ListValue, 'MODE_QUIC', _('MODE_QUIC'));
-        o.value('0', 'False');
-        o.value('1', 'True');
+        o = s.taboption(tabname, form.Flag, 'MODE_QUIC', _('MODE_QUIC'));
+        o.rmempty = false;
+        o.default = 0;
 
         /* NFQWS_OPT_DESYNC tab */
 
@@ -178,20 +178,22 @@ return view.extend({
         o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
+        o.description = tools.hostsUserFN;
         o.onclick = () => new tools.fileEditDialog(            
-            tools.userEntriesFile,
+            tools.hostsUserFN,
             _('User entries'),
             _('One hostname per line.<br />Examples:'),
             '<code>domain.net<br />sub.domain.com<br />googlevideo.com</code>',
             15
         ).show();
 
-        o = s.taboption(tabname, form.Button, '_ip_filter_btn', _('User IP entries'));
+        o = s.taboption(tabname, form.Button, '_user_ip_filter_btn', _('User IP entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
+        o.description = tools.iplstUserFN;
         o.onclick = () => new tools.fileEditDialog(
-            tools.ipFilterFile,
-            _('IP filter'),
+            tools.iplstUserFN,
+            _('User IP filter'),
             _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
             '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
             15

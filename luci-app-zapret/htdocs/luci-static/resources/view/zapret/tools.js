@@ -37,9 +37,8 @@ document.head.append(E('style', {'type': 'text/css'},
 return baseclass.extend({
     appName           : 'zapret',
     execPath          : '/opt/zapret/init.d/openwrt/zapret',
-    parsersDir        : '/usr/libexec/ruantiblock',
-    userEntriesFile   : '/opt/zapret/ipset/zapret-hosts-user.txt',
-    ipFilterFile      : '/opt/zapret/ipset/zapret-ip-user.txt',
+    hostsUserFN       : '/opt/zapret/ipset/zapret-hosts-user.txt',
+    iplstUserFN       : '/opt/zapret/ipset/zapret-ip-user.txt',
 
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
     infoLabelRunning  : '<span class="label-status running">' + _('Enabled') + '</span>',
