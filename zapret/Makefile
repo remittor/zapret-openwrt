@@ -90,10 +90,6 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_CONF) ./ipset/zapret-ip-user.txt            $(1)/opt/zapret/ipset/zapret-ip-user.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-user-exclude.txt    $(1)/opt/zapret/ipset/zapret-ip-user-exclude.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-user-ipban.txt      $(1)/opt/zapret/ipset/zapret-ip-user-ipban.txt
-	$(INSTALL_CONF) ./ipset/cust1.txt      $(1)/opt/zapret/ipset/cust1.txt
-	$(INSTALL_CONF) ./ipset/cust2.txt      $(1)/opt/zapret/ipset/cust2.txt
-	$(INSTALL_CONF) ./ipset/cust3.txt      $(1)/opt/zapret/ipset/cust3.txt
-	$(INSTALL_CONF) ./ipset/cust4.txt      $(1)/opt/zapret/ipset/cust4.txt
 	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
 endef
 
