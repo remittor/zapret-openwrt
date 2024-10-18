@@ -97,6 +97,13 @@ define Package/$(PKG_NAME)/preinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
+	if [ -f "/etc/init.d/zapret" ]; then
+		SCRIPT=$$( readlink /etc/init.d/zapret )
+		if [ -n "$${SCRIPT}" ]; then
+			echo "Please uninstall original zapret utility!"
+			exit 44
+		fi
+	fi
 	if [ "$${PKG_UPGRADE}" = "1" ]; then
 		# stop service if PKG_UPGRADE
 		[ -x "/etc/init.d/zapret" ] && /etc/init.d/zapret stop >/dev/null 2>&1
