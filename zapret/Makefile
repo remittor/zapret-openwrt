@@ -134,7 +134,7 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	# stop all
 	/etc/init.d/zapret stop_fw
 	/etc/init.d/zapret stop_daemons
-	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $1}' | xargs -r kill -9
+	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
 	# start main service
 	/etc/init.d/zapret start
 	# restart firewall
@@ -158,7 +158,7 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	. "$${ZAPRET_BASE}/common/installer.sh"
 	/etc/init.d/zapret disable
 	/etc/init.d/zapret stop
-	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $1}' | xargs -r kill -9
+	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
 	remove_openwrt_firewall
 	nft_del_table
 	restart_openwrt_firewall
