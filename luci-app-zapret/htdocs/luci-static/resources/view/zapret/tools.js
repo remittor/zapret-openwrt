@@ -36,7 +36,7 @@ document.head.append(E('style', {'type': 'text/css'},
 
 return baseclass.extend({
     appName           : 'zapret',
-    execPath          : '/opt/zapret/init.d/openwrt/zapret',
+    execPath          : '/etc/init.d/zapret',
     hostsUserFN       : '/opt/zapret/ipset/zapret-hosts-user.txt',
     hostsUserExcludeFN: '/opt/zapret/ipset/zapret-hosts-user-exclude.txt',
     iplstExcludeFN    : '/opt/zapret/ipset/zapret-ip-exclude.txt',
