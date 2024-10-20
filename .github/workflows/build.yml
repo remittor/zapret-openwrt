@@ -209,7 +209,7 @@ jobs:
         run: |
           mkdir -p public
           find . -name "ipk-openwrt-$BRANCH-*.tar" -exec tar -xvf {} --wildcards '*.ipk' \;
-          find $BRANCH -mindepth 1 -type d -exec sh -c 'zip -0 ./public/zapret_${TAG}_$(basename {}).ipk.zip -j {} {}/*' \;
+          find $BRANCH -mindepth 1 -type d -exec sh -c 'zip -0 ./public/zapret_${TAG}_$(basename {}).zip -j {} {}/*' \;
           ls -lh ./public/*.zip
 
       - name: Upload assets
