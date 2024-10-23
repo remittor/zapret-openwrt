@@ -14,111 +14,92 @@ const btn_style_warning  = 'btn cbi-button-negative';
 const btn_style_success  = 'btn cbi-button-success important';
 
 return view.extend({
-    disableButtons: function(flag, btn, elems = [ ]) {
-        let btn_start   = elems[1] || document.getElementById("btn_start");
-        //let btn_destroy = elems[4] || document.getElementById("btn_destroy");
-        let btn_enable  = elems[2] || document.getElementById("btn_enable");
-        let btn_update  = elems[3] || document.getElementById("btn_update");
-
+    disableButtons: function(flag, btn, elems = { }) {
+        let btn_enable  = elems.btn_enable  || document.getElementById('btn_enable');
+        let btn_disable = elems.btn_disable || document.getElementById('btn_disable');
+        let btn_start   = elems.btn_start   || document.getElementById('btn_start');
+        let btn_restart = elems.btn_restart || document.getElementById('btn_restart');
+        let btn_stop    = elems.btn_stop    || document.getElementById('btn_stop');
+        let btn_update  = elems.btn_update  || document.getElementById('btn_update');
+        btn_enable.disabled  = flag;
+        btn_disable.disabled = flag;
         btn_start.disabled   = flag;
+        btn_restart.disabled = flag;
+        btn_stop.disabled    = flag;
         btn_update.disabled  = true; // TODO
-        //btn_destroy.disabled = flag;
-        if (btn === btn_update) {
-            btn_enable.disabled = false;
-        } else {
-            btn_enable.disabled = flag;
-        }
     },
 
     getAppStatus: function() {
         return Promise.all([
-            { code: -1 }, //fs.exec(tools.execPath, [ 'raw-status' ]),
-            { code: -1 }, //fs.exec(tools.execPath, [ 'vpn-route-status' ]),
-            tools.getInitStatus(tools.appName),
-            //L.resolveDefault(fs.read(tools.tokenFile), 0),
-            uci.load(tools.appName),
+            tools.getInitState(tools.appName),    // svc_state
+            fs.exec(tools.execPath, [ 'info' ]),  // svc_info
+            fs.exec('/bin/ps'),                   // process list
+            uci.load(tools.appName),              // config
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
                 + ': %s [ %s | %s | %s ]'.format(
-                    e.message, tools.execPath, 'tools.getInitStatus', 'uci.zapret'
+                    e.message, tools.execPath, 'tools.getInitState', 'uci.zapret'
             )));
         });
     },
 
-    setAppStatus: function(status_array, elems = [ ], force_app_code = 0) {
-        let section = uci.get(tools.appName, 'config');
-        if (!status_array || section == null || typeof(section) !== 'object') {
-            (elems[0] || document.getElementById("status")).innerHTML = tools.makeStatusString(1);
+    setAppStatus: function(status_array, elems = { }, force_app_status = 0) {
+        let cfg = uci.get(tools.appName, 'config');
+        if (!status_array || cfg == null || typeof(cfg) !== 'object') {
+            let elem_status = elems.status || document.getElementById("status");
+            elem_status.innerHTML = tools.makeStatusString(null);
             ui.addNotification(null, E('p', _('Unable to read the contents') + ': setAppStatus()'));
             this.disableButtons(true, null, elems);
             return;
         }
-
-        let app_status_code       = (force_app_code) ? force_app_code : status_array[0].code;
-        let vpn_route_status_code = status_array[1].code;
-        let enabled_flag          = status_array[2];
-        let z_fwtype              = section.FWTYPE;
-        let z_mode                = section.MODE;
-        let bllist_preset         = 'user_only';
-
-        let btn_enable = elems[2] || document.getElementById('btn_enable');
-        /*
-        if (enabled_flag == true) {
-            btn_enable.onclick     = ui.createHandlerFn(this, this.serviceAction, 'disable', 'btn_enable');
-            btn_enable.textContent = _('Enabled');
-            btn_enable.className   = btn_style_positive;
-        } else {
-            btn_enable.onclick     = ui.createHandlerFn(this, this.serviceAction, 'enable', 'btn_enable');
-            btn_enable.textContent = _('Disabled');
-            btn_enable.className   = btn_style_negative;
-        }
-        */
-        let btn_start   = elems[1] || document.getElementById('btn_start');
-        let btn_update  = elems[3] || document.getElementById('btn_update');
-        //let btn_destroy = elems[4] || document.getElementById('btn_destroy');
-
-        let btnStartStateOn = () => {
-            //btn_start.onclick     = ui.createHandlerFn(this, this.appAction, 'stop', 'btn_start');
-            //btn_start.textContent = _('Enabled');
-            //btn_start.className   = btn_style_positive;
-        };
-
-        let btnStartStateOff = () => {
-            //btn_start.onclick     = ui.createHandlerFn(this, this.appAction, 'start', 'btn_start');
-            //btn_start.textContent = _('Disabled');
-            //btn_start.className   = btn_style_negative;
-        };
-
-        if (app_status_code == -1) {
-            this.disableButtons(false, null, elems);
-            btnStartStateOn();
-        }
-        else if (app_status_code == 0) {
-            this.disableButtons(false, null, elems);
-            btnStartStateOn();
-            //btn_destroy.disabled = false;
-            btn_update.disabled  = false;
-        }
-        else if (app_status_code == 2) {
-            this.disableButtons(false, null, elems);
-            btnStartStateOff();
-            btn_update.disabled = true;
-        }
-        else if (app_status_code == 3) {
-            btnStartStateOff();
-            this.disableButtons(true, btn_start, elems);
-        }
-        else if (app_status_code == 4) {
-            btnStartStateOn();
-            this.disableButtons(true, btn_update, elems);
-        }
-        else {
-            ui.addNotification(null, E('p', _('Error')
-                + ' %s: return code = %s'.format(tools.execPath, app_status_code)));
+        let svc_autorun = status_array[0] ? true : false;
+        let svc_info = status_array[1];   // stdout: JSON as text
+        let proc_list = status_array[2];  // stdout: multiline text
+        if (svc_info.code != 0) {
+            ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
             this.disableButtons(true, null, elems);
+            return;
         }
+        if (proc_list.code != 0) {
+            ui.addNotification(null, E('p', _('Unable to read process list') + ': setAppStatus()'));
+            this.disableButtons(true, null, elems);
+            return;
+        }
+        let svcinfo;
+        if (force_app_status) {
+            svcinfo = force_app_status;
+        } else {
+            svcinfo = tools.decode_svc_info(svc_autorun, svc_info, proc_list, cfg);
+        }
+        let btn_enable  = elems.btn_enable  || document.getElementById('btn_enable');
+        let btn_disable = elems.btn_disable || document.getElementById('btn_disable');
 
-        (elems[0] || document.getElementById("status")).innerHTML = tools.makeStatusString(app_status_code, z_fwtype, bllist_preset);
+        let btn_start   = elems.btn_start   || document.getElementById('btn_start');
+        let btn_restart = elems.btn_restart || document.getElementById('btn_restart');
+        let btn_stop    = elems.btn_stop    || document.getElementById('btn_stop');
+        
+        let btn_update  = elems.btn_update  || document.getElementById('btn_update');
+        btn_update.disabled = true;   // TODO
+
+        if (Number.isInteger(svcinfo)) {
+            ui.addNotification(null, E('p', _('Error')
+                + ' %s: return code = %s'.format('decode_svc_info', svcinfo + ' ')));
+            this.disableButtons(true, null, elems);
+        } else {
+            btn_enable.disabled  = (svc_autorun) ? true : false;
+            btn_disable.disabled = (svc_autorun) ? false : true;
+            if (svcinfo.dmn.total == 0) {
+                btn_start.disabled = false;
+                btn_restart.disabled = true;
+                btn_stop.disabled = true;
+            } else {
+                btn_start.disabled = true;
+                btn_restart.disabled = false;
+                btn_stop.disabled = false;
+            }
+        }
+        let elem_status = elems.status || document.getElementById("status");
+        elem_status.innerHTML = tools.makeStatusString(svcinfo, cfg.FWTYPE, 'user_only');
         
         if (!poll.active()) {
             poll.start();
@@ -130,12 +111,33 @@ return view.extend({
             let elem = document.getElementById(button);
             this.disableButtons(true, elem);
         }
-
         poll.stop();
         
         let _this = this;
         
-        return fs.exec('/opt/zapret/sync_config.sh')
+        return tools.handleServiceAction(tools.appName, action)
+        .then(() => {
+            return _this.getAppStatus().then(
+                (status_array) => {
+                    _this.setAppStatus(status_array);
+                }
+            );
+        })
+        .catch(e => { 
+            ui.addNotification(null, E('p', _('Unable to run service action.') + ' Error: ' + e.message));
+        });
+    },
+
+    serviceActionEx: function(action, button) {
+        if (button) {
+            let elem = document.getElementById(button);
+            this.disableButtons(true, elem);
+        }
+        poll.stop();
+        
+        let _this = this;
+        
+        return fs.exec(tools.syncCfgPath)
         .then(function(res) { 
             if (res.code != 0) {
                 ui.addNotification(null, E('p', _('Unable to run sync_config.sh script.') + ' res.code = ' + res.code));
@@ -145,13 +147,7 @@ return view.extend({
                     }
                 );
             }
-            return tools.handleServiceAction(tools.appName, action).then(() => {
-                return _this.getAppStatus().then(
-                    (status_array) => {
-                        _this.setAppStatus(status_array);
-                    }
-                );
-            });
+            return _this.serviceAction(action, null);
         })
         .catch(e => { 
             ui.addNotification(null, E('p', _('Unable to run sync_config.sh script.') + ' Error: ' + e.message));
@@ -225,8 +221,7 @@ return view.extend({
         if (!status_array) {
             return;
         }
-
-        let section = uci.get(tools.appName, 'config');
+        let cfg = uci.get(tools.appName, 'config');
 
         let status_string = E('div', {
             'id'   : 'status',
@@ -236,15 +231,15 @@ return view.extend({
 
         let layout = E('div', { 'class': 'cbi-section-node' });
 
-        function layout_append(title, descr, elem) {
+        function layout_append(title, descr, elems) {
             descr = (descr) ? E('div', { 'class': 'cbi-value-description' }, descr) : '';
-            let elist;
-            if (elem instanceof E) {
-                elist = [ elem ];
-            } else {
-                elist = elem;
+            let elist = elems;
+            let elem_list = [ ];
+            for (let i = 0; i < elist.length; i++) {
+                elem_list.push(elist[i]);
+                elem_list.push(' ');
             }
-            let vlist = [ E('div', {}, elist ) ];
+            let vlist = [ E('div', {}, elem_list ) ];
             for (let i = 0; i < elist.length; i++) {
                 let input = E('input', {
                     'id'  : elist[i].id + '_hidden',
@@ -252,9 +247,10 @@ return view.extend({
                 });
                 vlist.push(input);
             }
+            let elem_name = (elist.length == 1) ? elist[0].id + '_hidden' : null;
             layout.append(
                 E('div', { 'class': 'cbi-value' }, [
-                    E('label', { 'class': 'cbi-value-title', 'for': elem.id + '_hidden' || null }, title),
+                    E('label', { 'class': 'cbi-value-title', 'for': elem_name }, title),
                     E('div', { 'class': 'cbi-value-field' }, vlist),
                 ])
             );
@@ -272,26 +268,32 @@ return view.extend({
         btn_enable.onclick  = ui.createHandlerFn(this, this.serviceAction, 'enable', 'btn_enable');
         let btn_disable     = create_btn('btn_disable', btn_style_warning, _('Disable'));
         btn_disable.onclick = ui.createHandlerFn(this, this.serviceAction, 'disable', 'btn_disable');
-        layout_append(_('Service Status'), null, [ btn_enable, btn_disable ] );
+        layout_append(_('Service autorun control'), null, [ btn_enable, btn_disable ] );
 
         let btn_start       = create_btn('btn_start',   btn_style_action, _('Start'));
-        btn_start.onclick   = ui.createHandlerFn(this, this.serviceAction, 'start', 'btn_start');
+        btn_start.onclick   = ui.createHandlerFn(this, this.serviceActionEx, 'start', 'btn_start');
         let btn_restart     = create_btn('btn_restart', btn_style_action, _('Restart'));
-        btn_restart.onclick = ui.createHandlerFn(this, this.serviceAction, 'restart', 'btn_restart');
+        btn_restart.onclick = ui.createHandlerFn(this, this.serviceActionEx, 'restart', 'btn_restart');
         let btn_stop        = create_btn('btn_stop',    btn_style_warning, _('Stop'));
         btn_stop.onclick    = ui.createHandlerFn(this, this.serviceAction, 'stop', 'btn_stop');
-        layout_append(_('Service Control'), null, [ btn_start, btn_restart, btn_stop ] );
+        layout_append(_('Service daemons control'), null, [ btn_start, btn_restart, btn_stop ] );
 
         let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
         btn_update.onclick  = ui.createHandlerFn(this, () => { this.appAction('update', 'btn_update') });
-        layout_append(_('Update blacklist'), null, btn_update);
+        layout_append(_('Update blacklist'), null, [ btn_update ] );
         
         let btn_destroy     = create_btn('btn_destroy', btn_style_negative, _('Shutdown'));
         btn_destroy.onclick = L.bind(this.dialogDestroy, this);
-        //layout_append(_('Shutdown'), _('Complete service shutdown'), btn_destroy);
 
-        //let elems = [ status_string, btn_start, btn_enable, btn_update, btn_destroy ];
-        let elems = [ status_string, btn_start, btn_enable, btn_update ];
+        let elems = {
+            "status": status_string,
+            "btn_enable": btn_enable,
+            "btn_disable": btn_disable,
+            "btn_start": btn_start,
+            "btn_restart": btn_restart,
+            "btn_stop": btn_stop,
+            "btn_update": btn_update,
+        };
         this.setAppStatus(status_array, elems);
 
         poll.add(L.bind(this.statusPoll, this));
@@ -309,7 +311,6 @@ return view.extend({
             ),
             E('div', { 'class': 'cbi-section fade-in' }, [
                 status_string,
-                E('hr'),
             ]),
             E('div', { 'class': 'cbi-section fade-in' },
                 layout

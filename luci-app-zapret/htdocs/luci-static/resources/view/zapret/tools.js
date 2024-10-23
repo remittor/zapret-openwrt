@@ -37,6 +37,8 @@ document.head.append(E('style', {'type': 'text/css'},
 return baseclass.extend({
     appName           : 'zapret',
     execPath          : '/etc/init.d/zapret',
+    syncCfgPath       : '/opt/zapret/sync_config.sh',
+
     hostsUserFN       : '/opt/zapret/ipset/zapret-hosts-user.txt',
     hostsUserExcludeFN: '/opt/zapret/ipset/zapret-hosts-user-exclude.txt',
     iplstExcludeFN    : '/opt/zapret/ipset/zapret-ip-exclude.txt',
@@ -45,13 +47,23 @@ return baseclass.extend({
     custFileMax       : 4,
     custFileTemplate  : '/opt/zapret/ipset/cust%s.txt',
 
+    infoLabelRunning  : '<span class="label-status running">'  + _('Running')  + '</span>',
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
-    infoLabelRunning  : '<span class="label-status running">' + _('Enabled') + '</span>',
-    infoLabelUpdating : '<span class="label-status updating">' + _('Updating') + '</span>',
-    infoLabelStopped  : '<span class="label-status stopped">' + _('Disabled') + '</span>',
-    infoLabelError    : '<span class="label-status error">' + _('Error') + '</span>',
+    infoLabelStopped  : '<span class="label-status stopped">'  + _('Stopped')  + '</span>',
+    infoLabelDisabled : '<span class="label-status stopped">'  + _('Disabled') + '</span>',
+    infoLabelError    : '<span class="label-status error">'    + _('Error')    + '</span>',
 
-    callInitStatus: rpc.declare({
+    infoLabelUpdating : '<span class="label-status updating">' + _('Updating') + '</span>',
+
+    statusDict: {
+        error    : { code: 0, name: _('Error')    , label: this.infoLabelError    },
+        disabled : { code: 1, name: _('Disabled') , label: this.infoLabelDisabled },
+        stopped  : { code: 2, name: _('Stopped')  , label: this.infoLabelStopped  },
+        starting : { code: 3, name: _('Starting') , label: this.infoLabelStarting },
+        running  : { code: 4, name: _('Running')  , label: this.infoLabelRunning  },
+    },
+
+    callInitState: rpc.declare({
         object: 'luci',
         method: 'getInitList',
         params: [ 'name' ],
@@ -65,10 +77,10 @@ return baseclass.extend({
         expect: { result: false }
     }),
 
-    getInitStatus: function(name) {
-        return this.callInitStatus(name).then(res => {
+    getInitState: function(name) {
+        return this.callInitState(name).then(res => {
             if (res) {
-                return res[name].enabled;
+                return res[name].enabled ? true : false;
             } else {
                 throw _('Command failed');
             }
@@ -92,72 +104,130 @@ return baseclass.extend({
         return (v && typeof(v) === 'string') ? v.trim().replace(/\r?\n/g, '') : v;
     },
 
-    makeStatusString: function(app_status_code, fwtype, bllist_preset) {
-        let app_status_label;
-        let spinning = '';
-        /*
-        switch(app_status_code) {
-            case 0:
-                app_status_label = this.infoLabelRunning;
-                break;
-            case 2:
-                app_status_label = this.infoLabelStopped;
-                break;
-            case 3:
-                app_status_label = this.infoLabelStarting;
-                spinning = ' spinning';
-                break;
-            case 4:
-                app_status_label = this.infoLabelUpdating;
-                spinning = ' spinning';
-                break;
-            default:
-                app_status_label = this.infoLabelError;
-                return `<table class="table">
-                            <tr class="tr">
-                                <td class="td left" style="min-width:33%%">
-                                    ${_('Status')}:
-                                </td>
-                                <td class="td left">
-                                    ${app_status_label}
-                                </td>
-                            </tr>
-                        </table>`;
+    get_pid_list: function(proc_list) {
+        let plist = [ ];
+        let lines = proc_list.trim().split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].trim();
+            if (line.length > 5) {
+                let word_list = line.split(/\s+/);
+                let pid = word_list[0];
+                let isnum = /^\d+$/.test(pid);
+                if (isnum) {
+                    plist.push(parseInt(pid));
+                }
+            }
         }
-        */
-        return `<table class="table">
+        return plist;
+    },
+
+    decode_svc_info: function(svc_autorun, svc_info, proc_list, cfg) {
+        let result = {
+            "autorun": svc_autorun,
+            "dmn": {
+                total: 0,
+                running: 0,
+                working: 0,
+            },
+            "status": this.statusDict.error,
+        };
+        if (svc_info.code != 0) {
+            return -1;
+        }
+        if (proc_list.code != 0) {
+            return -2;
+        }        
+        let plist = this.get_pid_list(proc_list.stdout);
+        
+        let jdata = JSON.parse(svc_info.stdout);
+        if (typeof(jdata) !== 'object') {
+            return -3;
+        }
+        if (typeof(jdata.zapret) == 'object') {
+            let dmn_list = jdata.zapret.instances;
+            if (typeof(dmn_list) !== 'object') {
+                return -4;
+            }
+            for (const [dmn_name, daemon] of Object.entries(dmn_list)) {
+                result.dmn.total += 1;
+                if (daemon.running) {
+                    result.dmn.running += 1;
+                }
+                if (daemon.pid !== undefined && daemon.pid != null) {
+                    if (plist.includes(daemon.pid)) {
+                        result.dmn.working += 1;
+                    }
+                }
+            }
+        }
+        //console.log('SVC_DAEMONS: ' + result.dmn.working + ' / ' + result.dmn.total);
+        if (result.dmn.total == 0) {
+            result.status = (!svc_autorun) ? this.statusDict.disabled : this.statusDict.stopped;
+        } else {
+            result.status = (!result.dmn.working) ? this.statusDict.started : this.statusDict.running;
+        }
+        return result;
+    },
+
+    makeStatusString: function(svcinfo, fwtype, bllist_preset) {
+        let svc_autorun = _('Unknown');
+        let svc_daemons = _('Unknown');
+        
+        if (typeof(svcinfo) == 'object') {
+            svc_autorun = (svcinfo.autorun) ? _('Enabled') : _('Disabled');
+            if (svcinfo.dmn.total == 0) {
+                svc_daemons = _('Stopped');
+            } else {
+                svc_daemons = (!svcinfo.dmn.working) ? _('Starting') : _('Running');
+                svc_daemons += ' [' + svcinfo.dmn.working + '/' + svcinfo.dmn.total + ']';
+            }
+        }
+        let update_mode = _('user entries only');
+        
+        let td_name_width = 40;
+        let td_name_style = `style="width: ${td_name_width}%; min-width:${td_name_width}%; max-width:${td_name_width}%;"`;
+        let out = `
+                <table class="table">
                     <tr class="tr">
-                        <td class="td left" style="min-width:33%%">
-                            ${_('Status')}:
+                        <td class="td left" ${td_name_style}>
+                            ${_('Service autorun status')}:
                         </td>
-                        <td class="td left%s">
-                            %s %s
+                        <td class="td left">
+                            ${svc_autorun}
                         </td>
                     </tr>
                     <tr class="tr">
-                        <td class="td left">
+                        <td class="td left" ${td_name_style}>
+                            ${_('Service daemons status')}:
+                        </td>
+                        <td class="td left %s">
+                            ${svc_daemons}
+                        </td>
+                    </tr>
+                    <tr class="tr">
+                        <td class="td left" ${td_name_style}>
                             ${_('FW type')}:
                         </td>
                         <td class="td left">
-                            %s
+                            ${fwtype}
                         </td>
                     </tr>
                     <tr class="tr">
-                        <td class="td left">
+                        <td class="td left" ${td_name_style}>
                             ${_('Blacklist update mode')}:
                         </td>
                         <td class="td left">
-                            %s
+                            ${update_mode}
                         </td>
                     </tr>
-                </table>
-        `.format(
-            spinning,
-            app_status_label,
-            '',
-            fwtype,
-            _('user entries only')
-        );
+                    <tr class="tr">
+                        <td class="td left" ${td_name_style}>
+                        </td>
+                        <td class="td left">
+                        </td>
+                    </tr>
+                </table>`;
+        return out;
     },
 
     fileEditDialog: baseclass.extend({
