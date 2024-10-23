@@ -100,13 +100,25 @@ return view.extend({
         o.rmempty = false;
         o.default = 0;
 
+        o = s.taboption(tabname, form.Value, 'HTTP_PORTS', _('HTTP_PORTS'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
         o = s.taboption(tabname, form.Flag, 'MODE_HTTPS', _('MODE_HTTPS'));
         o.rmempty = false;
         o.default = 0;
 
+        o = s.taboption(tabname, form.Value, 'HTTPS_PORTS', _('HTTPS_PORTS'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
         o = s.taboption(tabname, form.Flag, 'MODE_QUIC', _('MODE_QUIC'));
         o.rmempty = false;
         o.default = 0;
+
+        o = s.taboption(tabname, form.Value, 'QUIC_PORTS', _('QUIC_PORTS'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
 
         o = s.taboption(tabname, form.Value, 'DESYNC_MARK', _('DESYNC_MARK'));
         //o.description = _("nfqws option for DPI desync attack");

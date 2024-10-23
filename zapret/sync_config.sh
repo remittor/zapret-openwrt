@@ -52,16 +52,19 @@ sync_param NFQWS_OPT_DESYNC str
 sync_param NFQWS_OPT_DESYNC_SUFFIX str
 sync_param MODE_HTTP
 sync_param MODE_HTTP_KEEPALIVE
+sync_param HTTP_PORTS
 sync_param NFQWS_OPT_DESYNC_HTTP str
 sync_param NFQWS_OPT_DESYNC_HTTP_SUFFIX str
 sync_param NFQWS_OPT_DESYNC_HTTP6 str
 sync_param NFQWS_OPT_DESYNC_HTTP6_SUFFIX str
 sync_param MODE_HTTPS
+sync_param HTTPS_PORTS
 sync_param NFQWS_OPT_DESYNC_HTTPS str
 sync_param NFQWS_OPT_DESYNC_HTTPS_SUFFIX str
 sync_param NFQWS_OPT_DESYNC_HTTPS6 str
 sync_param NFQWS_OPT_DESYNC_HTTPS6_SUFFIX str
 sync_param MODE_QUIC
+sync_param QUIC_PORTS
 sync_param NFQWS_OPT_DESYNC_QUIC str
 sync_param NFQWS_OPT_DESYNC_QUIC_SUFFIX str
 sync_param NFQWS_OPT_DESYNC_QUIC6 str

@@ -42,9 +42,9 @@ GZIP_LISTS=0
 #LISTS_RELOAD="pfctl -f /etc/pf.conf"
 
 # override ports
-#HTTP_PORTS=80-81,85
-#HTTPS_PORTS=443,500-501
-#QUIC_PORTS=443,444
+HTTP_PORTS=80
+HTTPS_PORTS=443
+QUIC_PORTS=443
 
 # CHOOSE OPERATION MODE
 # MODE : nfqws,tpws,tpws-socks,filter,custom
