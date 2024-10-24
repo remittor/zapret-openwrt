@@ -14,19 +14,25 @@ const btn_style_warning  = 'btn cbi-button-negative';
 const btn_style_success  = 'btn cbi-button-success important';
 
 return view.extend({
-    disableButtons: function(flag, btn, elems = { }) {
-        let btn_enable  = elems.btn_enable  || document.getElementById('btn_enable');
-        let btn_disable = elems.btn_disable || document.getElementById('btn_disable');
-        let btn_start   = elems.btn_start   || document.getElementById('btn_start');
-        let btn_restart = elems.btn_restart || document.getElementById('btn_restart');
-        let btn_stop    = elems.btn_stop    || document.getElementById('btn_stop');
-        let btn_update  = elems.btn_update  || document.getElementById('btn_update');
-        btn_enable.disabled  = flag;
-        btn_disable.disabled = flag;
-        btn_start.disabled   = flag;
-        btn_restart.disabled = flag;
-        btn_stop.disabled    = flag;
-        btn_update.disabled  = true; // TODO
+    get_svc_buttons: function(elems = { }) {
+        return {
+            enable  : elems.btn_enable  || document.getElementById('btn_enable'),
+            disable : elems.btn_disable || document.getElementById('btn_disable'),
+            start   : elems.btn_start   || document.getElementById('btn_start'),
+            restart : elems.btn_restart || document.getElementById('btn_restart'),
+            stop    : elems.btn_stop    || document.getElementById('btn_stop'),
+            update  : elems.btn_update  || document.getElementById('btn_update'),
+        };
+    },
+    
+    disableButtons: function(flag, button, elems = { }) {
+        let btn = this.get_svc_buttons(elems);
+        btn.enable.disabled  = flag;
+        btn.disable.disabled = flag;
+        btn.start.disabled   = flag;
+        btn.restart.disabled = flag;
+        btn.stop.disabled    = flag;
+        btn.update.disabled  = true; // TODO
     },
 
     getAppStatus: function() {
@@ -71,31 +77,24 @@ return view.extend({
         } else {
             svcinfo = tools.decode_svc_info(svc_autorun, svc_info, proc_list, cfg);
         }
-        let btn_enable  = elems.btn_enable  || document.getElementById('btn_enable');
-        let btn_disable = elems.btn_disable || document.getElementById('btn_disable');
-
-        let btn_start   = elems.btn_start   || document.getElementById('btn_start');
-        let btn_restart = elems.btn_restart || document.getElementById('btn_restart');
-        let btn_stop    = elems.btn_stop    || document.getElementById('btn_stop');
-        
-        let btn_update  = elems.btn_update  || document.getElementById('btn_update');
-        btn_update.disabled = true;   // TODO
+        let btn = this.get_svc_buttons(elems);
+        btn.update.disabled = true;   // TODO
 
         if (Number.isInteger(svcinfo)) {
             ui.addNotification(null, E('p', _('Error')
                 + ' %s: return code = %s'.format('decode_svc_info', svcinfo + ' ')));
             this.disableButtons(true, null, elems);
         } else {
-            btn_enable.disabled  = (svc_autorun) ? true : false;
-            btn_disable.disabled = (svc_autorun) ? false : true;
+            btn.enable.disabled  = (svc_autorun) ? true : false;
+            btn.disable.disabled = (svc_autorun) ? false : true;
             if (svcinfo.dmn.total == 0) {
-                btn_start.disabled = false;
-                btn_restart.disabled = true;
-                btn_stop.disabled = true;
+                btn.start.disabled = false;
+                btn.restart.disabled = true;
+                btn.stop.disabled = true;
             } else {
-                btn_start.disabled = true;
-                btn_restart.disabled = false;
-                btn_stop.disabled = false;
+                btn.start.disabled = true;
+                btn.restart.disabled = false;
+                btn.stop.disabled = false;
             }
         }
         let elem_status = elems.status || document.getElementById("status");
