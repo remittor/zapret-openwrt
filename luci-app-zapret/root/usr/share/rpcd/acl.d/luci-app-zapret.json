@@ -9,6 +9,7 @@
 				"/etc/crontabs/root": [ "read" ],
 				"/etc/init.d/zapret*": [ "exec" ],
 				"/bin/ps*": [ "exec" ],
+				"/bin/opkg*": [ "exec" ],
 				"/opt/zapret/sync_config.sh*": [ "exec" ]
 			},
 			"uci": [ "zapret", "network" ],

@@ -104,6 +104,21 @@ return baseclass.extend({
         return (v && typeof(v) === 'string') ? v.trim().replace(/\r?\n/g, '') : v;
     },
 
+    decode_pkg_list: function(pkg_list) {
+        let pkg_dict = { };
+        let lines = pkg_list.trim().split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].trim();
+            if (line.length >= 4) {
+                let word_list = line.split(' - ');
+                let name = word_list[0].trim();
+                let ver = word_list[1].trim();
+                pkg_dict[name] = ver;
+            }
+        }
+        return pkg_dict;
+    },
+
     get_pid_list: function(proc_list) {
         let plist = [ ];
         let lines = proc_list.trim().split('\n');

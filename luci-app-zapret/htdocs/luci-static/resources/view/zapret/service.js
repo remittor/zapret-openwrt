@@ -40,6 +40,7 @@ return view.extend({
             tools.getInitState(tools.appName),    // svc_state
             fs.exec(tools.execPath, [ 'info' ]),  // svc_info
             fs.exec('/bin/ps'),                   // process list
+            fs.exec('/bin/opkg', [ 'list-installed', '*zapret*' ]),  // installed packages
             uci.load(tools.appName),              // config
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
@@ -61,6 +62,7 @@ return view.extend({
         let svc_autorun = status_array[0] ? true : false;
         let svc_info = status_array[1];   // stdout: JSON as text
         let proc_list = status_array[2];  // stdout: multiline text
+        let pkg_list = status_array[3];   // stdout: installed packages
         if (svc_info.code != 0) {
             ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
             this.disableButtons(true, null, elems);
@@ -68,6 +70,11 @@ return view.extend({
         }
         if (proc_list.code != 0) {
             ui.addNotification(null, E('p', _('Unable to read process list') + ': setAppStatus()'));
+            this.disableButtons(true, null, elems);
+            return;
+        }
+        if (pkg_list.code != 0) {
+            ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': setAppStatus()'));
             this.disableButtons(true, null, elems);
             return;
         }
@@ -222,6 +229,12 @@ return view.extend({
         }
         let cfg = uci.get(tools.appName, 'config');
 
+        let pkg_list = status_array[3];
+        if (pkg_list === undefined || typeof(pkg_list) !== 'object' || pkg_list.code != 0) {
+            ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': setAppStatus()'));
+            return;
+        }
+
         let status_string = E('div', {
             'id'   : 'status',
             'name' : 'status',
@@ -297,11 +310,29 @@ return view.extend({
 
         poll.add(L.bind(this.statusPoll, this));
 
+        let page_title = _('Zapret');
+        let pkgdict = tools.decode_pkg_list(pkg_list.stdout);
+        page_title += ' &nbsp ';
+        if (pkgdict['zapret'] === undefined || pkgdict['zapret'] == '') {
+            page_title += 'unknown version';
+        } else {
+            page_title += 'v' + pkgdict['zapret'];
+        }
+        let aux1 = E('em');
+        let aux2 = E('em');
+        if (pkgdict['zapret'] != pkgdict['luci-app-zapret']) {
+            let errtxt = 'LuCI APP v' + pkgdict['luci-app-zapret'] + ' [ incorrect version! ]';
+            aux1 = E('div', { 'class': 'label-status error' }, errtxt);
+            aux2 = E('div', { }, '&nbsp');
+        }
+        
         let url1 = 'https://github.com/bol-van/zapret';
         let url2 = 'https://github.com/remittor/zapret-openwrt';
 
         return E([
-            E('h2', { 'class': 'fade-in' }, _('Zapret')),
+            E('h2', { 'class': 'fade-in' }, page_title),
+            aux1,
+            aux2,
             E('div', { 'class': 'cbi-section-descr fade-in' },
                 E('a', { 'href': url1, 'target': '_blank' }, url1),
             ),
