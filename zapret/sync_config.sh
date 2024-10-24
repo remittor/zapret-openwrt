@@ -12,6 +12,24 @@ function get_sed_compat
 	echo "$str"
 }
 
+function uncomment_param
+{
+	local param=$1
+	local fname=${2:-$ZAPRET_CONFIG}
+	sed -i "/^#$param=/s/^#//" $fname
+}
+
+function append_param
+{
+	local param=$1
+	local fname=${2:-$ZAPRET_CONFIG}
+	grep -q "^$param=" $fname
+	if [ "$?" != "0" ]; then
+		echo "" >> $fname
+		echo "$param=" >> $fname
+	fi
+}
+
 function set_param_value
 {
 	local param=$1
@@ -33,13 +51,15 @@ function sync_param
 	local param=$1
 	local vtype=$2
 	local value=$( uci -q get zapret.@main[0].$param )
+	uncomment_param $param
+	append_param $param
 	if [ "$vtype" = "str" ]; then
 		set_param_value_str $param "$value"
 	else
 		set_param_value $param $value
 	fi
 }
-	
+
 sync_param MODE
 sync_param FLOWOFFLOAD
 sync_param INIT_APPLY_FW
