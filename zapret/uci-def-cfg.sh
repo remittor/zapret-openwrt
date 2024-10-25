@@ -19,6 +19,7 @@ CFG_OPT_SYNC_CFG=0
 function set_default_values
 {
 	local cfgname=${1:-$ZAPRET_CFG_NAME}
+	local TAB="$( echo -n -e '\t' )"
 	uci batch <<-EOF
 		set $cfgname.config.autostart='0'
 		set $cfgname.config.FWTYPE='nftables'
@@ -31,26 +32,26 @@ function set_default_values
 		set $cfgname.config.DESYNC_MARK='0x40000000'
 		set $cfgname.config.DESYNC_MARK_POSTNAT='0x20000000'
 		set $cfgname.config.NFQWS_OPT_DESYNC='--dpi-desync=fake,split2 --dpi-desync-ttl=7 --dpi-desync-ttl6=0 --dpi-desync-repeats=20 --dpi-desync-fooling=md5sig,badseq --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin'
-		set $cfgname.config.NFQWS_OPT_DESYNC_SUFFIX=''
+		set $cfgname.config.NFQWS_OPT_DESYNC_SUFFIX="$TAB"
 		set $cfgname.config.MODE_HTTP='1'
 		set $cfgname.config.MODE_HTTP_KEEPALIVE='0'
 		set $cfgname.config.HTTP_PORTS='80'
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP_SUFFIX=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP6=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP6_SUFFIX=''
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP_SUFFIX="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP6="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTP6_SUFFIX="$TAB"
 		set $cfgname.config.MODE_HTTPS='1'
 		set $cfgname.config.HTTPS_PORTS='443'
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS_SUFFIX=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS6=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS6_SUFFIX=''
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS_SUFFIX="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS6="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_HTTPS6_SUFFIX="$TAB"
 		set $cfgname.config.MODE_QUIC='1'
 		set $cfgname.config.QUIC_PORTS='443'
 		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC='--dpi-desync=fake,split2 --dpi-desync-repeats=15 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin --new --dpi-desync=fake --dpi-desync-repeats=15'
-		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC_SUFFIX=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC6=''
-		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC6_SUFFIX=''
+		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC_SUFFIX="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC6="$TAB"
+		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC6_SUFFIX="$TAB"
 		commit $cfgname
 	EOF
 	return 0

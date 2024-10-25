@@ -7,6 +7,13 @@ ZAPRET_CONFIG="$ZAPRET_BASE/config"
 ZAPRET_CONFIG_DEF="$ZAPRET_BASE/config.default"
 ZAPRET_CFG=/etc/config/zapret
 
+ZAPRET_CFG_SEC_NAME="$( uci -q get zapret.config )"
+
+if [ -z "$ZAPRET_CFG_SEC_NAME" ]; then
+	# wrong uci-config
+	return 1
+fi
+
 function get_sed_compat
 {
 	local str=$( ( echo $1|sed -r 's/([\$\.\*\/\[\\^])/\\\1/g'|sed 's/[]]/\\]/g' )>&1 )
@@ -51,9 +58,13 @@ function sync_param
 {
 	local param=$1
 	local vtype=$2
-	local value=$( uci -q get zapret.@main[0].$param )
+	local value="$( uci -q get zapret.config.$param )"
 	uncomment_param $param
 	append_param $param
+	local TAB="$( echo -n -e '\t' )"
+	if [ "$value" = "$TAB" ]; then
+		value=""
+	fi
 	if [ "$vtype" = "str" ]; then
 		set_param_value_str $param "$value"
 	else

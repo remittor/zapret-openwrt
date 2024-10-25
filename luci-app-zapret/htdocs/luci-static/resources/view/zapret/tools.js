@@ -355,7 +355,11 @@ return baseclass.extend({
         },
 
         load: function() {
-            return uci.get('zapret', this.cfgsec, this.cfgparam);
+            let value = uci.get('zapret', this.cfgsec, this.cfgparam);
+            if (typeof(value) === 'string') {
+                return value.trim();
+            }
+            return value;
         },
 
         render: function(content) {
@@ -394,7 +398,9 @@ return baseclass.extend({
         handleSave: function(ev) {
             let txt = document.getElementById('widget.modal_content');
             let value = txt.value.trim().replace(/\r\n/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trim();
-
+            if (value == "") {
+                value = "\t";
+            }
             uci.set('zapret', this.cfgsec, this.cfgparam, value);
             uci.save();
             let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
