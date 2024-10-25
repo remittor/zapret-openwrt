@@ -4,6 +4,7 @@
 EXEDIR=/opt/zapret
 ZAPRET_BASE=/opt/zapret
 ZAPRET_CONFIG="$ZAPRET_BASE/config"
+ZAPRET_CONFIG_DEF="$ZAPRET_BASE/config.default"
 ZAPRET_CFG=/etc/config/zapret
 
 function get_sed_compat
@@ -59,6 +60,14 @@ function sync_param
 		set_param_value $param $value
 	fi
 }
+
+if [ ! -f "$ZAPRET_CONFIG" ]; then
+	if [ ! -f "$ZAPRET_CONFIG_DEF" ]; then
+		touch "$ZAPRET_CONFIG"
+	else
+		cp -f "$ZAPRET_CONFIG_DEF" "$ZAPRET_CONFIG"
+	fi
+fi
 
 sync_param MODE
 sync_param FLOWOFFLOAD

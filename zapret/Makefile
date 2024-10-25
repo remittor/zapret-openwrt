@@ -78,9 +78,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/90-zapret $(1)/etc/hotplug.d/iface/90-zapret
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/zapret $(1)/etc/init.d/zapret
-	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./zapret.config $(1)/etc/config/zapret
-	$(INSTALL_CONF) ./config        $(1)/opt/zapret/config
+	$(INSTALL_CONF) ./config.default $(1)/opt/zapret/config.default
 	#$(INSTALL_CONF) ./ipset/zapret-hosts-auto.txt         $(1)/opt/zapret/ipset/zapret-hosts-auto.txt
 	$(INSTALL_CONF) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
 	$(INSTALL_CONF) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
@@ -91,6 +89,9 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_CONF) ./ipset/zapret-ip-user-exclude.txt    $(1)/opt/zapret/ipset/zapret-ip-user-exclude.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-user-ipban.txt      $(1)/opt/zapret/ipset/zapret-ip-user-ipban.txt
 	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_BIN) ./uci-def-cfg.sh $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
+	$(INSTALL_BIN) ./uci-def-cfg.sh $(1)/opt/zapret/uci-def-cfg.sh
 endef
 
 define Package/$(PKG_NAME)/preinst
@@ -116,26 +117,20 @@ define Package/$(PKG_NAME)/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
-	NEWCFGNAME=zapret-opkg
-	NEWCFGFILE=/etc/config/$${NEWCFGNAME}
-	if [ -f "$${NEWCFGFILE}" ]; then
-		uci -m -f /etc/config/zapret import "$${NEWCFGNAME}"
-		uci commit "$${NEWCFGNAME}"
-		uci -m -f "$${NEWCFGFILE}" import zapret
-		uci commit zapret
-		rm -f "$${NEWCFGFILE}"
-		echo "File /etc/config/zapret merged from IPK"
+	ZAPRET_CONFIG=/opt/zapret/config
+	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
+	# check existing uci-config
+	[ -f "/etc/config/zapret" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
+	# create or merge uci-config
+	/opt/zapret/uci-def-cfg.sh
+	[ "$${ZAPRET_CFG_EXISTS}" = "1" ] && echo "Config /etc/config/zapret merged with default uci-config"
+	# remove uci-default script from system dir (used into /etc/init.d/boot)
+	rm -f /etc/uci-defaults/zapret-uci-def-cfg.sh
+	# creating main config if its not exists
+	if [ ! -f "$${ZAPRET_CONFIG}" ]; then
+		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
+		/opt/zapret/sync_config.sh
 	fi
-	NEWCONFIG=/opt/zapret/config-opkg
-	if [ -f "$${NEWCONFIG}" ]; then
-		# backup current main config
-		mv -f /opt/zapret/config /opt/zapret/config.backup
-		# renew main config
-		mv -f "$${NEWCONFIG}" /opt/zapret/config
-		echo "File /opt/zapret/config replaced from IPK"
-	fi
-	# synchnonize main config
-	/opt/zapret/sync_config.sh
 	# enable main service
 	/etc/init.d/zapret enable
 	# stop all
@@ -178,7 +173,7 @@ define Package/$(PKG_NAME)/postrm
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
 	[ -f "/etc/config/zapret-opkg" ] && rm -f "/etc/config/zapret-opkg"
-	[ -f "/opt/zapret/config" ] && cp -f /opt/zapret/config "/opt/zapret/config.backup2"
+	[ -f "/opt/zapret/config" ] && cp -f /opt/zapret/config "/opt/zapret/config.backup"
 	#rm -rf /opt/zapret
 	#echo "Directory /opt/zapret removed!"
 fi
