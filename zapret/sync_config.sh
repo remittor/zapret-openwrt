@@ -80,37 +80,28 @@ if [ ! -f "$ZAPRET_CONFIG" ]; then
 	fi
 fi
 
-sync_param MODE
+sync_param FWTYPE
+sync_param POSTNAT
 sync_param FLOWOFFLOAD
 sync_param INIT_APPLY_FW
 sync_param DISABLE_IPV4
 sync_param DISABLE_IPV6
 sync_param MODE_FILTER
-sync_param DESYNC_MARK
-sync_param DESYNC_MARK_POSTNAT
-sync_param NFQWS_OPT_DESYNC str
-sync_param NFQWS_OPT_DESYNC_SUFFIX str
-sync_param MODE_HTTP
-sync_param MODE_HTTP_KEEPALIVE
-sync_param HTTP_PORTS
-sync_param NFQWS_OPT_DESYNC_HTTP str
-sync_param NFQWS_OPT_DESYNC_HTTP_SUFFIX str
-sync_param NFQWS_OPT_DESYNC_HTTP6 str
-sync_param NFQWS_OPT_DESYNC_HTTP6_SUFFIX str
-sync_param MODE_HTTPS
-sync_param HTTPS_PORTS
-sync_param NFQWS_OPT_DESYNC_HTTPS str
-sync_param NFQWS_OPT_DESYNC_HTTPS_SUFFIX str
-sync_param NFQWS_OPT_DESYNC_HTTPS6 str
-sync_param NFQWS_OPT_DESYNC_HTTPS6_SUFFIX str
-sync_param MODE_QUIC
-sync_param QUIC_PORTS
-sync_param NFQWS_OPT_DESYNC_QUIC str
-sync_param NFQWS_OPT_DESYNC_QUIC_SUFFIX str
-sync_param NFQWS_OPT_DESYNC_QUIC6 str
-sync_param NFQWS_OPT_DESYNC_QUIC6_SUFFIX str
 
 sync_param AUTOHOSTLIST_RETRANS_THRESHOLD
 sync_param AUTOHOSTLIST_FAIL_THRESHOLD
 sync_param AUTOHOSTLIST_FAIL_TIME
 sync_param AUTOHOSTLIST_DEBUGLOG
+
+sync_param NFQWS_ENABLE
+sync_param DESYNC_MARK
+sync_param DESYNC_MARK_POSTNAT
+sync_param NFQWS_PORTS_TCP str
+sync_param NFQWS_PORTS_UDP str
+sync_param NFQWS_TCP_PKT_OUT str
+sync_param NFQWS_TCP_PKT_IN str
+sync_param NFQWS_UDP_PKT_OUT str
+sync_param NFQWS_UDP_PKT_IN str
+sync_param NFQWS_PORTS_TCP_KEEPALIVE
+sync_param NFQWS_PORTS_UDP_KEEPALIVE
+sync_param NFQWS_OPT str

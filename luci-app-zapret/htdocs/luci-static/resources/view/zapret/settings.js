@@ -64,10 +64,10 @@ return view.extend({
         //o.value('iptables', 'iptables');
         //o.value('ipfw',     'ipfw');
 
-        o = s.taboption(tabname, form.ListValue, 'MODE', _('MODE'));
-        o.value('nfqws',   'nfqws');
-        //o.value('tpws',    'tpws');
-        
+        o = s.taboption(tabname, form.Flag, 'POSTNAT', _('POSTNAT'));
+        o.rmempty = false;
+        o.default = 1;
+
         o = s.taboption(tabname, form.ListValue, 'FLOWOFFLOAD', _('FLOWOFFLOAD'));
         o.value('donttouch', 'donttouch');
         o.value('none',      'none');
@@ -91,44 +91,6 @@ return view.extend({
         //o.value('ipset',        'ipset');
         o.value('hostlist',     'hostlist');
         o.value('autohostlist', 'autohostlist');
-
-        o = s.taboption(tabname, form.Flag, 'MODE_HTTP', _('MODE_HTTP'));
-        o.rmempty = false;
-        o.default = 0;
-
-        o = s.taboption(tabname, form.Flag, 'MODE_HTTP_KEEPALIVE', _('MODE_HTTP_KEEPALIVE'));
-        o.rmempty = false;
-        o.default = 0;
-
-        o = s.taboption(tabname, form.Value, 'HTTP_PORTS', _('HTTP_PORTS'));
-        o.rmempty     = false;
-        o.datatype    = 'string';
-
-        o = s.taboption(tabname, form.Flag, 'MODE_HTTPS', _('MODE_HTTPS'));
-        o.rmempty = false;
-        o.default = 0;
-
-        o = s.taboption(tabname, form.Value, 'HTTPS_PORTS', _('HTTPS_PORTS'));
-        o.rmempty     = false;
-        o.datatype    = 'string';
-
-        o = s.taboption(tabname, form.Flag, 'MODE_QUIC', _('MODE_QUIC'));
-        o.rmempty = false;
-        o.default = 0;
-
-        o = s.taboption(tabname, form.Value, 'QUIC_PORTS', _('QUIC_PORTS'));
-        o.rmempty     = false;
-        o.datatype    = 'string';
-
-        o = s.taboption(tabname, form.Value, 'DESYNC_MARK', _('DESYNC_MARK'));
-        //o.description = _("nfqws option for DPI desync attack");
-        o.rmempty     = false;
-        o.datatype    = 'string';
-
-        o = s.taboption(tabname, form.Value, 'DESYNC_MARK_POSTNAT', _('DESYNC_MARK_POSTNAT'));
-        //o.description = _("nfqws option for DPI desync attack");
-        o.rmempty     = false;
-        o.datatype    = 'string';
 
         /* NFQWS_OPT_DESYNC tab */
 
@@ -173,34 +135,54 @@ return view.extend({
             btn.onclick = () => new tools.longstrEditDialog('config', param, param, locname, rows, multiline).show();
         };
 
+        o = s.taboption(tabname, form.Flag, 'NFQWS_ENABLE', _('NFQWS_ENABLE'));
+        o.rmempty = false;
+        o.default = 1;
+
+        o = s.taboption(tabname, form.Value, 'DESYNC_MARK', _('DESYNC_MARK'));
+        //o.description = _("nfqws option for DPI desync attack");
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'DESYNC_MARK_POSTNAT', _('DESYNC_MARK_POSTNAT'));
+        //o.description = _("nfqws option for DPI desync attack");
+        o.rmempty     = false;
+        o.datatype    = 'string';
+        
+        o = s.taboption(tabname, form.Value, 'NFQWS_PORTS_TCP', _('NFQWS_PORTS_TCP'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_PORTS_UDP', _('NFQWS_PORTS_UDP'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_TCP_PKT_OUT', _('NFQWS_TCP_PKT_OUT'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_TCP_PKT_IN', _('NFQWS_TCP_PKT_IN'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_UDP_PKT_OUT', _('NFQWS_UDP_PKT_OUT'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_UDP_PKT_IN', _('NFQWS_UDP_PKT_IN'));
+        o.rmempty     = false;
+        o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_PORTS_TCP_KEEPALIVE', _('NFQWS_PORTS_TCP_KEEPALIVE'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Value, 'NFQWS_PORTS_UDP_KEEPALIVE', _('NFQWS_PORTS_UDP_KEEPALIVE'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
         add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_SUFFIX');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTP');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTP_SUFFIX');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS_SUFFIX');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTP6');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTP6_SUFFIX');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS6');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_HTTPS6_SUFFIX');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_QUIC');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_QUIC_SUFFIX');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_QUIC6');
-        add_delim(s);
-        add_param(s, 'NFQWS_OPT_DESYNC_QUIC6_SUFFIX');
+        add_param(s, 'NFQWS_OPT', null, 18, 2);
 
         /* AutoHostList settings */
 

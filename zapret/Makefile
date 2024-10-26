@@ -119,6 +119,18 @@ define Package/$(PKG_NAME)/postinst
 if [ -z "$${IPKG_INSTROOT}" ]; then
 	ZAPRET_CONFIG=/opt/zapret/config
 	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
+	# creating main config if its not exists
+	if [ ! -f "$${ZAPRET_CONFIG}" ]; then
+		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
+	fi
+	# check obsolete format for main config
+	if grep -qE "^NFQWS_OPT_DESYNC=|^MODE_HTTP=|^MODE_HTTPS=|^MODE_QUIC=|^MODE=" "$${ZAPRET_CONFIG}" ; then
+		echo "Detect obsolute format for main config!"
+		ZAPRET_CONFIG_BACKUP="$${ZAPRET_CONFIG}.backup"
+		cp -f "$${ZAPRET_CONFIG}" "$${ZAPRET_CONFIG_BACKUP}"
+		echo "Current file $${ZAPRET_CONFIG} backuped to $${ZAPRET_CONFIG_BACKUP}"
+		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
+	fi
 	# check existing uci-config
 	[ -f "/etc/config/zapret" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
 	# create or merge uci-config
@@ -126,11 +138,8 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	[ "$${ZAPRET_CFG_EXISTS}" = "1" ] && echo "Config /etc/config/zapret merged with default uci-config"
 	# remove uci-default script from system dir (used into /etc/init.d/boot)
 	rm -f /etc/uci-defaults/zapret-uci-def-cfg.sh
-	# creating main config if its not exists
-	if [ ! -f "$${ZAPRET_CONFIG}" ]; then
-		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
-		/opt/zapret/sync_config.sh
-	fi
+	# copy (sync) all params from uci-config to main config
+	/opt/zapret/sync_config.sh
 	# enable main service
 	/etc/init.d/zapret enable
 	# stop all
