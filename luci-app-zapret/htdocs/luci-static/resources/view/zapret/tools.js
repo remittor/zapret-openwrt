@@ -350,18 +350,24 @@ return baseclass.extend({
     }),
 
     longstrEditDialog: baseclass.extend({
-        __init__: function(cfgsec, cfgparam, title, desc, rows = 10) {
+        __init__: function(cfgsec, cfgparam, title, desc, rows = 10, multiline = false) {
             this.cfgsec      = cfgsec;
             this.cfgparam    = cfgparam;
             this.title       = title;
             this.desc        = desc;
             this.rows        = rows;
+            this.multiline   = multiline;
         },
 
         load: function() {
             let value = uci.get('zapret', this.cfgsec, this.cfgparam);
             if (typeof(value) === 'string') {
-                return value.trim();
+                value = value.trim();
+                if (this.multiline == 2) {
+                    value = value.replace(/\n  --/g, "\n--");
+                    value = value.replace(/\n --/g, "\n--");
+                    value = value.replace(/ --/g, "\n--");
+                }
             }
             return value;
         },
@@ -401,15 +407,36 @@ return baseclass.extend({
 
         handleSave: function(ev) {
             let txt = document.getElementById('widget.modal_content');
-            let value = txt.value.trim().replace(/\r\n/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trim();
+            let value = txt.value.trim();
+            if (this.multiline) {
+                value = value.replace(/\r/g, '');
+                if (value != "" && value != "\t") {
+                    value = '\n' + value + '\n';
+                }
+            } else {
+                value = value.replace(/\r\n/g, ' ');
+                value = value.replace(/\r/g, ' ');
+                value = value.replace(/\n/g, ' ');
+                value = value.trim();
+            }
             if (value == "") {
                 value = "\t";
             }
+            value = value.replace(/˂/g, '<');
+            value = value.replace(/˃/g, '>');
             uci.set('zapret', this.cfgsec, this.cfgparam, value);
             uci.save();
             let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
             if (elem) {
-                elem.querySelector('div').textContent = value;
+                let val = value.trim();
+                if (this.multiline) {
+                    val = val.replace(/</g, '˂');
+                    val = val.replace(/>/g, '˃');
+                    val = val.replace(/\n/g, '<br/>');
+                    elem.querySelector('div').innerHTML = val;
+                } else {
+                    elem.querySelector('div').textContent = val;
+                }
             }
             ui.hideModal();
             /*

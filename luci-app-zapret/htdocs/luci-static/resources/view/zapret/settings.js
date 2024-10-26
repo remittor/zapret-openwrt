@@ -141,26 +141,36 @@ return view.extend({
             o.default = '<hr style="width: 620px; height: 1px; margin: 1px 0 1px; border-top: 1px solid;">';
         };
 
-        let add_param = function(sec, param, locname = null, rows = 10) {
+        let add_param = function(sec, param, locname = null, rows = 10, multiline = false) {
             if (!locname)
                 locname = param;
             let btn = sec.taboption(tabname, form.Button, '_' + param + '_btn', locname);
             btn.inputtitle = _('Edit');
             btn.inputstyle = 'edit btn';
             let val = sec.taboption(tabname, form.DummyValue, '_' + param);
-            val.rawhtml = false;
+            val.rawhtml = multiline ? true : false;
             val.cfgvalue = function(section_id) {
-                let name = uci.get(tools.appName, section_id, param);
-                if (name == null || name == "")
-                    name = "";
-                return name;
+                let value = uci.get(tools.appName, section_id, param);
+                if (value == null) {
+                    return "";
+                }
+                value = value.trim();
+                if (multiline == 2) {
+                    value = value.replace(/\n  --/g, "\n--");
+                    value = value.replace(/\n --/g, "\n--");
+                    value = value.replace(/ --/g, "\n--");
+                }
+                if (val.rawhtml) {
+                    value = value.replace(/</g, '˂');
+                    value = value.replace(/>/g, '˃');
+                    value = value.replace(/\n/g, '<br/>');
+                }
+                return value;
             };
             val.validate = function(section_id, value) {
-                if (!value)
-                    return "";
-                return value.trim();
+                return (value) ? value.trim() : "";
             };
-            btn.onclick = () => new tools.longstrEditDialog('config', param, param, locname, rows).show();
+            btn.onclick = () => new tools.longstrEditDialog('config', param, param, locname, rows, multiline).show();
         };
 
         add_delim(s);
@@ -213,7 +223,7 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.autoHostListFN;
-        o.onclick = () => new tools.fileEditDialog(            
+        o.onclick = () => new tools.fileEditDialog(
             tools.autoHostListFN,
             _('Auto host list'),
             '',
@@ -229,7 +239,7 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.autoHostListDbgFN;
-        o.onclick = () => new tools.fileEditDialog(            
+        o.onclick = () => new tools.fileEditDialog(
             tools.autoHostListDbgFN,
             _('Auto host debug list'),
             '',
@@ -246,7 +256,7 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.hostsUserFN;
-        o.onclick = () => new tools.fileEditDialog(            
+        o.onclick = () => new tools.fileEditDialog(
             tools.hostsUserFN,
             _('User entries'),
             _('One hostname per line.<br />Examples:'),
@@ -258,7 +268,7 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.hostsUserExcludeFN;
-        o.onclick = () => new tools.fileEditDialog(            
+        o.onclick = () => new tools.fileEditDialog(
             tools.hostsUserExcludeFN,
             _('User excluded entries'),
             _('One hostname per line.<br />Examples:'),
