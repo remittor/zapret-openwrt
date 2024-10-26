@@ -94,7 +94,7 @@ return view.extend({
         } else {
             btn.enable.disabled  = (svc_autorun) ? true : false;
             btn.disable.disabled = (svc_autorun) ? false : true;
-            if (svcinfo.dmn.total == 0) {
+            if (!svcinfo.dmn.inited) {
                 btn.start.disabled = false;
                 btn.restart.disabled = true;
                 btn.stop.disabled = true;

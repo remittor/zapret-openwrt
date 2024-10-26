@@ -143,6 +143,7 @@ return baseclass.extend({
         let result = {
             "autorun": svc_autorun,
             "dmn": {
+                inited: false,
                 total: 0,
                 running: 0,
                 working: 0,
@@ -162,18 +163,18 @@ return baseclass.extend({
             return -3;
         }
         if (typeof(jdata.zapret) == 'object') {
+            result.dmn.inited = true;
             let dmn_list = jdata.zapret.instances;
-            if (typeof(dmn_list) !== 'object') {
-                return -4;
-            }
-            for (const [dmn_name, daemon] of Object.entries(dmn_list)) {
-                result.dmn.total += 1;
-                if (daemon.running) {
-                    result.dmn.running += 1;
-                }
-                if (daemon.pid !== undefined && daemon.pid != null) {
-                    if (plist.includes(daemon.pid)) {
-                        result.dmn.working += 1;
+            if (typeof(dmn_list) == 'object') {
+                for (const [dmn_name, daemon] of Object.entries(dmn_list)) {
+                    result.dmn.total += 1;
+                    if (daemon.running) {
+                        result.dmn.running += 1;
+                    }
+                    if (daemon.pid !== undefined && daemon.pid != null) {
+                        if (plist.includes(daemon.pid)) {
+                            result.dmn.working += 1;
+                        }
                     }
                 }
             }
@@ -182,7 +183,7 @@ return baseclass.extend({
         if (result.dmn.total == 0) {
             result.status = (!svc_autorun) ? this.statusDict.disabled : this.statusDict.stopped;
         } else {
-            result.status = (!result.dmn.working) ? this.statusDict.started : this.statusDict.running;
+            result.status = (result.dmn.inited) ? this.statusDict.started : this.statusDict.running;
         }
         return result;
     },
@@ -193,7 +194,7 @@ return baseclass.extend({
         
         if (typeof(svcinfo) == 'object') {
             svc_autorun = (svcinfo.autorun) ? _('Enabled') : _('Disabled');
-            if (svcinfo.dmn.total == 0) {
+            if (!svcinfo.dmn.inited) {
                 svc_daemons = _('Stopped');
             } else {
                 svc_daemons = (!svcinfo.dmn.working) ? _('Starting') : _('Running');
