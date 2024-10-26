@@ -47,6 +47,9 @@ return baseclass.extend({
     custFileMax       : 4,
     custFileTemplate  : '/opt/zapret/ipset/cust%s.txt',
 
+    autoHostListFN    : '/opt/zapret/ipset/zapret-hosts-auto.txt',
+    autoHostListDbgFN : '/opt/zapret/ipset/zapret-hosts-auto-debug.log',
+
     infoLabelRunning  : '<span class="label-status running">'  + _('Running')  + '</span>',
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
     infoLabelStopped  : '<span class="label-status stopped">'  + _('Stopped')  + '</span>',

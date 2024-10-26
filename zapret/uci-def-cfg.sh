@@ -52,6 +52,10 @@ function set_default_values
 		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC_SUFFIX="$TAB"
 		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC6="$TAB"
 		set $cfgname.config.NFQWS_OPT_DESYNC_QUIC6_SUFFIX="$TAB"
+		set $cfgname.config.AUTOHOSTLIST_RETRANS_THRESHOLD='3'
+		set $cfgname.config.AUTOHOSTLIST_FAIL_THRESHOLD='3'
+		set $cfgname.config.AUTOHOSTLIST_FAIL_TIME='60'
+		set $cfgname.config.AUTOHOSTLIST_DEBUGLOG='0'
 		commit $cfgname
 	EOF
 	return 0

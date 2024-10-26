@@ -191,6 +191,51 @@ return view.extend({
         add_param(s, 'NFQWS_OPT_DESYNC_QUIC6');
         add_delim(s);
         add_param(s, 'NFQWS_OPT_DESYNC_QUIC6_SUFFIX');
+
+        /* AutoHostList settings */
+
+        tabname = 'autohostlist_tab'; 
+        s.tab(tabname, _('AutoHostList'));
+        
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_THRESHOLD', _('RETRANS_THRESHOLD'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_FAIL_THRESHOLD', _('FAIL_THRESHOLD'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_FAIL_TIME', _('FAIL_TIME'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Button, '_auto_host_btn', _('Auto host list entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.description = tools.autoHostListFN;
+        o.onclick = () => new tools.fileEditDialog(            
+            tools.autoHostListFN,
+            _('Auto host list'),
+            '',
+            '',
+            15
+        ).show();
+
+        o = s.taboption(tabname, form.Flag, 'AUTOHOSTLIST_DEBUGLOG', _('DEBUGLOG'));
+        o.rmempty     = false;
+        o.default     = 0;
+
+        o = s.taboption(tabname, form.Button, '_auto_host_debug_btn', _('Auto host debug list entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.description = tools.autoHostListDbgFN;
+        o.onclick = () => new tools.fileEditDialog(            
+            tools.autoHostListDbgFN,
+            _('Auto host debug list'),
+            '',
+            '',
+            15
+        ).show();
         
         /* Blacklist settings */
 
