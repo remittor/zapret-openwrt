@@ -103,7 +103,15 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		# stop service if PKG_UPGRADE
 		[ -x "/etc/init.d/zapret" ] && /etc/init.d/zapret stop >/dev/null 2>&1
 	fi
-fi	
+	if [ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ]; then
+		if [ -f "/opt/zapret/ipset/zapret-hosts-user.txt" ]; then
+			CFGLISTHASH=$$( md5sum "/opt/zapret/ipset/zapret-hosts-user.txt" | awk '{print $$1;}' )
+			if [ "$${CFGLISTHASH}" = "79e35df62b0d1ae455d0a7e04c4cecac" ]; then
+				rm -f "/opt/zapret/ipset/zapret-hosts-user.txt"
+			fi
+		fi
+	fi
+fi
 exit 0
 endef
 
