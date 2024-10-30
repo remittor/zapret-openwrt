@@ -79,7 +79,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/zapret $(1)/etc/init.d/zapret
 	$(INSTALL_CONF) ./config.default $(1)/opt/zapret/config.default
-	$(INSTALL_CONF) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
+	$(INSTALL_CONF) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
 	$(INSTALL_CONF) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
 	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
@@ -126,7 +126,9 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	fi
 	# create empty txt files into ipset directory
+	[ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-google.txt"
 	#[ ! -f "/opt/zapret/ipset/zapret-hosts-auto.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-auto.txt"
+	[ ! -f "/opt/zapret/ipset/zapret-hosts-user.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-user.txt"
 	[ ! -f "/opt/zapret/ipset/zapret-hosts-user-ipban.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-user-ipban.txt"
 	#[ ! -f "/opt/zapret/ipset/zapret-ip.txt" ] && touch "/opt/zapret/ipset/zapret-ip.txt"
 	[ ! -f "/opt/zapret/ipset/zapret-ip-user.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user.txt"

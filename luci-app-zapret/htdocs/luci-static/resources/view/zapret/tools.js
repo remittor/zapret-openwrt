@@ -40,6 +40,7 @@ return baseclass.extend({
     syncCfgPath       : '/opt/zapret/sync_config.sh',
     defaultCfgPath    : '/opt/zapret/uci-def-cfg.sh',
 
+    hostsGoogleFN     : '/opt/zapret/ipset/zapret-hosts-google.txt',
     hostsUserFN       : '/opt/zapret/ipset/zapret-hosts-user.txt',
     hostsUserExcludeFN: '/opt/zapret/ipset/zapret-hosts-user-exclude.txt',
     iplstExcludeFN    : '/opt/zapret/ipset/zapret-ip-exclude.txt',

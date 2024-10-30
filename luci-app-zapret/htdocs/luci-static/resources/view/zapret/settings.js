@@ -234,6 +234,18 @@ return view.extend({
         tabname = 'blacklist_tab'; 
         s.tab(tabname, _('Blacklist settings'));
 
+        o = s.taboption(tabname, form.Button, '_google_entries_btn', _('Google hostname entries'));
+        o.inputtitle = _('Edit');
+        o.inputstyle = 'edit btn';
+        o.description = tools.hostsGoogleFN;
+        o.onclick = () => new tools.fileEditDialog(
+            tools.hostsGoogleFN,
+            _('Google hostname entries'),
+            _('One hostname per line.<br />Examples:'),
+            '<code>youtube.com<br />googlevideo.com</code>',
+            15
+        ).show();
+
         o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
