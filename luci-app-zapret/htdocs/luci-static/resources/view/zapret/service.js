@@ -22,6 +22,7 @@ return view.extend({
             restart : elems.btn_restart || document.getElementById('btn_restart'),
             stop    : elems.btn_stop    || document.getElementById('btn_stop'),
             update  : elems.btn_update  || document.getElementById('btn_update'),
+            reset   : elems.btn_update  || document.getElementById('btn_reset'),
         };
     },
     
@@ -33,6 +34,7 @@ return view.extend({
         btn.restart.disabled = flag;
         btn.stop.disabled    = flag;
         btn.update.disabled  = true; // TODO
+        btn.reset.disabled   = flag;
     },
 
     getAppStatus: function() {
@@ -86,6 +88,7 @@ return view.extend({
         }
         let btn = this.get_svc_buttons(elems);
         btn.update.disabled = true;   // TODO
+        btn.reset.disabled = false;
 
         if (Number.isInteger(svcinfo)) {
             ui.addNotification(null, E('p', _('Error')
@@ -134,7 +137,7 @@ return view.extend({
         });
     },
 
-    serviceActionEx: function(action, button) {
+    serviceActionEx: function(action, button, hide_modal = false) {
         if (button) {
             let elem = document.getElementById(button);
             this.disableButtons(true, elem);
@@ -142,11 +145,32 @@ return view.extend({
         poll.stop();
         
         let _this = this;
-        
-        return fs.exec(tools.syncCfgPath)
+        let exec_cmd = null;
+        let exec_arg = [ ];
+        let errmsg = 'ERROR:';
+        if (action == 'start' || action == 'restart') {
+            exec_cmd = tools.syncCfgPath;
+            errmsg = _('Unable to run sync_config.sh script.');
+        }
+        else if (action == 'reset') {
+            exec_cmd = tools.defaultCfgPath;
+            exec_arg = [ '-f' ];
+            errmsg = _('Unable to run uci-def-cfg.sh script.');
+            action = null;
+        } else {
+            ui.addNotification(null, E('p', 'ERROR: unknown action'));
+            return null;
+        }
+        return fs.exec(exec_cmd, exec_arg)
         .then(function(res) { 
             if (res.code != 0) {
-                ui.addNotification(null, E('p', _('Unable to run sync_config.sh script.') + ' res.code = ' + res.code));
+                ui.addNotification(null, E('p', errmsg + ' res.code = ' + res.code));
+                action = null;  // return with error
+            }
+            if (hide_modal) {
+                ui.hideModal();
+            }
+            if (!action) {
                 return _this.getAppStatus().then(
                     (status_array) => {
                         _this.setAppStatus(status_array);
@@ -156,7 +180,7 @@ return view.extend({
             return _this.serviceAction(action, null);
         })
         .catch(e => { 
-            ui.addNotification(null, E('p', _('Unable to run sync_config.sh script.') + ' Error: ' + e.message));
+            ui.addNotification(null, E('p', errmsg + ' Error: ' + e.message));
         });
     },
 
@@ -192,29 +216,29 @@ return view.extend({
         );
     },
 
-    dialogDestroy: function(ev) {
+    dialogResetCfg: function(ev) {
         ev.target.blur();
         let cancel_button = E('button', {
             'class': btn_style_neutral,
             'click': ui.hideModal,
         }, _('Cancel'));
 
-        let shutdown_btn = E('button', {
-            'class': btn_style_warning,
-        }, _('Shutdown'));
-        shutdown_btn.onclick = ui.createHandlerFn(this, () => {
+        let resetcfg_btn = E('button', {
+            'class': btn_style_action,
+        }, _('Reset settings'));
+        resetcfg_btn.onclick = ui.createHandlerFn(this, () => {
             cancel_button.disabled = true;
-            return this.appAction('destroy');
+            return this.serviceActionEx('reset', resetcfg_btn, true);
         });
 
-        ui.showModal(_('Shutdown'), [
+        ui.showModal(_('Reset settings to default'), [
             E('div', { 'class': 'cbi-section' }, [
-                E('p', _('The service will be disabled. Continue?')),
+                E('p', _('All settings will be reset to default. Continue?')),
             ]),
             E('div', { 'class': 'right' }, [
-                shutdown_btn,
-                ' ',
                 cancel_button,
+                ' ',
+                resetcfg_btn,
             ])
         ]);
     },
@@ -294,8 +318,9 @@ return view.extend({
         btn_update.onclick  = ui.createHandlerFn(this, () => { this.appAction('update', 'btn_update') });
         layout_append(_('Update blacklist'), null, [ btn_update ] );
         
-        let btn_destroy     = create_btn('btn_destroy', btn_style_negative, _('Shutdown'));
-        btn_destroy.onclick = L.bind(this.dialogDestroy, this);
+        let btn_reset       = create_btn('btn_reset', btn_style_action, _('Reset settings'));
+        btn_reset.onclick   = L.bind(this.dialogResetCfg, this);
+        layout_append(_('Reset settings to default'), null, [ btn_reset ] );
 
         let elems = {
             "status": status_string,
@@ -305,6 +330,7 @@ return view.extend({
             "btn_restart": btn_restart,
             "btn_stop": btn_stop,
             "btn_update": btn_update,
+            "btn_reset": btn_reset,
         };
         this.setAppStatus(status_array, elems);
 
