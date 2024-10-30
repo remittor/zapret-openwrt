@@ -79,15 +79,9 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/zapret $(1)/etc/init.d/zapret
 	$(INSTALL_CONF) ./config.default $(1)/opt/zapret/config.default
-	#$(INSTALL_CONF) ./ipset/zapret-hosts-auto.txt         $(1)/opt/zapret/ipset/zapret-hosts-auto.txt
 	$(INSTALL_CONF) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
 	$(INSTALL_CONF) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
-	$(INSTALL_CONF) ./ipset/zapret-hosts-user-ipban.txt   $(1)/opt/zapret/ipset/zapret-hosts-user-ipban.txt
-	#$(INSTALL_CONF) ./ipset/zapret-ip.txt                 $(1)/opt/zapret/ipset/zapret-ip.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
-	$(INSTALL_CONF) ./ipset/zapret-ip-user.txt            $(1)/opt/zapret/ipset/zapret-ip-user.txt
-	$(INSTALL_CONF) ./ipset/zapret-ip-user-exclude.txt    $(1)/opt/zapret/ipset/zapret-ip-user-exclude.txt
-	$(INSTALL_CONF) ./ipset/zapret-ip-user-ipban.txt      $(1)/opt/zapret/ipset/zapret-ip-user-ipban.txt
 	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
@@ -131,6 +125,13 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		echo "Current file $${ZAPRET_CONFIG} backuped to $${ZAPRET_CONFIG_BACKUP}"
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	fi
+	# create empty txt files into ipset directory
+	#[ ! -f "/opt/zapret/ipset/zapret-hosts-auto.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-auto.txt"
+	[ ! -f "/opt/zapret/ipset/zapret-hosts-user-ipban.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-user-ipban.txt"
+	#[ ! -f "/opt/zapret/ipset/zapret-ip.txt" ] && touch "/opt/zapret/ipset/zapret-ip.txt"
+	[ ! -f "/opt/zapret/ipset/zapret-ip-user.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user.txt"
+	[ ! -f "/opt/zapret/ipset/zapret-ip-user-exclude.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user-exclude.txt"
+	[ ! -f "/opt/zapret/ipset/zapret-ip-user-ipban.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user-ipban.txt"
 	# check existing uci-config
 	[ -f "/etc/config/zapret" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
 	# create or merge uci-config
