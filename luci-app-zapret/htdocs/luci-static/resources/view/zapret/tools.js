@@ -160,9 +160,24 @@ return baseclass.extend({
         }        
         let plist = this.get_pid_list(proc_list.stdout);
         
-        let jdata = JSON.parse(svc_info.stdout);
-        if (typeof(jdata) !== 'object') {
+        if (plist.length < 4) {
             return -3;
+        }
+        if (typeof(svc_info.stdout) !== 'string') {
+            return -4;
+        }
+        if (svc_info.stdout.length < 3) {
+            return -5;
+        }
+        let jdata;
+        try {
+            jdata = JSON.parse(svc_info.stdout);
+        } catch (e) {
+            console.log('Incorrect JSON: ' + svc_info.stdout);
+            return -6;
+        }
+        if (typeof(jdata) !== 'object') {
+            return -7;
         }
         if (typeof(jdata.zapret) == 'object') {
             result.dmn.inited = true;
