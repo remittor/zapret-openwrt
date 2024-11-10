@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - '*'
+      - v[0-9]+*
 
 jobs:
   check:
@@ -63,6 +63,7 @@ jobs:
     #if: needs.check.outputs.is_active == 'true'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         #branch: [ openwrt-22.03, openwrt-23.05 ]
         branch: [ openwrt-23.05 ]
@@ -111,6 +112,17 @@ jobs:
           repository: 'remittor/zapret-openwrt'
           path: zapret-openwrt
 
+      - name: Setup OpenWrt SDK
+        if: ${{ matrix.branch == 'openwrt-23.05' || matrix.branch == 'SNAPSHOT' }}
+        working-directory: /builder
+        shell: bash
+        run: |
+          # gpg --verbose --recv-keys 0x1D53D1877742E911
+          gpg --verbose --import <(wget -qO- 'https://git.openwrt.org/?p=keyring.git;a=blob_plain;f=gpg/0x1D53D1877742E911.asc')
+          sed -r -i 's/^rm.+//' setup.sh
+          ./setup.sh
+          ls -lh
+
       - name: Setup ccache
         uses: actions/cache@v4
         with:
@@ -132,8 +144,8 @@ jobs:
         shell: bash
         run: |
           #export PKG_VERSION=$(date --utc -d $DATE +%Y%m%d)
-          #find $GITHUB_WORKSPACE/zapret-openwrt -type d -path '*/package/zapret' -exec cp -r {} ./package \;
-          cp -r $GITHUB_WORKSPACE/zapret-openwrt ./package/zapret-openwrt/
+          #find $GITHUB_WORKSPACE/zapret-openwrt -type d -path '*/package/zapret' -exec cp -vr {} ./package \;
+          cp -vr $GITHUB_WORKSPACE/zapret-openwrt ./package/zapret-openwrt/
           
           mv feeds.conf.default feeds.conf
           sed -i -e 's|base.*\.git|base https://github.com/openwrt/openwrt.git|' feeds.conf
