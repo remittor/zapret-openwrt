@@ -68,8 +68,9 @@ function set_default_values
 			--dpi-desync=fake
 			--dpi-desync-repeats=11
 			--new
-			<HOSTLIST>
+			--filter-tcp=80,443 <HOSTLIST>
 			--dpi-desync=fake,disorder2
+			--dpi-desync-repeats=6
 			--dpi-desync-autottl=2
 			--dpi-desync-fooling=md5sig
 		"
