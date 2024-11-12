@@ -150,6 +150,13 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	rm -f /etc/uci-defaults/zapret-uci-def-cfg.sh
 	# copy (sync) all params from uci-config to main config
 	/opt/zapret/sync_config.sh
+	# check main config
+	sh -n "$$ZAPRET_CONFIG"
+	ZAPRET_CONFIG_ERRCODE=$$?
+	[ "$$ZAPRET_CONFIG_ERRCODE" != "0" ] && cp -f "$$ZAPRET_CONFIG_DEF" "$$ZAPRET_CONFIG"
+	sh -n "$$ZAPRET_CONFIG"
+	ZAPRET_CONFIG_ERRCODE=$$?
+	[ "$$ZAPRET_CONFIG_ERRCODE" != "0" ] && exit 58
 	# enable main service
 	/etc/init.d/zapret enable
 	# stop all
@@ -171,7 +178,18 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	EXEDIR=/opt/zapret
 	ZAPRET_BASE=/opt/zapret
 	ZAPRET_CONFIG=/opt/zapret/config
+	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
 	OPENWRT_FW_INCLUDE=/etc/firewall.zapret
+	# check main config
+	sh -n "$$ZAPRET_CONFIG"
+	ZAPRET_CONFIG_ERRCODE=$$?
+	[ "$$ZAPRET_CONFIG_ERRCODE" != "0" ] && cp -f "$$ZAPRET_CONFIG_DEF" "$$ZAPRET_CONFIG"
+	sh -n "$$ZAPRET_CONFIG"
+	ZAPRET_CONFIG_ERRCODE=$$?
+	if [ "$$ZAPRET_CONFIG_ERRCODE" != "0" ]; then
+		ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
+		exit 0
+	fi
 	. "$${ZAPRET_CONFIG}"
 	. "$${ZAPRET_BASE}/common/base.sh"
 	. "$${ZAPRET_BASE}/common/fwtype.sh"
