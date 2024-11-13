@@ -27,6 +27,10 @@ return view.extend({
     },
     
     disableButtons: function(flag, button, elems = { }) {
+        let error_code = 0;
+        if (Number.isInteger(button) && button < 0) {
+            error_code = button;
+        }
         let btn = this.get_svc_buttons(elems);
         btn.enable.disabled  = flag;
         btn.disable.disabled = flag;
@@ -34,7 +38,7 @@ return view.extend({
         btn.restart.disabled = flag;
         btn.stop.disabled    = flag;
         btn.update.disabled  = true; // TODO
-        btn.reset.disabled   = flag;
+        btn.reset.disabled   = (error_code == 0) ? flag : false;
     },
 
     getAppStatus: function() {
@@ -58,7 +62,7 @@ return view.extend({
             let elem_status = elems.status || document.getElementById("status");
             elem_status.innerHTML = tools.makeStatusString(null);
             ui.addNotification(null, E('p', _('Unable to read the contents') + ': setAppStatus()'));
-            this.disableButtons(true, null, elems);
+            this.disableButtons(true, -1, elems);
             return;
         }
         let svc_autorun = status_array[0] ? true : false;
@@ -67,17 +71,17 @@ return view.extend({
         let pkg_list = status_array[3];   // stdout: installed packages
         if (svc_info.code != 0) {
             ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
-            this.disableButtons(true, null, elems);
+            this.disableButtons(true, -1, elems);
             return;
         }
         if (proc_list.code != 0) {
             ui.addNotification(null, E('p', _('Unable to read process list') + ': setAppStatus()'));
-            this.disableButtons(true, null, elems);
+            this.disableButtons(true, -1, elems);
             return;
         }
         if (pkg_list.code != 0) {
             ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': setAppStatus()'));
-            this.disableButtons(true, null, elems);
+            this.disableButtons(true, -1, elems);
             return;
         }
         let svcinfo;
@@ -93,7 +97,7 @@ return view.extend({
         if (Number.isInteger(svcinfo)) {
             ui.addNotification(null, E('p', _('Error')
                 + ' %s: return code = %s'.format('decode_svc_info', svcinfo + ' ')));
-            this.disableButtons(true, null, elems);
+            this.disableButtons(true, -1, elems);
         } else {
             btn.enable.disabled  = (svc_autorun) ? true : false;
             btn.disable.disabled = (svc_autorun) ? false : true;
@@ -154,7 +158,7 @@ return view.extend({
         }
         else if (action == 'reset') {
             exec_cmd = tools.defaultCfgPath;
-            exec_arg = [ '-f' ];
+            exec_arg = [ '-fs' ];  // force + sync 
             errmsg = _('Unable to run uci-def-cfg.sh script.');
             action = null;
         } else {
