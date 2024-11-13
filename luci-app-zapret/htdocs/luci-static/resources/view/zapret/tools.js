@@ -429,6 +429,10 @@ return baseclass.extend({
                 value = value.replace(/\r/g, '');
                 if (value != "" && value != "\t") {
                     value = '\n' + value + '\n';
+                    if (this.multiline == 2) {
+                        value = value.replace(/"/g, '');
+                        value = value.replace(/'/g, '');
+                    }
                 }
             } else {
                 value = value.replace(/\r\n/g, ' ');
