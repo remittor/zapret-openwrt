@@ -34,7 +34,7 @@ return view.extend({
         btn.restart.disabled = flag;
         btn.stop.disabled    = flag;
         btn.update.disabled  = true; // TODO
-        btn.reset.disabled   = flag;
+        btn.reset.disabled   = false;
     },
 
     getAppStatus: function() {
@@ -66,7 +66,7 @@ return view.extend({
         let proc_list = status_array[2];  // stdout: multiline text
         let pkg_list = status_array[3];   // stdout: installed packages
         if (svc_info.code != 0) {
-            ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
+            ui.addNotification(null, E('p', _('Unable to read the service info, please try ResetSettings') + ': setAppStatus()'));
             this.disableButtons(true, null, elems);
             return;
         }
@@ -154,7 +154,7 @@ return view.extend({
         }
         else if (action == 'reset') {
             exec_cmd = tools.defaultCfgPath;
-            exec_arg = [ '-f' ];
+            exec_arg = [ '-fs' ];
             errmsg = _('Unable to run uci-def-cfg.sh script.');
             action = null;
         } else {
