@@ -4,6 +4,7 @@
 EXEDIR=/opt/zapret
 ZAPRET_BASE=/opt/zapret
 ZAPRET_CONFIG="$ZAPRET_BASE/config"
+ZAPRET_CONFIG_NEW="$ZAPRET_BASE/config.new"
 ZAPRET_CONFIG_DEF="$ZAPRET_BASE/config.default"
 ZAPRET_CFG=/etc/config/zapret
 
@@ -11,13 +12,20 @@ ZAPRET_CFG_SEC_NAME="$( uci -q get zapret.config )"
 
 if [ -z "$ZAPRET_CFG_SEC_NAME" ]; then
 	# wrong uci-config
-	return 1
+	return 96
 fi
 
 function get_sed_compat
 {
 	local str=$( ( echo $1|sed -r 's/([\$\.\*\/\[\\^])/\\\1/g'|sed 's/[]]/\\]/g' )>&1 )
 	echo "$str"
+}
+
+function is_valid_sh_syntax
+{
+	local fname=${1:-$ZAPRET_CONFIG}
+	sh -n "$fname" &>/dev/null
+	return $?
 }
 
 function uncomment_param
@@ -80,6 +88,10 @@ if [ ! -f "$ZAPRET_CONFIG" ]; then
 	fi
 fi
 
+cp -f "$ZAPRET_CONFIG" "$ZAPRET_CONFIG_NEW"
+
+ZAPRET_CONFIG="$ZAPRET_CONFIG_NEW"
+
 sync_param FWTYPE
 sync_param POSTNAT
 sync_param FLOWOFFLOAD
@@ -105,3 +117,13 @@ sync_param NFQWS_UDP_PKT_IN str
 sync_param NFQWS_PORTS_TCP_KEEPALIVE
 sync_param NFQWS_PORTS_UDP_KEEPALIVE
 sync_param NFQWS_OPT str
+
+ZAPRET_CONFIG="$ZAPRET_BASE/config"
+
+if is_valid_sh_syntax "$ZAPRET_CONFIG_NEW" ; then
+	cp -f "$ZAPRET_CONFIG_NEW" "$ZAPRET_CONFIG"
+	rm -f "$ZAPRET_CONFIG_NEW"
+else
+	rm -f "$ZAPRET_CONFIG_NEW"
+	return 97
+fi
