@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret-mdig
-PKG_VERSION:=68-20241110
+PKG_VERSION:=68-20241115
 
 PKG_MAINTAINER:=bol-van
 PKG_LICENSE:=MIT
