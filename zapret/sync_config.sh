@@ -1,32 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2024 remittor
 
-EXEDIR=/opt/zapret
-ZAPRET_BASE=/opt/zapret
-ZAPRET_CONFIG="$ZAPRET_BASE/config"
-ZAPRET_CONFIG_NEW="$ZAPRET_BASE/config.new"
-ZAPRET_CONFIG_DEF="$ZAPRET_BASE/config.default"
-ZAPRET_CFG=/etc/config/zapret
-
-ZAPRET_CFG_SEC_NAME="$( uci -q get zapret.config )"
-
-if [ -z "$ZAPRET_CFG_SEC_NAME" ]; then
-	# wrong uci-config
-	return 96
-fi
-
-function get_sed_compat
-{
-	local str=$( ( echo $1|sed -r 's/([\$\.\*\/\[\\^])/\\\1/g'|sed 's/[]]/\\]/g' )>&1 )
-	echo "$str"
-}
-
-function is_valid_sh_syntax
-{
-	local fname=${1:-$ZAPRET_CONFIG}
-	sh -n "$fname" &>/dev/null
-	return $?
-}
+. /opt/zapret/comfunc.sh
 
 function uncomment_param
 {
@@ -49,7 +24,7 @@ function append_param
 function set_param_value
 {
 	local param=$1
-	local value=$( get_sed_compat "$2" )
+	local value=$( adapt_for_sed "$2" )
 	local fname=${3:-$ZAPRET_CONFIG}
 	sed -i "s/^$param=.*/$param=$value/g" $fname
 }
@@ -57,7 +32,7 @@ function set_param_value
 function set_param_value_str
 {
 	local param=$1
-	local value=$( get_sed_compat "$2" )
+	local value=$( adapt_for_sed "$2" )
 	local fname=${3:-$ZAPRET_CONFIG}
 	sed -i "s/^$param=.*/$param=\"$value\"/g" $fname
 }
@@ -90,6 +65,7 @@ fi
 
 cp -f "$ZAPRET_CONFIG" "$ZAPRET_CONFIG_NEW"
 
+ZAPRET_CONFIG__SAVED="$ZAPRET_CONFIG"
 ZAPRET_CONFIG="$ZAPRET_CONFIG_NEW"
 
 sync_param FWTYPE
@@ -118,9 +94,9 @@ sync_param NFQWS_PORTS_TCP_KEEPALIVE
 sync_param NFQWS_PORTS_UDP_KEEPALIVE
 sync_param NFQWS_OPT str
 
-ZAPRET_CONFIG="$ZAPRET_BASE/config"
+ZAPRET_CONFIG="$ZAPRET_CONFIG__SAVED"
 
-if is_valid_sh_syntax "$ZAPRET_CONFIG_NEW" ; then
+if is_valid_config "$ZAPRET_CONFIG_NEW" ; then
 	cp -f "$ZAPRET_CONFIG_NEW" "$ZAPRET_CONFIG"
 	rm -f "$ZAPRET_CONFIG_NEW"
 else

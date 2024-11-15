@@ -43,9 +43,10 @@ return view.extend({
 
     getAppStatus: function() {
         return Promise.all([
-            tools.getInitState(tools.appName),    // svc_state
-            fs.exec(tools.execPath, [ 'info' ]),  // svc_info
-            fs.exec('/bin/ps'),                   // process list
+            tools.getInitState(tools.appName),      // svc_boot
+            fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
+            fs.exec(tools.execPath, [ 'info' ]),    // svc_info
+            fs.exec('/bin/ps'),                     // process list
             fs.exec('/bin/opkg', [ 'list-installed', '*zapret*' ]),  // installed packages
             uci.load(tools.appName),              // config
         ]).catch(e => {
@@ -65,10 +66,15 @@ return view.extend({
             this.disableButtons(true, -1, elems);
             return;
         }
-        let svc_autorun = status_array[0] ? true : false;
-        let svc_info = status_array[1];   // stdout: JSON as text
-        let proc_list = status_array[2];  // stdout: multiline text
-        let pkg_list = status_array[3];   // stdout: installed packages
+        let svc_boot  = status_array[0] ? true : false;
+        let svc_en    = status_array[1];   // stdout: empty or error text
+        let svc_info  = status_array[2];   // stdout: JSON as text
+        let proc_list = status_array[3];   // stdout: multiline text
+        let pkg_list  = status_array[4];   // stdout: installed packages
+        
+        console.log('svc_en: ' + svc_en.code);
+        svc_en = (svc_en.code == 0) ? true : false;
+        
         if (svc_info.code != 0) {
             ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
             this.disableButtons(true, -1, elems);
@@ -88,7 +94,7 @@ return view.extend({
         if (force_app_status) {
             svcinfo = force_app_status;
         } else {
-            svcinfo = tools.decode_svc_info(svc_autorun, svc_info, proc_list, cfg);
+            svcinfo = tools.decode_svc_info(svc_en, svc_info, proc_list, cfg);
         }
         let btn = this.get_svc_buttons(elems);
         btn.update.disabled = true;   // TODO
@@ -99,8 +105,8 @@ return view.extend({
                 + ' %s: return code = %s'.format('decode_svc_info', svcinfo + ' ')));
             this.disableButtons(true, -1, elems);
         } else {
-            btn.enable.disabled  = (svc_autorun) ? true : false;
-            btn.disable.disabled = (svc_autorun) ? false : true;
+            btn.enable.disabled  = (svc_en) ? true : false;
+            btn.disable.disabled = (svc_en) ? false : true;
             if (!svcinfo.dmn.inited) {
                 btn.start.disabled = false;
                 btn.restart.disabled = true;
@@ -158,8 +164,8 @@ return view.extend({
         }
         else if (action == 'reset') {
             exec_cmd = tools.defaultCfgPath;
-            exec_arg = [ '-fs' ];  // force + sync 
-            errmsg = _('Unable to run uci-def-cfg.sh script.');
+            exec_arg = [ 'sync' ];  // restore config + sync configs
+            errmsg = _('Unable to run restore-def-cfg.sh script.');
             action = null;
         } else {
             ui.addNotification(null, E('p', 'ERROR: unknown action'));
@@ -231,7 +237,7 @@ return view.extend({
             'class': btn_style_action,
         }, _('Reset settings'));
         resetcfg_btn.onclick = ui.createHandlerFn(this, () => {
-            cancel_button.disabled = true;
+            //cancel_button.disabled = true;
             return this.serviceActionEx('reset', resetcfg_btn, true);
         });
 
@@ -257,7 +263,7 @@ return view.extend({
         }
         let cfg = uci.get(tools.appName, 'config');
 
-        let pkg_list = status_array[3];
+        let pkg_list = status_array[4];
         if (pkg_list === undefined || typeof(pkg_list) !== 'object' || pkg_list.code != 0) {
             ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': setAppStatus()'));
             return;

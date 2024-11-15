@@ -10,6 +10,7 @@
 			"acl": [ "luci-app-zapret" ],
 			"fs": {
 				"/opt/zapret/sync_config.sh": "executable",
+				"/opt/zapret/restore-def-cfg.sh": "executable",
 				"/etc/init.d/zapret": "executable"
 			},
 			"uci": { "zapret": true }

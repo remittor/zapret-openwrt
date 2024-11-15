@@ -10,7 +10,7 @@
 				"/etc/init.d/zapret*": [ "exec" ],
 				"/bin/ps*": [ "exec" ],
 				"/bin/opkg*": [ "exec" ],
-				"/opt/zapret/uci-def-cfg.sh*": [ "exec" ],
+				"/opt/zapret/restore-def-cfg.sh*": [ "exec" ],
 				"/opt/zapret/sync_config.sh*": [ "exec" ]
 			},
 			"uci": [ "zapret", "network" ],

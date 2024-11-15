@@ -76,15 +76,19 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/90-zapret $(1)/etc/hotplug.d/iface/90-zapret
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/zapret $(1)/etc/init.d/zapret
+	$(INSTALL_BIN) ./init.d.sh $(1)/etc/init.d/zapret
 	$(INSTALL_CONF) ./config.default $(1)/opt/zapret/config.default
 	$(INSTALL_CONF) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
 	$(INSTALL_CONF) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
 	$(INSTALL_CONF) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
-	$(INSTALL_BIN) ./sync_config.sh $(1)/opt/zapret/sync_config.sh
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(INSTALL_BIN) ./uci-def-cfg.sh $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
-	$(INSTALL_BIN) ./uci-def-cfg.sh $(1)/opt/zapret/uci-def-cfg.sh
+	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
+	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret/uci-def-cfg.sh
+	$(INSTALL_BIN) ./comfunc.sh         $(1)/opt/zapret/comfunc.sh
+	$(INSTALL_BIN) ./def-cfg.sh         $(1)/opt/zapret/def-cfg.sh
+	$(INSTALL_BIN) ./renew-cfg.sh       $(1)/opt/zapret/renew-cfg.sh
+	$(INSTALL_BIN) ./restore-def-cfg.sh $(1)/opt/zapret/restore-def-cfg.sh
+	$(INSTALL_BIN) ./sync_config.sh     $(1)/opt/zapret/sync_config.sh
 endef
 
 define Package/$(PKG_NAME)/preinst
@@ -132,15 +136,6 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		echo "Current file $${ZAPRET_CONFIG} backuped to $${ZAPRET_CONFIG_BACKUP}"
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	fi
-	# create empty txt files into ipset directory
-	[ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-google.txt"
-	#[ ! -f "/opt/zapret/ipset/zapret-hosts-auto.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-auto.txt"
-	[ ! -f "/opt/zapret/ipset/zapret-hosts-user.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-user.txt"
-	[ ! -f "/opt/zapret/ipset/zapret-hosts-user-ipban.txt" ] && touch "/opt/zapret/ipset/zapret-hosts-user-ipban.txt"
-	#[ ! -f "/opt/zapret/ipset/zapret-ip.txt" ] && touch "/opt/zapret/ipset/zapret-ip.txt"
-	[ ! -f "/opt/zapret/ipset/zapret-ip-user.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user.txt"
-	[ ! -f "/opt/zapret/ipset/zapret-ip-user-exclude.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user-exclude.txt"
-	[ ! -f "/opt/zapret/ipset/zapret-ip-user-ipban.txt" ] && touch "/opt/zapret/ipset/zapret-ip-user-ipban.txt"
 	# check existing uci-config
 	[ -f "/etc/config/zapret" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
 	# create or merge uci-config
@@ -150,13 +145,15 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	rm -f /etc/uci-defaults/zapret-uci-def-cfg.sh
 	# copy (sync) all params from uci-config to main config
 	/opt/zapret/sync_config.sh
+	# check service status
+	[ "$$( /etc/init.d/zapret status 2>/dev/null )" = "running" ] && ZAPRET_RUNNING=1 || ZAPRET_RUNNING=0
+	if [ "$${ZAPRET_RUNNING}" = "0" ]; then
+		ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
+		exit 0
+	fi
 	# check main config
-	sh -n "$$ZAPRET_CONFIG"
-	ZAPRET_CONFIG_ERRCODE=$$?
-	[ "$$ZAPRET_CONFIG_ERRCODE" != "0" ] && cp -f "$$ZAPRET_CONFIG_DEF" "$$ZAPRET_CONFIG"
-	sh -n "$$ZAPRET_CONFIG"
-	ZAPRET_CONFIG_ERRCODE=$$?
-	[ "$$ZAPRET_CONFIG_ERRCODE" != "0" ] && exit 58
+	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
+	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || exit 58
 	# enable main service
 	/etc/init.d/zapret enable
 	# stop all
@@ -181,12 +178,8 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
 	OPENWRT_FW_INCLUDE=/etc/firewall.zapret
 	# check main config
-	sh -n "$$ZAPRET_CONFIG"
-	ZAPRET_CONFIG_ERRCODE=$$?
-	[ "$$ZAPRET_CONFIG_ERRCODE" != "0" ] && cp -f "$$ZAPRET_CONFIG_DEF" "$$ZAPRET_CONFIG"
-	sh -n "$$ZAPRET_CONFIG"
-	ZAPRET_CONFIG_ERRCODE=$$?
-	if [ "$$ZAPRET_CONFIG_ERRCODE" != "0" ]; then
+	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
+	if ! sh -n "$${ZAPRET_CONFIG}" 2>/dev/null ; then
 		ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
 		exit 0
 	fi
