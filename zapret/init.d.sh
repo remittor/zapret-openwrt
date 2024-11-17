@@ -47,7 +47,9 @@ function enabled
 	if [ -n "$ZAPRET_CFG_SEC_NAME" ]; then
 		run_on_boot=$( get_run_on_boot_option )
 		if [ $run_on_boot != 1 ]; then
-			logger -p notice -t ZAPRET "Service is blocked!"
+			if [ "$IS_RUN_ON_BOOT" = "1" ]; then
+				logger -p notice -t ZAPRET "Service is blocked!"
+			fi
 			return 61
 		fi
 	fi
