@@ -145,12 +145,6 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	rm -f /etc/uci-defaults/zapret-uci-def-cfg.sh
 	# copy (sync) all params from uci-config to main config
 	/opt/zapret/sync_config.sh
-	# check service status
-	[ "$$( /etc/init.d/zapret status 2>/dev/null )" = "running" ] && ZAPRET_RUNNING=1 || ZAPRET_RUNNING=0
-	if [ "$${ZAPRET_RUNNING}" = "0" ]; then
-		ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
-		exit 0
-	fi
 	# check main config
 	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || exit 58
