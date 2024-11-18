@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-zapret
-PKG_VERSION:=68-20241115
+PKG_VERSION:=69-20241118
 PKG_LICENSE:=MIT
 
 LUCI_TITLE:=LuCI support for zapret
