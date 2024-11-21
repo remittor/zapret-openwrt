@@ -65,8 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #branch: [ openwrt-22.03, openwrt-23.05 ]
-        branch: [ openwrt-23.05 ]
+        branch: [ openwrt-23.05, SNAPSHOT ]
         arch:
           - aarch64_cortex-a53
           - aarch64_cortex-a72
@@ -94,14 +93,13 @@ jobs:
           - mipsel_74kc
           - mipsel_mips32
           - x86_64
-        #include:
-        #  - branch: SNAPSHOT
-        #    arch: x86_64
-        #exclude:
-        #  - branch: openwrt-22.03
-        #    arch: arm_fa526
-        #  - branch: openwrt-22.03
-        #    arch: arm_mpcore
+        include:
+          - branch: SNAPSHOT
+            arch: aarch64_cortex-a76
+            #arch: riscv64_riscv64
+        exclude:
+          - branch: SNAPSHOT
+            arch: arm_mpcore
     container:
       image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
       options: --user root
@@ -119,6 +117,9 @@ jobs:
         run: |
           # gpg --verbose --recv-keys 0x1D53D1877742E911
           gpg --verbose --import <(wget -qO- 'https://git.openwrt.org/?p=keyring.git;a=blob_plain;f=gpg/0x1D53D1877742E911.asc')
+          # disable check signatures
+          sed -i 's/gpg --/#gpg --/g' setup.sh
+          # disable cleanup keys
           sed -r -i 's/^rm.+//' setup.sh
           ./setup.sh
           ls -lh
@@ -163,14 +164,14 @@ jobs:
           PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
           make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
           
-          find ./bin/packages/*/base -type f ! -regex ".*\(zapret\).*\.ipk$" -delete
+          find ./bin/packages/*/base -type f ! -regex ".*\(zapret\).*\.[ai]pk$" -delete
           
           #echo ">>>>>>> build a repository index to make the output directory usable as local OPKG source"
           #ln -s `which usign` staging_dir/host/bin/usign
           #echo "$SIGN_KEY" | base64 -d > key-build
           #make package/index
           
-          tar -C ./bin/packages/*/base -cvf $GITHUB_WORKSPACE/ipk-$BRANCH-$ARCH.tar --transform "s|^\./|${BRANCH/openwrt-}/$ARCH/|" --show-transformed-names .
+          tar -C ./bin/packages/*/base -cvf $GITHUB_WORKSPACE/pkg-$BRANCH-$ARCH.tar --transform "s|^\./|${BRANCH/openwrt-}/$ARCH/|" --show-transformed-names .
           ./staging_dir/host/bin/ccache --max-size=10M --show-stats
 
       - name: Compress build logs
@@ -186,8 +187,8 @@ jobs:
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: ipk-${{ matrix.branch }}-${{ matrix.arch }}
-          path: ./**/ipk-${{ matrix.branch }}-${{ matrix.arch }}.tar
+          name: pkg-${{ matrix.branch }}-${{ matrix.arch }}
+          path: pkg-*.tar
           if-no-files-found: error
 
       - name: Upload build logs
@@ -195,7 +196,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: logs-${{ matrix.branch }}-${{ matrix.arch }}
-          path: ./**/logs-*.tar.xz
+          path: logs-*.tar.xz
 
   release:
     needs: [ check, build ]
@@ -205,22 +206,21 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        #branch: [ '22.03', '23.05' ]
-        branch: [ '23.05' ]
+        branch: [ 'SNAPSHOT', '23.05' ]
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: ipk-*
+          pattern: pkg-*
 
-      - name: Put ipk into zip
+      - name: Put packages into zip
         env:
           BRANCH: ${{ matrix.branch }}
           TAG: ${{ needs.check.outputs.tag }}
           DATE: ${{ needs.check.outputs.date }}
         run: |
           mkdir -p public
-          find . -name "ipk-openwrt-$BRANCH-*.tar" -exec tar -xvf {} --wildcards '*.ipk' \;
+          find . -name "*-$BRANCH-*.tar" -exec tar -xvf {} --wildcards '*.*pk' \;
           find $BRANCH -mindepth 1 -type d -exec sh -c 'zip -0 ./public/zapret_${TAG}_$(basename {}).zip -j {} {}/*' \;
           ls -lh ./public/*.zip
 
