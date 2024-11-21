@@ -1,6 +1,8 @@
 [![build](https://github.com/remittor/zapret-openwrt/actions/workflows/build.yml/badge.svg)](https://github.com/remittor/zapret-openwrt/actions/workflows/build.yml)
 # zapret-openwrt
 
+Zapret is not a VPN! Zapret is an Anti-DPI utility!
+
 [Instructions for installing](https://github.com/remittor/zapret-openwrt/wiki/Installing-zapret‐openwrt-package)
 
 [Download page](https://github.com/remittor/zapret-openwrt/releases)
