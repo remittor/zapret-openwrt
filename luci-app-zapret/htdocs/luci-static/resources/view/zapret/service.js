@@ -47,7 +47,7 @@ return view.extend({
             fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
             fs.exec(tools.execPath, [ 'info' ]),    // svc_info
             fs.exec('/bin/ps'),                     // process list
-            fs.exec('/bin/opkg', [ 'list-installed', '*zapret*' ]),  // installed packages
+            fs.exec(tools.packager.path, tools.packager.args),  // installed packages
             uci.load(tools.appName),              // config
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
@@ -72,7 +72,7 @@ return view.extend({
         let proc_list = status_array[3];   // stdout: multiline text
         let pkg_list  = status_array[4];   // stdout: installed packages
         
-        console.log('svc_en: ' + svc_en.code);
+        //console.log('svc_en: ' + svc_en.code);
         svc_en = (svc_en.code == 0) ? true : false;
         
         if (svc_info.code != 0) {

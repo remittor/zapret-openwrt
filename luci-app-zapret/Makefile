@@ -5,8 +5,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-zapret
-PKG_VERSION:=69-20241118
+PKG_VERSION:=69.20241118
 PKG_LICENSE:=MIT
+PKG_MAINTAINER:=remittor <https://github.com/remittor>
 
 LUCI_TITLE:=LuCI support for zapret
 LUCI_DEPENDS:=+zapret
@@ -19,8 +20,8 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	rm -rf /tmp/luci-modulecache/
 	#killall -HUP rpcd 2>/dev/null
 	/etc/init.d/rpcd reload
-	/sbin/luci-reload
-	/etc/init.d/uhttpd reload
+	[ -f "/sbin/luci-reload" ] && /sbin/luci-reload
+	[ -f "/etc/init.d/uhttpd" ] && /etc/init.d/uhttpd reload
 fi
 exit 0
 endef

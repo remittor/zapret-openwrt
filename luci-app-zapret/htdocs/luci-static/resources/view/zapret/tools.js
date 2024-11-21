@@ -35,6 +35,7 @@ document.head.append(E('style', {'type': 'text/css'},
 `));
 
 return baseclass.extend({
+    packager          : null,
     appName           : 'zapret',
     execPath          : '/etc/init.d/zapret',
     syncCfgPath       : '/opt/zapret/sync_config.sh',
@@ -82,7 +83,24 @@ return baseclass.extend({
         expect: { result: false }
     }),
 
+    init_consts: function() {
+        if (!this.packager) {
+            this.packager = { };
+            if (L.hasSystemFeature('apk')) {
+                this.packager.name = 'apk';
+                this.packager.path = '/usr/bin/apk';
+                this.packager.args = [ 'list', '-I', '*zapret*' ];
+            } else {
+                this.packager.name = 'opkg';
+                this.packager.path = '/bin/opkg';
+                this.packager.args = [ 'list-installed', '*zapret*' ];
+            }
+            //console.log('PACKAGER: ' + this.packager.name);
+        }
+    },
+
     getInitState: function(name) {
+        this.init_consts();
         return this.callInitState(name).then(res => {
             if (res) {
                 return res[name].enabled ? true : false;
@@ -114,12 +132,33 @@ return baseclass.extend({
         let lines = pkg_list.trim().split('\n');
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i].trim();
-            if (line.length >= 4) {
-                let word_list = line.split(' - ');
-                let name = word_list[0].trim();
-                let ver = word_list[1].trim();
-                pkg_dict[name] = ver;
+            let name;
+            let ver;
+            if (this.packager.name == 'apk') {
+                let fullname = line.split(' ')[0];
+                let mpos = fullname.lastIndexOf("-");
+                if (mpos <= 0)
+                    continue;
+                if (fullname.substring(mpos+1, mpos+2) == 'r') {
+                    // release number
+                    fullname = fullname.substring(0, mpos);
+                }
+                mpos = fullname.lastIndexOf("-");
+                if (mpos <= 0)
+                    continue;
+                name = fullname.substring(0, mpos).trim();
+                ver = fullname.substring(mpos+1).trim();
+            } else {
+                if (!line.includes(' - '))
+                    continue;
+                name = line.split(' - ')[0].trim();
+                ver  = line.split(' - ')[1].trim();
+                let spos = ver.indexOf(" ");
+                if (spos > 0) {
+                    ver = ver.substring(0, spos);
+                }
             }
+            pkg_dict[name] = ver;
         }
         return pkg_dict;
     },
