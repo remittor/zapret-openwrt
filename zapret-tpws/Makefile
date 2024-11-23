@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret-tpws
-PKG_VERSION:=69.20241121
+PKG_VERSION:=69.20241123
 
 PKG_MAINTAINER:=bol-van
 PKG_LICENSE:=MIT
@@ -9,8 +9,8 @@ PKG_LICENSE_FILES:=docs/LICENSE.txt
 
 PKG_SOURCE_URL:=https://github.com/bol-van/zapret.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=62b081e9fbbb6be8b7ea457fd5367cdd7a62acc9
-PKG_SOURCE_DATE:=2024-11-21
+PKG_SOURCE_VERSION:=34199b151c508b3567043394edca058e64ab34f5
+PKG_SOURCE_DATE:=2024-11-23
 
 #PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 #PKG_SOURCE_URL:=https://github.com/bol-van/zapret/archive/refs/tags/v$(PKG_VERSION).tar.gz?
