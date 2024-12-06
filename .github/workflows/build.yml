@@ -100,6 +100,8 @@ jobs:
         exclude:
           - branch: SNAPSHOT
             arch: arm_mpcore
+          - branch: SNAPSHOT
+            arch: arm_cortex-a9_vfpv3-d16
     container:
       image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
       options: --user root
