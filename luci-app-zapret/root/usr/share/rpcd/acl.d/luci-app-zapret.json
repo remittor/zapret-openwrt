@@ -8,7 +8,7 @@
 				"/opt/zapret/ipset/*": [ "read" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/etc/init.d/zapret*": [ "exec" ],
-				"/bin/ps*": [ "exec" ],
+				"/bin/busybox*": [ "exec" ],
 				"/bin/opkg*": [ "exec" ],
 				"/usr/bin/apk*": [ "exec" ],
 				"/opt/zapret/restore-def-cfg.sh*": [ "exec" ],

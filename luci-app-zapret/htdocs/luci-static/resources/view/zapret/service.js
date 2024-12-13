@@ -46,7 +46,7 @@ return view.extend({
             tools.getInitState(tools.appName),      // svc_boot
             fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
             fs.exec(tools.execPath, [ 'info' ]),    // svc_info
-            fs.exec('/bin/ps'),                     // process list
+            fs.exec('/bin/busybox', [ 'ps' ]),      // process list
             fs.exec(tools.packager.path, tools.packager.args),  // installed packages
             uci.load(tools.appName),              // config
         ]).catch(e => {
