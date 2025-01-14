@@ -8,6 +8,7 @@
 				"/opt/zapret/ipset/*": [ "read" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/etc/init.d/zapret*": [ "exec" ],
+				"/bin/ps*": [ "exec" ],
 				"/bin/busybox*": [ "exec" ],
 				"/bin/opkg*": [ "exec" ],
 				"/usr/bin/apk*": [ "exec" ],
@@ -22,7 +23,8 @@
 		"write": {
 			"file": {
 				"/opt/zapret/config": [ "write" ],
-				"/opt/zapret/ipset/*.txt": [ "write" ],
+				"/opt/zapret/ipset/*": [ "write" ],
+				"/opt/zapret/init.d/openwrt/custom.d/*": [ "write" ],
 				"/etc/crontabs/root": [ "write" ]
 			},
 			"uci": [ "zapret" ]

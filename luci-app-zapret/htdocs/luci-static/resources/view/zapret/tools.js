@@ -49,6 +49,10 @@ return baseclass.extend({
     iplstUserExcludeFN: '/opt/zapret/ipset/zapret-ip-user-exclude.txt',
     custFileMax       : 4,
     custFileTemplate  : '/opt/zapret/ipset/cust%s.txt',
+    customdPrefixList : [ 10, 20, 50, 60, 90 ] ,
+    customdFileFormat : '/opt/zapret/init.d/openwrt/custom.d/%s-script.sh',
+    discord_num       : 50,
+    discord_url       : 'https://github.com/bol-van/zapret/blob/master/init.d/custom.d.examples.linux/50-discord',
 
     autoHostListFN    : '/opt/zapret/ipset/zapret-hosts-auto.txt',
     autoHostListDbgFN : '/opt/zapret/ipset/zapret-hosts-auto-debug.log',

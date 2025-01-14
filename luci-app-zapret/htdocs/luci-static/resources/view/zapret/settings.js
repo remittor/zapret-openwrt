@@ -320,6 +320,23 @@ return view.extend({
             o.onclick = () => new tools.fileEditDialog(fn, name, '', '', 15).show();
         }
 
+        /* custom.d files */
+
+        tabname = 'custom_d_tab'; 
+        s.tab(tabname, 'custom.d');
+        
+        for (let i = 0; i < tools.customdPrefixList.length; i++) {
+            let num = tools.customdPrefixList[i];
+            let fn = tools.customdFileFormat.format(num.toString());
+            let name = _('custom.d script #' + num);
+            o = s.taboption(tabname, form.Button, '_customd_file%d_btn'.format(num), name);
+            o.inputtitle = _('Edit');
+            o.inputstyle = 'edit btn';
+            o.description = fn;
+            let desc = (num == tools.discord_num) ? _('Example') + ': <a href=%s>%s</a>'.format(tools.discord_url) : '';
+            o.onclick = () => new tools.fileEditDialog(fn, name, desc, '', 15).show();
+        }
+
         let map_promise = m.render();
         map_promise.then(node => node.classList.add('fade-in'));
         return map_promise;
