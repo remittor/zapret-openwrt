@@ -124,11 +124,13 @@ jobs:
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
           - { isFake: true }
-        #include:
-        #  - branch: SNAPSHOT
-        #    arch: aarch64_cortex-a76
         include:
-          - { arch: "aarch64_cortex-a53" }            
+          - branch: openwrt-23.05
+            arch: aarch64_cortex-a53
+          - branch: SNAPSHOT
+            arch: aarch64_cortex-a53
+          - branch: SNAPSHOT
+            arch: aarch64_cortex-a76
     container:
       image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
       options: --user root
