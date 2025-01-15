@@ -116,17 +116,17 @@ jobs:
           - mipsel_74kc
           - mipsel_mips32
           - x86_64
-        is_fake:
+        isFake:
           - ${{ github.event.inputs.fake_build == 'true' }}        
         exclude:
           - branch: SNAPSHOT
             arch: arm_mpcore
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
-          - { is_fake: true }
-        include:
-          - branch: SNAPSHOT
-            arch: aarch64_cortex-a76
+          - { isFake: true }
+        #include:
+        #  - branch: SNAPSHOT
+        #    arch: aarch64_cortex-a76
         include:
           - { arch: "aarch64_cortex-a53" }            
     container:
