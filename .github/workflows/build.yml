@@ -2,9 +2,27 @@ name: build
 
 on:
   workflow_dispatch:
+    inputs:
+      fake_build:
+        description: 'Fake build'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+        - true
+        - false
   push:
     tags:
       - v[0-9]+*
+
+env:
+  FAKE_BUILD: ${{ github.event.inputs.fake_build }}
+  REPO_URL: https://github.com/remittor/zapret-openwrt
+  REPO_LNK: remittor/zapret-openwrt
+  REPO_BRANCH: master
+  BUILD_ROOT: ${{ github.workspace }}/openwrt
+  BUILD_DATE: unknown
+  REPO_DATE: unknown
 
 jobs:
   check:
@@ -15,38 +33,43 @@ jobs:
       sha: ${{ steps.gh.outputs.sha }}
       url: ${{ steps.gh.outputs.url }}
       message: ${{ steps.gh.outputs.message }}
+      build_date: ${{ steps.gh.outputs.build_date }}
+      fw_date: ${{ steps.gh.outputs.fw_date }}
       is_active: ${{ steps.activity.outputs.is_active }}
     steps:
       - name: Get repo data via GH API
         id: gh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: 'remittor/zapret-openwrt'
         run: |
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{ github.ref_name }}"
-          BRANCH=$(gh api repos/$REPO --jq '.default_branch')
-          DATE=$(gh api repos/$REPO/commits/$BRANCH --jq '.commit.committer.date')
+          BRANCH=$(gh api repos/$REPO_LNK --jq '.default_branch')
+          REPO_DATE=$(gh api repos/$REPO_LNK/commits/$BRANCH --jq '.commit.committer.date')
+          BUILD_DATE=$( date --utc +'%Y%m%d' )
+          FW_DATE=$( date --utc +'%Y-%m-%d' )
           {
             echo "tag=$GITHUB_REF_NAME"
-            echo "date=$(date --utc -d $DATE +%Y%m%d)"
-            echo "sha=$(gh api repos/$REPO/commits/$BRANCH --jq '.sha[0:7]')"
-            echo "url=$(gh api repos/$REPO/commits/$BRANCH --jq '.html_url')"
+            echo "date=$(date --utc -d $REPO_DATE +%Y%m%d)"
+            echo "sha=$(gh api repos/$REPO_LNK/commits/$BRANCH --jq '.sha[0:7]')"
+            echo "url=$(gh api repos/$REPO_LNK/commits/$BRANCH --jq '.html_url')"
             echo "message<<EOF"
-            gh api repos/$REPO/commits/$BRANCH --jq '.commit.message'
+            gh api repos/$REPO_LNK/commits/$BRANCH --jq '.commit.message'
             echo EOF
+            echo "build_date=$BUILD_DATE"
+            echo "fw_date=$FW_DATE"
           } >> $GITHUB_OUTPUT
-          echo "DATE=$DATE" >> $GITHUB_ENV
+          echo "REPO_DATE=$REPO_DATE" >> $GITHUB_ENV
 
       - name: Check for repo activity
         id: activity
         env:
-          DATE: ${{ env.DATE }}
+          REPO_DATE: ${{ env.REPO_DATE }}
           URL: ${{ steps.gh.outputs.url }}
         run: |
-          TIMESTAMP=$(date --utc -d $DATE +%s)
+          TIMESTAMP=$(date --utc -d $REPO_DATE +%s)
           DAYS=$(( ( $(date --utc +%s) - $TIMESTAMP ) / 86400 ))
-          echo "Repository activity: $(date --utc -d $DATE)"
+          echo "Repository activity: $(date --utc -d $REPO_DATE)"
           echo "Commit: $URL"
           if [ "${{ github.event_name }}" != "schedule" ]; then
             is_active=true
@@ -93,15 +116,19 @@ jobs:
           - mipsel_74kc
           - mipsel_mips32
           - x86_64
-        include:
-          - branch: SNAPSHOT
-            arch: aarch64_cortex-a76
-            #arch: riscv64_riscv64
+        is_fake:
+          - ${{ github.event.inputs.fake_build == 'true' }}        
         exclude:
           - branch: SNAPSHOT
             arch: arm_mpcore
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
+          - { is_fake: true }
+        include:
+          - branch: SNAPSHOT
+            arch: aarch64_cortex-a76
+        include:
+          - { arch: "aarch64_cortex-a53" }            
     container:
       image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
       options: --user root
@@ -109,7 +136,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: 'remittor/zapret-openwrt'
+          repository: ${{ env.REPO_LNK }}
           path: zapret-openwrt
 
       - name: Setup OpenWrt SDK
@@ -129,21 +156,22 @@ jobs:
       - name: Setup ccache
         uses: actions/cache@v4
         with:
-          path: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt/.ccache' || '/builder/.ccache' }}
+          path: '/builder/.ccache'
           key: ccache-${{ matrix.arch }}-${{ matrix.branch }}-${{ github.run_id }}
           restore-keys: |
             ccache-${{ matrix.arch }}-${{ matrix.branch }}-
 
       - name: Build packages
         id: build
-        working-directory: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt' || '/builder' }}
+        working-directory: '/builder'
         env:
+          BUILD_DATE: ${{ needs.check.outputs.build_date }}
           DATE: ${{ needs.check.outputs.date }}
           SHA: ${{ needs.check.outputs.sha }}
           ARCH: ${{ matrix.arch }}
           BRANCH: ${{ matrix.branch }}
           SIGN_KEY: ${{ secrets.SIGN_PRIVATE_KEY }}
-          CCACHE_DIR: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt/.ccache' || '/builder/.ccache' }}
+          CCACHE_DIR: '/builder/.ccache'
         shell: bash
         run: |
           #export PKG_VERSION=$(date --utc -d $DATE +%Y%m%d)
@@ -155,17 +183,28 @@ jobs:
           sed -i -e 's|packages.*\.git|packages https://github.com/openwrt/packages.git|' feeds.conf
           sed -i -e 's|luci.*\.git|luci https://github.com/openwrt/luci.git|' feeds.conf
           
-          ./scripts/feeds update base packages luci
-          ./scripts/feeds install -a
-          
-          make defconfig
-          echo "------------- .config BEG -------------------"
-          cat .config
-          echo "------------- .config END -------------------"
-          
-          PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
-          make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
-          
+          if [ "$FAKE_BUILD" != "true" ]; then
+              ./scripts/feeds update base packages luci
+              ./scripts/feeds install -a
+              make defconfig
+              echo "------------- .config BEG -------------------"
+              cat .config
+              echo "------------- .config END -------------------"
+              PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
+              make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
+          else
+              OUT_DIR=./bin/packages/dev_x/base
+              mkdir -p $OUT_DIR
+              mkdir -p ./logs
+              ZAPVER=70
+              if [ "$BRANCH" = "SNAPSHOT" ]; then
+                  touch $OUT_DIR/zapret_$ZAPVER.$BUILD_DATE-$ARCH.apk
+                  touch $OUT_DIR/luci-app-zapret_$ZAPVER.$BUILD_DATE-all.apk
+              else
+                  touch $OUT_DIR/zapret_$ZAPVER.$BUILD_DATE-$ARCH.ipk
+                  touch $OUT_DIR/luci-app-zapret_$ZAPVER.$BUILD_DATE-all.ipk
+              fi
+          fi
           find ./bin/packages/*/base -type f ! -regex ".*\(zapret\).*\.[ai]pk$" -delete
           
           #echo ">>>>>>> build a repository index to make the output directory usable as local OPKG source"
@@ -173,7 +212,8 @@ jobs:
           #echo "$SIGN_KEY" | base64 -d > key-build
           #make package/index
           
-          tar -C ./bin/packages/*/base -cvf $GITHUB_WORKSPACE/pkg-$BRANCH-$ARCH.tar --transform "s|^\./|${BRANCH/openwrt-}/$ARCH/|" --show-transformed-names .
+          OUTFN=$GITHUB_WORKSPACE/pkg-$BRANCH-$ARCH.tar
+          tar -C ./bin/packages/*/base -cvf $OUTFN --transform "s|^\./|${BRANCH/openwrt-}/$ARCH/|" --show-transformed-names .
           ./staging_dir/host/bin/ccache --max-size=10M --show-stats
 
       - name: Compress build logs
@@ -181,7 +221,7 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}
           BRANCH: ${{ matrix.branch }}
-          LOGS_DIR: ${{ matrix.branch == 'openwrt-19.07' && '/home/build/openwrt/logs' || '/builder/logs' }}
+          LOGS_DIR: '/builder/logs'
         run: |
           tar -cJvf logs-$BRANCH-$ARCH.tar.xz $LOGS_DIR
 
@@ -205,10 +245,6 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        branch: [ 'SNAPSHOT', '23.05' ]
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -220,11 +256,15 @@ jobs:
           BRANCH: ${{ matrix.branch }}
           TAG: ${{ needs.check.outputs.tag }}
           DATE: ${{ needs.check.outputs.date }}
+          BUILD_DATE: ${{ needs.check.outputs.build_date }}
         run: |
           mkdir -p public
-          find . -name "*-$BRANCH-*.tar" -exec tar -xvf {} --wildcards '*.*pk' \;
-          find $BRANCH -mindepth 1 -type d -exec sh -c 'zip -0 ./public/zapret_${TAG}_$(basename {}).zip -j {} {}/*' \;
-          ls -lh ./public/*.zip
+          echo "------------- DIR BEG -------------------"
+          ls -la
+          echo "------------- DIR END -------------------"
+          #find . -name "*-$BRANCH-*.tar" -exec tar -xvf {} --wildcards '*.*pk' \;
+          #find $BRANCH -mindepth 1 -type d -exec sh -c 'zip -0 ./public/zapret_${TAG}_$(basename {}).zip -j {} {}/*' \;
+          #ls -lh ./public/*.zip
 
       - name: Upload assets
         uses: andelf/nightly-release@main
