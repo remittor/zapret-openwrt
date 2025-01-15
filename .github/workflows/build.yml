@@ -279,7 +279,7 @@ jobs:
         with:
           prerelease: false
           tag_name: ${{ needs.check.outputs.tag }}
-          name: '${{ needs.check.outputs.tag }}
+          name: ${{ needs.check.outputs.tag }}
           body: |
             zapret ${{ needs.check.outputs.tag }}
           files: ./public/*.zip
