@@ -25,7 +25,8 @@ on:
 
 env:
   FAKE_BUILD: ${{ github.event.inputs.fake_build == 'true' }}
-  SUFFIX: ${{ github.event.inputs.fake_build == 'true' && '-fake' || '' }}
+  MAX_SPEED: ${{ github.event.inputs.max_speed != 'false' }}
+  TAG_SUFFIX: ${{ github.event.inputs.fake_build == 'true' && '-fake' || '' }}
   REPO_URL: https://github.com/remittor/zapret-openwrt
   REPO_LNK: remittor/zapret-openwrt
   REPO_BRANCH: master
@@ -127,7 +128,7 @@ jobs:
           - mipsel_mips32
           - x86_64
         isFake:
-          - ${{ github.event.inputs.fake_build == 'true' }}        
+          - ${{ env.FAKE_BUILD }}
         exclude:
           - branch: SNAPSHOT
             arch: arm_mpcore
@@ -187,7 +188,6 @@ jobs:
         id: build
         working-directory: '/builder'
         env:
-          MAX_SPEED: ${{ github.event.inputs.max_speed != 'false' }}
           BUILD_DATE: ${{ needs.check.outputs.build_date }}
           DATE: ${{ needs.check.outputs.date }}
           SHA: ${{ needs.check.outputs.sha }}
@@ -315,8 +315,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.check.outputs.tag }}
         with:
-          prerelease: ${{ github.event.inputs.fake_build == 'true' }}
-          tag_name: v${{ needs.build.outputs.pkgver }}${{ github.event.inputs.fake_build == 'true' && '-fake' || '' }}
+          prerelease: ${{ env.FAKE_BUILD }}
+          tag_name: v${{ needs.build.outputs.pkgver }}${{ env.TAG_SUFFIX }}
           name: zapret v${{ needs.build.outputs.pkgver }}
           body: |
             zapret v${{ needs.build.outputs.pkgver }} for OpenWrt
