@@ -1,4 +1,6 @@
-[![build](https://github.com/remittor/zapret-openwrt/actions/workflows/build.yml/badge.svg)](https://github.com/remittor/zapret-openwrt/releases)  [![Github All Releases](https://img.shields.io/github/downloads/remittor/zapret-openwrt/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
+[![build](https://github.com/remittor/zapret-openwrt/actions/workflows/build.yml/badge.svg)](https://github.com/remittor/zapret-openwrt/releases)
+[![Github All Releases](https://img.shields.io/github/downloads/remittor/zapret-openwrt/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
+[![Github Latest Release](https://img.shields.io/github/downloads/remittor/zapret-openwrt/latest/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
 # zapret-openwrt
 
 Zapret is not a VPN! Zapret is an Anti-DPI utility!
