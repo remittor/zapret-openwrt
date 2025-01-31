@@ -1,6 +1,9 @@
 [![build](https://github.com/remittor/zapret-openwrt/actions/workflows/build.yml/badge.svg)](https://github.com/remittor/zapret-openwrt/releases)
 [![Github All Releases](https://img.shields.io/github/downloads/remittor/zapret-openwrt/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
 [![Github Latest Release](https://img.shields.io/github/downloads/remittor/zapret-openwrt/latest/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
+[![ViewCount](https://views.whatilearened.today/views/github/remittor/zapret-openwrt.svg)](https://github.com/remittor/zapret-openwrt)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fremittor%2Fzapret-openwrt&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://github.com/remittor/zapret-openwrt/releases)
+[![Donations Page](https://github.com/andry81-cache/gh-content-static-cache/raw/master/common/badges/donate/donate.svg)](https://github.com/remittor/donate)
 # zapret-openwrt
 
 Zapret is not a VPN! Zapret is an Anti-DPI utility!
@@ -15,7 +18,4 @@ Zapret is not a VPN! Zapret is an Anti-DPI utility!
 
 ## Donations
 
-<img src=https://cdn-icons-png.flaticon.com/16/14446/14446252.png alt="USDT" style="vertical-align: middle;"/> USDT (ethereum network)
-```
-0x840E78D3E47A7ed4987bc36b4A4f0C5240bd7DE8
-```
+[![Donations Page](https://github.com/andry81-cache/gh-content-static-cache/raw/master/common/badges/donate/donate.svg)](https://github.com/remittor/donate)
