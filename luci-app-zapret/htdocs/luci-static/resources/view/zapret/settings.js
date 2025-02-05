@@ -92,6 +92,10 @@ return view.extend({
         o.value('hostlist',     'hostlist');
         o.value('autohostlist', 'autohostlist');
 
+        o = s.taboption(tabname, form.Flag, 'DISABLE_CUSTOM', _('DISABLE_CUSTOM'));
+        o.rmempty = false;
+        o.default = 0;
+
         /* NFQWS_OPT_DESYNC tab */
 
         tabname = 'nfqws_params';
