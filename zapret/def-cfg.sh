@@ -16,6 +16,7 @@ function set_cfg_default_values
 		set $cfgname.config.DISABLE_IPV6='1'
 		set $cfgname.config.MODE_FILTER='hostlist'
 		set $cfgname.config.DISABLE_CUSTOM='0'
+		set $cfgname.config.WS_USER='daemon'
 		# autohostlist options
 		set $cfgname.config.AUTOHOSTLIST_RETRANS_THRESHOLD='3'
 		set $cfgname.config.AUTOHOSTLIST_FAIL_THRESHOLD='3'

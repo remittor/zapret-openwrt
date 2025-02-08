@@ -95,6 +95,10 @@ return view.extend({
         o = s.taboption(tabname, form.Flag, 'DISABLE_CUSTOM', _('DISABLE_CUSTOM'));
         o.rmempty = false;
         o.default = 0;
+        
+        o = s.taboption(tabname, form.Value, 'WS_USER', _('WS_USER'));
+        o.rmempty  = false;
+        o.datatype = 'string';
 
         /* NFQWS_OPT_DESYNC tab */
 
