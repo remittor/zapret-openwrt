@@ -215,6 +215,7 @@ jobs:
               ./scripts/feeds update base packages luci
               ./scripts/feeds install -a
               make defconfig
+              sed -i 's/CONFIG_LUCI_JSMIN=y/CONFIG_LUCI_JSMIN=n/g' .config
               echo "------------- .config BEG -------------------"
               cat .config
               echo "------------- .config END -------------------"
