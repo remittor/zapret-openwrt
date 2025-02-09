@@ -3,6 +3,14 @@ name: build
 on:
   workflow_dispatch:
     inputs:
+      test_build:
+        description: 'Test build'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+        - true
+        - false
       fake_build:
         description: 'Fake build'
         required: false
@@ -24,9 +32,10 @@ on:
       - v[0-9]+*
 
 env:
+  TEST_BUILD: ${{ github.event.inputs.test_build == 'true' }}
   FAKE_BUILD: ${{ github.event.inputs.fake_build == 'true' }}
   MAX_SPEED: ${{ github.event.inputs.max_speed != 'false' }}
-  TAG_SUFFIX: ${{ github.event.inputs.fake_build == 'true' && '-fake' || '' }}
+  TAG_SUFFIX: ${{ github.event.inputs.fake_build == 'true' && '-fake' || github.event.inputs.test_build == 'true' && '-test' || '' }}
   REPO_URL: https://github.com/remittor/zapret-openwrt
   REPO_LNK: remittor/zapret-openwrt
   REPO_BRANCH: master
@@ -47,6 +56,8 @@ jobs:
       build_date: ${{ steps.gh.outputs.build_date }}
       fw_date: ${{ steps.gh.outputs.fw_date }}
       is_active: ${{ steps.activity.outputs.is_active }}
+      test_build: ${{ env.TEST_BUILD }}
+      fake_build: ${{ env.FAKE_BUILD }}
     steps:
       - name: Get repo data via GH API
         id: gh
@@ -127,14 +138,14 @@ jobs:
           - mipsel_74kc
           - mipsel_mips32
           - x86_64
-        isFake:
-          - ${{ env.FAKE_BUILD }}
+        isTestOrFake:
+          - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
         exclude:
           - branch: SNAPSHOT
             arch: arm_mpcore
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
-          - { isFake: true }
+          - { isTestOrFake: true }
         include:
           - branch: openwrt-23.05
             arch: x86_64
@@ -188,6 +199,7 @@ jobs:
         id: build
         working-directory: '/builder'
         env:
+          FAKE_BUILD: ${{ env.FAKE_BUILD == 'true' || ( env.TEST_BUILD == 'true' && matrix.branch == 'SNAPSHOT' ) }}
           BUILD_DATE: ${{ needs.check.outputs.build_date }}
           DATE: ${{ needs.check.outputs.date }}
           SHA: ${{ needs.check.outputs.sha }}
@@ -211,7 +223,7 @@ jobs:
           sed -i -e 's|luci.*\.git|luci https://github.com/openwrt/luci.git|' feeds.conf
           mkdir -p ./logs
           
-          if [ "$FAKE_BUILD" != "true" ]; then
+          if [ "$FAKE_BUILD" = "false" ]; then
               ./scripts/feeds update base packages luci
               ./scripts/feeds install -a
               make defconfig
@@ -316,7 +328,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.check.outputs.tag }}
         with:
-          prerelease: ${{ env.FAKE_BUILD }}
+          prerelease: ${{ env.TEST_BUILD == 'true' || env.FAKE_BUILD == 'true' }}
           tag_name: v${{ needs.build.outputs.pkgver }}${{ env.TAG_SUFFIX }}
           name: zapret v${{ needs.build.outputs.pkgver }}
           body: |
