@@ -33,5 +33,14 @@
 			"type": "view",
 			"path": "zapret/settings"
 		}
+	},
+
+	"admin/services/zapret/dmnlog": {
+		"title": "Log Viewer",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "zapret/dmnlog"
+		}
 	}
 }

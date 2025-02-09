@@ -308,6 +308,17 @@ return baseclass.extend({
                 </table>`;
         return out;
     },
+    
+    getLineCount: function(mstr) {
+        let count = 0;
+        let c = '\n'.charAt(0);
+        for (let i = 0; i < mstr.length; ++i) {
+            if (c === mstr.charAt(i)) {
+                ++count;
+            }
+        }
+        return count;
+    },
 
     fileEditDialog: baseclass.extend({
         __init__: function(file, title, desc, aux = null, rows = 10, callback, file_exists = false) {
