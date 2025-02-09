@@ -71,3 +71,8 @@ function boot
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD start "$@"
 }
 
+function restart
+{
+	rm -f /tmp/zapret*.log
+	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD restart "$@"
+}
