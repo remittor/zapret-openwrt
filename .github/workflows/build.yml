@@ -195,22 +195,18 @@ jobs:
           restore-keys: |
             ccache-${{ matrix.arch }}-${{ matrix.branch }}-
 
-      - name: Build packages
-        id: build
+      - name: Init packages
+        id: init
         working-directory: '/builder'
         env:
           FAKE_BUILD: ${{ env.FAKE_BUILD == 'true' || ( env.TEST_BUILD == 'true' && matrix.branch == 'SNAPSHOT' ) }}
           BUILD_DATE: ${{ needs.check.outputs.build_date }}
-          DATE: ${{ needs.check.outputs.date }}
-          SHA: ${{ needs.check.outputs.sha }}
           ARCH: ${{ matrix.arch }}
           BRANCH: ${{ matrix.branch }}
           SIGN_KEY: ${{ secrets.SIGN_PRIVATE_KEY }}
           CCACHE_DIR: '/builder/.ccache'
         shell: bash
         run: |
-          MAKE_JOBS=$(($(nproc)+1))
-          echo "$MAKE_JOBS thread compile"
           PKGDIR=$GITHUB_WORKSPACE/zapret-openwrt
           MKFN=$PKGDIR/luci-app-zapret/Makefile
           PKGVER=$( grep -s '^PKG_VERSION:=.*' $MKFN | cut -d'=' -f2 )
@@ -226,6 +222,28 @@ jobs:
           if [ "$FAKE_BUILD" = "false" ]; then
               ./scripts/feeds update base packages luci
               ./scripts/feeds install -a
+          fi
+          echo "FAKE_BUILD=$FAKE_BUILD" >> $GITHUB_ENV
+          echo "PKGVER=$PKGVER" >> $GITHUB_ENV
+          echo "pkgver=$PKGVER" >> $GITHUB_OUTPUT
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Build packages        
+        id: build
+        if: steps.init.outputs.status == 'success'
+        working-directory: '/builder'
+        env:
+          BUILD_DATE: ${{ needs.check.outputs.build_date }}
+          ARCH: ${{ matrix.arch }}
+          BRANCH: ${{ matrix.branch }}
+          SIGN_KEY: ${{ secrets.SIGN_PRIVATE_KEY }}
+          CCACHE_DIR: '/builder/.ccache'
+        shell: bash
+        run: |
+          MAKE_JOBS=$(($(nproc)+1))
+          echo "$MAKE_JOBS thread compile"
+          
+          if [ "$FAKE_BUILD" = "false" ]; then
               make defconfig
               sed -i 's/CONFIG_LUCI_JSMIN=y/CONFIG_LUCI_JSMIN=n/g' .config
               echo "------------- .config BEG -------------------"
@@ -261,8 +279,8 @@ jobs:
           ./staging_dir/host/bin/ccache --max-size=10M --show-stats
           
           echo "OUTDIR=$OUTDIR" >> $GITHUB_ENV
-          echo "PKGVER=$PKGVER" >> $GITHUB_ENV
           echo "pkgver=$PKGVER" >> $GITHUB_OUTPUT
+          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Compress build logs
         if: always()
