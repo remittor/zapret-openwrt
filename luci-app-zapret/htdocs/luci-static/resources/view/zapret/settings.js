@@ -100,6 +100,10 @@ return view.extend({
         o.rmempty  = false;
         o.datatype = 'string';
 
+        o = s.taboption(tabname, form.Flag, 'DAEMON_LOG_ENABLE', _('DAEMON_LOG_ENABLE'));
+        o.rmempty = false;
+        o.default = 0;
+
         /* NFQWS_OPT_DESYNC tab */
 
         tabname = 'nfqws_params';
