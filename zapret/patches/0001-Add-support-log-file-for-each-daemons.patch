@@ -29,7 +29,7 @@ diff --git a/init.d/openwrt/zapret b/init.d/openwrt/zapret
 index 8d6d3a9..fcb1e91 100755
 --- a/init.d/openwrt/zapret
 +++ b/init.d/openwrt/zapret
-@@ -58,12 +58,27 @@ run_daemon()
+@@ -58,12 +58,29 @@ run_daemon()
  	# use $PIDDIR/$DAEMONBASE$1.pid as pidfile
  	local DAEMONBASE="$(basename "$2")"
  	echo "Starting daemon $1: $2 $3"
@@ -38,13 +38,15 @@ index 8d6d3a9..fcb1e91 100755
 +	local DAEMON_PATH="$2"
 +	local DAEMON_ARGS="$3"
 +	local DAEMON_LOG=
-+	if [ "$DAEMON_LOG_ENABLE" = "1" -a -n "$DAEMON_LOG_FILE" ]; then
++	if [ -n "$DAEMON_LOG_FILE" ]; then
 +		DAEMON_LOG="$DAEMON_LOG_FILE"
 +		DAEMON_LOG=${DAEMON_LOG/<DAEMON_NAME>/$DAEMON_NAME}
 +		DAEMON_LOG=${DAEMON_LOG/<DAEMON_IDNUM>/$DAEMON_IDNUM}
 +		DAEMON_LOG=${DAEMON_LOG/<DAEMON_CFGNAME>/$DAEMON_CFGNAME}
 +		[ -f "$DAEMON_LOG" ] && rm -f "$DAEMON_LOG"
-+		DAEMON_ARGS="--debug=@$DAEMON_LOG $DAEMON_ARGS"
++		if [ "$DAEMON_LOG_ENABLE" = "1" ]; then
++			DAEMON_ARGS="--debug=@$DAEMON_LOG $DAEMON_ARGS"
++		fi
 +	fi
  	procd_open_instance
 -	procd_set_param command $2 $3
