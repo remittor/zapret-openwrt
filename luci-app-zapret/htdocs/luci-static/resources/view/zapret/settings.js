@@ -92,10 +92,6 @@ return view.extend({
         o.value('hostlist',     'hostlist');
         o.value('autohostlist', 'autohostlist');
 
-        o = s.taboption(tabname, form.Flag, 'DISABLE_CUSTOM', _('DISABLE_CUSTOM'));
-        o.rmempty = false;
-        o.default = 0;
-        
         o = s.taboption(tabname, form.Value, 'WS_USER', _('WS_USER'));
         o.rmempty  = false;
         o.datatype = 'string';
@@ -336,6 +332,12 @@ return view.extend({
 
         tabname = 'custom_d_tab'; 
         s.tab(tabname, 'custom.d');
+
+        o = s.taboption(tabname, form.Flag, 'DISABLE_CUSTOM', _('DISABLE_CUSTOM'));
+        o.rmempty = false;
+        o.default = 0;
+
+        add_delim(s);
         
         for (let i = 0; i < tools.customdPrefixList.length; i++) {
             let num = tools.customdPrefixList[i];
