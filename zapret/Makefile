@@ -69,7 +69,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/opt/zapret/ipset
 	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)/opt/zapret/ipset/
 	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck.sh  $(1)/opt/zapret/blockcheck.sh
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret/config.default
+	#$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret/config.default
 	$(INSTALL_DIR) $(1)/opt/zapret/tmp
 	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt
 	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)/opt/zapret/init.d/openwrt/
@@ -77,10 +77,10 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/90-zapret $(1)/etc/hotplug.d/iface/90-zapret
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./init.d.sh $(1)/etc/init.d/zapret
-	$(INSTALL_CONF) ./config.default $(1)/opt/zapret/config.default
-	$(INSTALL_CONF) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
-	$(INSTALL_CONF) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
-	$(INSTALL_CONF) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
+	$(INSTALL_DATA) ./config.default $(1)/opt/zapret/config.default
+	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
+	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret/uci-def-cfg.sh
@@ -89,6 +89,10 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./renew-cfg.sh       $(1)/opt/zapret/renew-cfg.sh
 	$(INSTALL_BIN) ./restore-def-cfg.sh $(1)/opt/zapret/restore-def-cfg.sh
 	$(INSTALL_BIN) ./sync_config.sh     $(1)/opt/zapret/sync_config.sh
+	# Fix permisions
+	chmod 644 $(1)/opt/zapret/ipset/*.txt
+	chmod 644 $(1)/opt/zapret/config.default
+	chmod 755 $(1)/opt/zapret/*.sh
 endef
 
 define Package/$(PKG_NAME)/preinst
