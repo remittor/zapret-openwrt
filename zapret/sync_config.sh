@@ -78,6 +78,7 @@ sync_param MODE_FILTER
 sync_param DISABLE_CUSTOM
 sync_param WS_USER str
 sync_param DAEMON_LOG_ENABLE
+sync_param DAEMON_LOG_FILE str
 
 sync_param AUTOHOSTLIST_RETRANS_THRESHOLD
 sync_param AUTOHOSTLIST_FAIL_THRESHOLD
