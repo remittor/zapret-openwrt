@@ -19,10 +19,22 @@ return view.extend({
                 ui.addNotification(null, E('p', _('Unable to get log files') + '(code = ' + log_data.code + ') : retrieveLog()'));
                 return null;
             }
+            if (typeof(log_data.stdout) !== 'string') {
+                ui.addNotification(null, E('p', _('Unable to get log files') + '(undefined stdout) : retrieveLog()'));
+                return null;
+            }
             var log_list = log_data.stdout.trim().split('\n');
             if (log_list.length <= 0) {
                 ui.addNotification(null, E('p', _('Unable to get log files') + '(not found) : retrieveLog()'));
                 return null;
+            }
+            for (let i = 0; i < log_list.length; i++) {
+                let logfn = log_list[i].trim();
+                if (logfn.startsWith('/tmp/') && logfn.endsWith('+main.log')) {
+                    log_list.splice(i, 1);
+                    log_list.unshift(logfn);
+                    break;
+                }
             }
             var tasks = [ ];
             var logdata = [ ];
@@ -31,7 +43,7 @@ return view.extend({
                 if (logfn.startsWith('/tmp/')) {
                     //console.log('LOG: ' + logfn);
                     logdata.push( { filename: logfn, data: null, rows: 0 } );
-                    tasks.push( fs.exec_direct(filereader, [ logfn ] ) );
+                    tasks.push( fs.read_direct(logfn) );
                 }
             }
             return Promise.all(tasks).then(function(log_array) {
