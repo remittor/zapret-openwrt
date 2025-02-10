@@ -71,22 +71,35 @@ return view.extend({
     },
 
     pollLog: async function() {
-        const elem0 = document.getElementById('dmnlog_0');
-        if (elem0) {
-            const logdata = await this.retrieveLog();
-            for (let log_num = 0; log_num < logdata.length; log_num++) {
-                let elem = document.getElementById('dmnlog_' + log_num);
-                if (elem) {
-                    if (logdata[log_num].data) {
-                        elem.value = logdata[log_num].data;
-                        elem.rows  = logdata[log_num].rows;
-                    } else {
-                        elem.value = '';
-                        elem.rows  = 0;
+        let logdate_len = -2;
+        let logdata;
+        for (let txt_id = 0; txt_id < 10; txt_id++) {
+            let elem = document.getElementById('dmnlog_' + txt_id);
+            if (!elem)
+                break;
+            if (logdate_len == -2) {
+                logdata = await this.retrieveLog();
+                logdate_len = (logdata) ? logdata.length : -1;
+            }
+            let elem_name = elem.getAttribute("name");
+            let founded = false;
+            if (logdate_len > 0) {
+                for (let log_num = 0; log_num < logdate_len; log_num++) {
+                    if (logdata[log_num].filename == elem_name) {
+                        if (logdata[log_num].data) {
+                            elem.value = logdata[log_num].data;
+                            elem.rows  = logdata[log_num].rows;
+                            founded = true;
+                            //console.log('POLL: updated ' + elem_name);
+                        }
+                        break;
                     }
                 }
             }
-            //console.log('POLL: updated ' + logdata.length);
+            if (!founded) {
+                elem.value = '';
+                elem.rows  = 0;
+            }
         }
     },
 
@@ -137,13 +150,16 @@ return view.extend({
                 scrollDownButton.focus();
             });
             
+            let log_id = 'dmnlog_' + log_num;
+            let log_name = logdata[log_num].filename;
             let log_text = (logdata[log_num].data) ? logdata[log_num].data : '';
             
             let tab = E('div', { 'data-tab': tabname, 'data-tab-title': tabNameText }, [
                 E('div', { 'id': 'content_dmnlog_' + log_num }, [
                     E('div', {'style': 'padding-bottom: 20px'}, [ scrollDownButton ]),
                     E('textarea', {
-                        'id': 'dmnlog_' + log_num,
+                        'id': log_id,
+                        'name': log_name,
                         'style': 'font-size:12px',
                         'readonly': 'readonly',
                         'wrap': 'off',
