@@ -12,6 +12,7 @@ return view.extend({
         return Promise.all([
             L.resolveDefault(fs.stat('/bin/cat'), null),
             fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', 'zapret+*.log' ]),
+            uci.load(tools.appName),
         ]).then(function(status_array) {
             var filereader = status_array[0] ? status_array[0].path : null;
             var log_data   = status_array[1];   // stdout: multiline text
@@ -19,14 +20,20 @@ return view.extend({
                 ui.addNotification(null, E('p', _('Unable to get log files') + '(code = ' + log_data.code + ') : retrieveLog()'));
                 return null;
             }
+            var reason = '';
+            var uci_cfg = uci.get(tools.appName, 'config');
+            if (uci_cfg !== null && typeof(uci_cfg) === 'object') {
+                let flag = uci_cfg.DAEMON_LOG_ENABLE;
+                if (flag != '1') {
+                    reason = ' (Reason: option DAEMON_LOG_ENABLE = ' + flag + ')';
+                }
+            }
             if (typeof(log_data.stdout) !== 'string') {
-                ui.addNotification(null, E('p', _('Unable to get log files') + '(undefined stdout) : retrieveLog()'));
-                return null;
+                return 'Log files not found.' + reason;
             }
             var log_list = log_data.stdout.trim().split('\n');
             if (log_list.length <= 0) {
-                ui.addNotification(null, E('p', _('Unable to get log files') + '(not found) : retrieveLog()'));
-                return null;
+                return 'Log files not found!' + reason;
             }
             for (let i = 0; i < log_list.length; i++) {
                 let logfn = log_list[i].trim();
@@ -56,15 +63,16 @@ return view.extend({
                 return logdata;
             }).catch(function(e) {
                 ui.addNotification(null, E('p', _('Unable to execute or read contents')
-                    + ': %s [ %s | %s | %s | %s ]'.format(
-                        e.message, tools.execPath, 'retrieveLogData', 'uci.zapret'
+                    + ': %s [ %s | %s | %s ]'.format(
+                        e.message, 'retrieveLogData', 'uci.zapret'
                 )));
                 return null;
             });
         }).catch(function(e) {
+            const [, lineno, colno] = e.stack.match(/(\d+):(\d+)/);
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
-                + ': %s [ %s | %s | %s | %s ]'.format(
-                    e.message, tools.execPath, 'retrieveLog', 'uci.zapret'
+                + ': %s [ lineno: %s | %s | %s | %s ]'.format(
+                    e.message, lineno, 'retrieveLog', 'uci.zapret'
             )));
             return null;
         });
@@ -79,7 +87,7 @@ return view.extend({
                 break;
             if (logdate_len == -2) {
                 logdata = await this.retrieveLog();
-                logdate_len = (logdata) ? logdata.length : -1;
+                logdate_len = (Array.isArray(logdata)) ? logdata.length : -1;
             }
             let elem_name = elem.getAttribute("name");
             let founded = false;
@@ -110,6 +118,15 @@ return view.extend({
     
     render: function(logdata) {
         if (!logdata) {
+            return;
+        }
+        if (typeof(logdata) === 'string') {
+            return E('div', {}, [
+                E('p', {'class': 'cbi-title-field'}, [ logdata ]),
+            ]);
+        }
+        if (!Array.isArray(logdata)) {
+            ui.addNotification(null, E('p', _('Unable to get log files') + ' : render()'));
             return;
         }
         var h2 = E('div', {'class' : 'cbi-title-section'}, [
