@@ -73,6 +73,8 @@ function boot
 
 function restart
 {
+	chmod 644 /opt/zapret/ipset/*.txt
+	chmod 666 /opt/zapret/ipset/*.log
 	rm -f /tmp/zapret*.log
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD restart "$@"
 }
