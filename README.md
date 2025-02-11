@@ -1,4 +1,4 @@
-[![build](https://github.com/remittor/zapret-openwrt/actions/workflows/build.yml/badge.svg)](https://github.com/remittor/zapret-openwrt/releases)
+[![GitHub Release](https://img.shields.io/github/release/remittor/zapret-openwrt)](https://github.com/remittor/zapret-openwrt/releases)
 [![Github All Releases](https://img.shields.io/github/downloads/remittor/zapret-openwrt/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
 [![Github Latest Release](https://img.shields.io/github/downloads/remittor/zapret-openwrt/latest/total.svg)](https://github.com/remittor/zapret-openwrt/releases)
 [![ViewCount](https://views.whatilearened.today/views/github/remittor/zapret-openwrt.svg)](https://github.com/remittor/zapret-openwrt)
