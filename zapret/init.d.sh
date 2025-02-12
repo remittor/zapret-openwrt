@@ -68,13 +68,18 @@ function boot
 			fi
 		fi
 	fi
+	init_before_start "$DAEMON_LOG_ENABLE"
+	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD start "$@"
+}
+
+function start
+{
+	init_before_start "$DAEMON_LOG_ENABLE"
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD start "$@"
 }
 
 function restart
 {
-	chmod 644 /opt/zapret/ipset/*.txt
-	chmod 666 /opt/zapret/ipset/*.log
-	rm -f /tmp/zapret*.log
+	init_before_start "$DAEMON_LOG_ENABLE"
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD restart "$@"
 }
