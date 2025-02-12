@@ -237,10 +237,10 @@ return view.extend({
             15
         ).show();
         
-        /* Blacklist settings */
+        /* HostList settings */
 
-        tabname = 'blacklist_tab'; 
-        s.tab(tabname, _('Blacklist settings'));
+        tabname = 'hostlist_tab'; 
+        s.tab(tabname, _('Host lists'));
 
         o = s.taboption(tabname, form.Button, '_google_entries_btn', _('Google hostname entries'));
         o.inputtitle = _('Edit');
@@ -254,7 +254,7 @@ return view.extend({
             15
         ).show();
 
-        o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries'));
+        o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries <HOSTLIST>'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.hostsUserFN;
@@ -262,7 +262,7 @@ return view.extend({
             tools.hostsUserFN,
             _('User entries'),
             _('One hostname per line.<br />Examples:'),
-            '<code>domain.net<br />sub.domain.com<br />googlevideo.com</code>',
+            '<code>domain.net<br />sub.domain.com<br />facebook.com</code>',
             15
         ).show();
 
@@ -274,7 +274,7 @@ return view.extend({
             tools.hostsUserExcludeFN,
             _('User excluded entries'),
             _('One hostname per line.<br />Examples:'),
-            '<code>domain.net<br />sub.domain.com<br />googlevideo.com</code>',
+            '<code>domain.net<br />sub.domain.com<br />gosuslugi.ru</code>',
             15
         ).show();
         

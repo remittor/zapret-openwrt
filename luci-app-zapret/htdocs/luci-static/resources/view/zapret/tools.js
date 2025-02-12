@@ -293,7 +293,7 @@ return baseclass.extend({
                     </tr>
                     <tr class="tr">
                         <td class="td left" ${td_name_style}>
-                            ${_('Blacklist update mode')}:
+                            ${_('HostLists update mode')}:
                         </td>
                         <td class="td left">
                             ${update_mode}

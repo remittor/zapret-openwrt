@@ -326,7 +326,7 @@ return view.extend({
 
         let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
         btn_update.onclick  = ui.createHandlerFn(this, () => { this.appAction('update', 'btn_update') });
-        layout_append(_('Update blacklist'), null, [ btn_update ] );
+        layout_append(_('Update HostLists'), null, [ btn_update ] );
         
         let btn_reset       = create_btn('btn_reset', btn_style_action, _('Reset settings'));
         btn_reset.onclick   = L.bind(this.dialogResetCfg, this);
