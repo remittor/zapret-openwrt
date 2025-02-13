@@ -254,7 +254,12 @@ return view.extend({
     },
 
     load: function() {
-        return this.getAppStatus();
+        var _this = this;
+        return Promise.all([
+            L.resolveDefault(fs.stat('/bin/cat'), null),
+        ]).then(function(data) {
+            return _this.getAppStatus();
+        });
     },
 
     render: function(status_array) {
