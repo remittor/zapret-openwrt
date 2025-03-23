@@ -114,6 +114,7 @@ jobs:
         arch:
           - aarch64_cortex-a53
           - aarch64_cortex-a72
+          - aarch64_cortex-a76
           - aarch64_generic
           - arm_arm1176jzf-s_vfp
           - arm_arm926ej-s
@@ -153,8 +154,6 @@ jobs:
             arch: aarch64_cortex-a53
           - branch: SNAPSHOT
             arch: aarch64_cortex-a53
-          - branch: SNAPSHOT
-            arch: aarch64_cortex-a76
     container:
       image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
       options: --user root
