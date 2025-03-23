@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret-ip2net
-PKG_VERSION:=70.20250213
+PKG_VERSION:=70.20250323
 
 PKG_MAINTAINER:=bol-van
 PKG_LICENSE:=MIT
@@ -9,8 +9,8 @@ PKG_LICENSE_FILES:=docs/LICENSE.txt
 
 PKG_SOURCE_URL:=https://github.com/bol-van/zapret.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=f62b289cb5e0566633aa51f163651c656f9e1cc1
-PKG_SOURCE_DATE:=2025-02-13
+PKG_SOURCE_VERSION:=77df43b9cba68a82ca884cd56238e89f9851da47
+PKG_SOURCE_DATE:=2025-03-23
 
 #PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 #PKG_SOURCE_URL:=https://github.com/bol-van/zapret/archive/refs/tags/v$(PKG_VERSION).tar.gz?
