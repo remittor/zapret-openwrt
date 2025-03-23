@@ -128,7 +128,6 @@ jobs:
           - arm_cortex-a9_neon
           - arm_cortex-a9_vfpv3-d16
           - arm_fa526
-          - arm_mpcore
           - arm_xscale
           - mips64_octeonplus
           - mips_24kc
@@ -142,8 +141,6 @@ jobs:
         isTestOrFake:
           - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
         exclude:
-          - branch: SNAPSHOT
-            arch: arm_mpcore
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
           - { isTestOrFake: true }
