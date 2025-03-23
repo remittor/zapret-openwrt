@@ -161,6 +161,11 @@ return baseclass.extend({
                 if (spos > 0) {
                     ver = ver.substring(0, spos);
                 }
+                let mpos = ver.lastIndexOf("-");
+                if (mpos > 0 && ver.substring(mpos+1, mpos+2) == 'r') {
+                    // release number
+                    ver = ver.substring(0, mpos);
+                }
             }
             pkg_dict[name] = ver;
         }
