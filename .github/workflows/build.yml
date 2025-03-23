@@ -110,7 +110,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [ openwrt-23.05, SNAPSHOT ]
+        branch: [ openwrt-24.10, SNAPSHOT ]
         arch:
           - aarch64_cortex-a53
           - aarch64_cortex-a72
@@ -147,9 +147,9 @@ jobs:
             arch: arm_cortex-a9_vfpv3-d16
           - { isTestOrFake: true }
         include:
-          - branch: openwrt-23.05
+          - branch: openwrt-24.10
             arch: x86_64
-          - branch: openwrt-23.05
+          - branch: openwrt-24.10
             arch: aarch64_cortex-a53
           - branch: SNAPSHOT
             arch: aarch64_cortex-a53
@@ -181,7 +181,7 @@ jobs:
           sed -r -i 's/^rm.+//' setup.sh
           ./setup.sh
           ls -lh
-          if [ "$BRANCH" = "openwrt-23.05" ]; then
+          if [ "$BRANCH" = "openwrt-24.10" ]; then
               echo "PKGTYPE=ipk" >> $GITHUB_ENV
           else
               echo "PKGTYPE=apk" >> $GITHUB_ENV
