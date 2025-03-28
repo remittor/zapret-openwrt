@@ -141,8 +141,6 @@ jobs:
         isTestOrFake:
           - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
         exclude:
-          - branch: openwrt-24.10
-            arch: arm_cortex-a7_neon-vfpv4
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
           - { isTestOrFake: true }
