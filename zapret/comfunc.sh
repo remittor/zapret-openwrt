@@ -147,10 +147,6 @@ function init_before_start
 	local DAEMON_LOG_ENABLE=$1
 	local HOSTLIST_FN="$ZAPRET_BASE/ipset/zapret-hosts-user.txt"
 	[ ! -f "$HOSTLIST_FN" ] && touch "$HOSTLIST_FN"
-	local HOSTLIST_SZ=$( wc -c < "$HOSTLIST_FN" )
-	if [ "$HOSTLIST_SZ" -le 3 ]; then
-		echo "abra-cadabra.com" > "$HOSTLIST_FN"
-	fi
 	chmod 644 $ZAPRET_BASE/ipset/*.txt
 	chmod 666 $ZAPRET_BASE/ipset/*.log
 	rm -f /tmp/zapret*.log
