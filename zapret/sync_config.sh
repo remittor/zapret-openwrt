@@ -48,6 +48,9 @@ function sync_param
 	if [ "$value" = "$TAB" ]; then
 		value=""
 	fi
+	if [ "$param" = "NFQWS_PORTS_TCP_KEEPALIVE" -o "$param" = "NFQWS_PORTS_UDP_KEEPALIVE" ]; then
+		[ "$value" = "0" ] && value=""
+	fi
 	if [ "$vtype" = "str" ]; then
 		set_param_value_str $param "$value"
 	else
@@ -94,8 +97,8 @@ sync_param NFQWS_TCP_PKT_OUT str
 sync_param NFQWS_TCP_PKT_IN str
 sync_param NFQWS_UDP_PKT_OUT str
 sync_param NFQWS_UDP_PKT_IN str
-sync_param NFQWS_PORTS_TCP_KEEPALIVE
-sync_param NFQWS_PORTS_UDP_KEEPALIVE
+sync_param NFQWS_PORTS_TCP_KEEPALIVE str
+sync_param NFQWS_PORTS_UDP_KEEPALIVE str
 sync_param NFQWS_OPT str
 
 ZAPRET_CONFIG="$ZAPRET_CONFIG__SAVED"

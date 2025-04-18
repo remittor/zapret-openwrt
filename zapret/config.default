@@ -90,8 +90,8 @@ NFQWS_UDP_PKT_IN="0"
 # normally it's needed only for stateless DPI that matches every packet in a single TCP session
 # typical example are plain HTTP keep alives
 # this mode can be very CPU consuming. enable with care !
-NFQWS_PORTS_TCP_KEEPALIVE=0
-NFQWS_PORTS_UDP_KEEPALIVE=0
+NFQWS_PORTS_TCP_KEEPALIVE=""
+NFQWS_PORTS_UDP_KEEPALIVE=""
 
 # use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
 # hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
