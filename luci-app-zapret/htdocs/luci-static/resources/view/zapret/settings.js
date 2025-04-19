@@ -190,7 +190,7 @@ return view.extend({
         o.datatype    = 'uinteger';
 
         add_delim(s);
-        add_param(s, 'NFQWS_OPT', null, 18, 2);
+        add_param(s, 'NFQWS_OPT', null, 21, 2);
 
         /* AutoHostList settings */
 

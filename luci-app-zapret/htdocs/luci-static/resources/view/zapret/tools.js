@@ -440,6 +440,9 @@ return baseclass.extend({
             if (typeof(value) === 'string') {
                 value = value.trim();
                 if (this.multiline == 2) {
+                    value = value.replace(/\n\t\t\t--/g, "\n--");
+                    value = value.replace(/\n\t\t--/g, "\n--");
+                    value = value.replace(/\n\t--/g, "\n--");
                     value = value.replace(/\n  --/g, "\n--");
                     value = value.replace(/\n --/g, "\n--");
                     value = value.replace(/ --/g, "\n--");
