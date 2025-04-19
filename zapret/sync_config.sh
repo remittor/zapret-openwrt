@@ -51,6 +51,9 @@ function sync_param
 	if [ "$param" = "NFQWS_PORTS_TCP_KEEPALIVE" -o "$param" = "NFQWS_PORTS_UDP_KEEPALIVE" ]; then
 		[ "$value" = "0" ] && value=""
 	fi
+	if [ "$param" = "NFQWS_OPT" -a "$value" != "" ]; then
+		value=$( echo -n "$value" | sed '/^#/d' )
+	fi
 	if [ "$vtype" = "str" ]; then
 		set_param_value_str $param "$value"
 	else
