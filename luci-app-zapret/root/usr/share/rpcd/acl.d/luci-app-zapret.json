@@ -20,7 +20,8 @@
 			},
 			"uci": [ "zapret", "network" ],
 			"ubus": {
-				"luci": [ "getInitList", "setInitAction" ]
+				"luci": [ "getInitList", "setInitAction" ],
+				"service": [ "list" ]
 			}
 		},
 		"write": {

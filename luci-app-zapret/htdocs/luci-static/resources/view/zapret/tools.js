@@ -74,6 +74,13 @@ return baseclass.extend({
         running  : { code: 4, name: _('Running')  , label: this.infoLabelRunning  },
     },
 
+    callServiceList: rpc.declare({
+        object: 'service',
+        method: 'list',
+        params: [ 'name', 'verbose' ],
+        expect: { '': {} }
+    }),
+
     callInitState: rpc.declare({
         object: 'luci',
         method: 'getInitList',
@@ -102,6 +109,17 @@ return baseclass.extend({
             }
             //console.log('PACKAGER: ' + this.packager.name);
         }
+    },
+
+    getSvcInfo: function(svc_name = null) {
+        this.init_consts();
+        let name = (svc_name) ? svc_name : this.appName;
+        let verbose = 1;
+        return this.callServiceList(name, verbose).then(res => {
+            return res;
+        }).catch(e => {
+            ui.addNotification(null, E('p', _('Failed to get %s service info: %s').format(name, e)));
+        });
     },
 
     getInitState: function(name) {
@@ -201,9 +219,6 @@ return baseclass.extend({
             },
             "status": this.statusDict.error,
         };
-        if (svc_info.code != 0) {
-            return -1;
-        }
         if (proc_list.code != 0) {
             return -2;
         }        
@@ -212,22 +227,10 @@ return baseclass.extend({
         if (plist.length < 4) {
             return -3;
         }
-        if (typeof(svc_info.stdout) !== 'string') {
+        if (typeof(svc_info) !== 'object') {
             return -4;
         }
-        if (svc_info.stdout.length < 3) {
-            return -5;
-        }
-        let jdata;
-        try {
-            jdata = JSON.parse(svc_info.stdout);
-        } catch (e) {
-            console.log('Incorrect JSON: ' + svc_info.stdout);
-            return -6;
-        }
-        if (typeof(jdata) !== 'object') {
-            return -7;
-        }
+        let jdata = svc_info;
         if (typeof(jdata.zapret) == 'object') {
             result.dmn.inited = true;
             let dmn_list = jdata.zapret.instances;

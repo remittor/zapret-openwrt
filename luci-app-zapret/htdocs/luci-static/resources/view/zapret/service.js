@@ -45,7 +45,7 @@ return view.extend({
         return Promise.all([
             tools.getInitState(tools.appName),      // svc_boot
             fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
-            fs.exec(tools.execPath, [ 'info' ]),    // svc_info
+            tools.getSvcInfo(),                     // svc_info
             fs.exec('/bin/busybox', [ 'ps' ]),      // process list
             fs.exec(tools.packager.path, tools.packager.args),  // installed packages
             uci.load(tools.appName),              // config
@@ -75,7 +75,7 @@ return view.extend({
         //console.log('svc_en: ' + svc_en.code);
         svc_en = (svc_en.code == 0) ? true : false;
         
-        if (svc_info.code != 0) {
+        if (typeof(svc_info) !== 'object') {
             ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
             this.disableButtons(true, -1, elems);
             return;
