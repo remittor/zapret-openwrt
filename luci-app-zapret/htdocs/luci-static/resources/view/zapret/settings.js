@@ -105,10 +105,13 @@ return view.extend({
         tabname = 'nfqws_params';
         s.tab(tabname, _('NFQWS options'));
 
-        let add_delim = function(sec) {
+        let add_delim = function(sec, url = null) {
             let o = sec.taboption(tabname, form.DummyValue, '_hr');
             o.rawhtml = true;
             o.default = '<hr style="width: 620px; height: 1px; margin: 1px 0 1px; border-top: 1px solid;">';
+            if (url) {
+                o.default += '<br/>' + _('Help') + ': <a href=%s>%s</a>'.format(url);
+            }
         };
 
         let add_param = function(sec, param, locname = null, rows = 10, multiline = false) {
@@ -140,7 +143,11 @@ return view.extend({
             val.validate = function(section_id, value) {
                 return (value) ? value.trim() : "";
             };
-            btn.onclick = () => new tools.longstrEditDialog('config', param, param, locname, rows, multiline).show();
+            let desc = locname;
+            if (multiline == 2) {
+                desc += '<br/>' + _('Example') + ': <a href=%s>%s</a>'.format(tools.nfqws_opt_url);
+            }
+            btn.onclick = () => new tools.longstrEditDialog('config', param, param, desc, rows, multiline).show();
         };
 
         o = s.taboption(tabname, form.Flag, 'NFQWS_ENABLE', _('NFQWS_ENABLE'));
@@ -189,7 +196,7 @@ return view.extend({
         o.rmempty     = false;
         o.datatype    = 'uinteger';
 
-        add_delim(s);
+        add_delim(s, tools.nfqws_opt_url);
         add_param(s, 'NFQWS_OPT', null, 21, 2);
 
         /* AutoHostList settings */

@@ -53,6 +53,7 @@ return baseclass.extend({
     customdFileFormat : '/opt/zapret/init.d/openwrt/custom.d/%s-script.sh',
     discord_num       : 50,
     discord_url       : 'https://github.com/bol-van/zapret/blob/4e8e3a9ed9dbeb1156db68dfaa7b353051c13797/init.d/custom.d.examples.linux/50-discord',
+    nfqws_opt_url     : 'https://github.com/remittor/zapret-openwrt/discussions/168',
 
     autoHostListFN    : '/opt/zapret/ipset/zapret-hosts-auto.txt',
     autoHostListDbgFN : '/opt/zapret/ipset/zapret-hosts-auto-debug.log',
