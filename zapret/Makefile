@@ -108,7 +108,9 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	fi
 	if [ "$${PKG_UPGRADE}" = "1" ]; then
 		# stop service if PKG_UPGRADE
-		[ -x "/etc/init.d/zapret" ] && /etc/init.d/zapret stop >/dev/null 2>&1
+		if [ -x "/etc/init.d/zapret" ]; then
+			/etc/init.d/zapret running && /etc/init.d/zapret stop >/dev/null 2>&1
+		fi
 	fi
 	if [ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ]; then
 		if [ -f "/opt/zapret/ipset/zapret-hosts-user.txt" ]; then
@@ -186,8 +188,8 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	. "$${ZAPRET_BASE}/common/fwtype.sh"
 	. "$${ZAPRET_BASE}/common/nft.sh"
 	. "$${ZAPRET_BASE}/common/installer.sh"
+	/etc/init.d/zapret running && /etc/init.d/zapret stop
 	/etc/init.d/zapret disable
-	/etc/init.d/zapret stop
 	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
 	remove_openwrt_firewall
 	nft_del_table
