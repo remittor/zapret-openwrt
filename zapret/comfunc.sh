@@ -21,8 +21,7 @@ CRONTAB_FILE="/etc/crontabs/root"
 
 function adapt_for_sed
 {
-	local str=$( ( echo $1|sed -r 's/([\$\.\*\/\[\\^])/\\\1/g'|sed 's/[]]/\\]/g' )>&1 )
-	echo "$str"
+	echo -n "$1" | tr '\r' ' ' | tr '\n' ' ' | tr '\t' ' ' | sed -r 's/([\$\.\*\/\[\\^])/\\\1/g' | sed 's/[]]/\\]/g'
 }
 
 function is_valid_config
