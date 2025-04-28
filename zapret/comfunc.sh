@@ -156,3 +156,35 @@ function init_before_start
 		remove_cron_task_logs
 	fi
 }
+
+function patch_luci_header_ut
+{
+	# INFO: https://github.com/openwrt/luci/pull/7725
+	local header_ut=/usr/share/ucode/luci/template/header.ut
+	local runtime_uc=/usr/share/ucode/luci/runtime.uc
+	local newenv
+	[ ! -f $header_ut ] && return 0
+	[ ! -f $runtime_uc ] && return 0
+	if grep -q "pkgs_update_time" $runtime_uc; then
+		return 0
+	fi
+	if grep -q "pkgs_update_time" $header_ut; then
+		return 0
+	fi
+	sed -i "/^import { access/i import { stat } from 'fs';" $runtime_uc
+	if ! grep -q "{ stat }" $runtime_uc; then
+		return 1
+	fi
+	newenv="self.env.pkgs_update_time = stat('/lib/apk/db/installed')?.mtime ?? stat('/usr/lib/opkg/status')?.mtime ?? 0;"
+	newenv=`adapt_for_sed "$newenv"`
+	sed -i "/self.env.include =/i $newenv" $runtime_uc
+	if ! grep -q "pkgs_update_time" $runtime_uc; then
+		return 1
+	fi
+	sed -i 's/luci.js?v=\(.*\)"><\/script>/luci.js?v=\1-{{ pkgs_update_time }}"><\/script>/g' $header_ut
+	if ! grep -q "pkgs_update_time" $header_ut; then
+		return 1
+	fi
+	logger -p notice -t ZAPRET "patch_luci_header_ut: OK"
+	return 0
+}

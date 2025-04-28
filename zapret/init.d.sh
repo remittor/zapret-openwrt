@@ -25,6 +25,7 @@ is_run_on_boot && IS_RUN_ON_BOOT=1 || IS_RUN_ON_BOOT=0
 function enable
 {
 	local run_on_boot=""
+	patch_luci_header_ut
 	if [ "$IS_RUN_ON_BOOT" = "1" ]; then
 		if [ -n "$ZAPRET_CFG_SEC_NAME" ]; then
 			run_on_boot=$( get_run_on_boot_option )
@@ -59,6 +60,7 @@ function enabled
 function boot
 {
 	local run_on_boot=""
+	patch_luci_header_ut
 	if [ "$IS_RUN_ON_BOOT" = "1" ]; then
 		if [ -n "$ZAPRET_CFG_SEC_NAME" ]; then
 			run_on_boot=$( get_run_on_boot_option )
