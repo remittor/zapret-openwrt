@@ -6,6 +6,7 @@
 			"file": {
 				"/opt/zapret/config": [ "read" ],
 				"/opt/zapret/ipset/*": [ "read" ],
+				"/opt/zapret/init.d/openwrt/custom.d/*": [ "read" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/tmp/zapret*": [ "read" ],
 				"/etc/init.d/zapret*": [ "exec" ],
