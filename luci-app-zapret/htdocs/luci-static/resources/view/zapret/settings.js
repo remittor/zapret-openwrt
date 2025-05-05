@@ -86,6 +86,10 @@ return view.extend({
         o.rmempty = false;
         o.default = 0;
 
+        o = s.taboption(tabname, form.Flag, 'FILTER_TTL_EXPIRED_ICMP', 'FILTER_TTL_EXPIRED_ICMP');
+        o.rmempty = false;
+        o.default = 1;
+
         o = s.taboption(tabname, form.ListValue, 'MODE_FILTER', _('MODE_FILTER'));
         //o.value('none',         'none');
         //o.value('ipset',        'ipset');

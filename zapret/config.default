@@ -136,6 +136,11 @@ DISABLE_IPV4=0
 # do not work with ipv6
 DISABLE_IPV6=1
 
+# drop icmp time exceeded messages for nfqws tampered connections
+# in POSTNAT mode this can interfere with default mtr/traceroute in tcp or udp mode. use source port not redirected to nfqws
+# set to 0 if you are not expecting connection breakage due to icmp in response to TCP SYN or UDP
+FILTER_TTL_EXPIRED_ICMP=1
+
 # select which init script will be used to get ip or host list
 # possible values : get_user.sh get_antizapret.sh get_combined.sh get_reestr.sh get_hostlist.sh
 # comment if not required

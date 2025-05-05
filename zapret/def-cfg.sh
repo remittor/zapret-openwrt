@@ -14,6 +14,7 @@ function set_cfg_default_values
 		set $cfgname.config.INIT_APPLY_FW='1'
 		set $cfgname.config.DISABLE_IPV4='0'
 		set $cfgname.config.DISABLE_IPV6='1'
+		set $cfgname.config.FILTER_TTL_EXPIRED_ICMP='1'
 		set $cfgname.config.MODE_FILTER='hostlist'
 		set $cfgname.config.DISABLE_CUSTOM='0'
 		set $cfgname.config.WS_USER='daemon'
