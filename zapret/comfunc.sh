@@ -155,6 +155,7 @@ function init_before_start
 	else
 		remove_cron_task_logs
 	fi
+	return 0
 }
 
 function patch_luci_header_ut
