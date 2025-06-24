@@ -147,6 +147,8 @@ jobs:
         exclude:
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
+          - branch: SNAPSHOT
+            arch: arm_cortex-a7_neon-vfpv4
           - { isTestOrFake: true }
         include:
           - branch: openwrt-24.10
