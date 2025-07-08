@@ -41,14 +41,14 @@ function set_cfg_default_values
 			--filter-tcp=80 <HOSTLIST>
 			--dpi-desync=fake,fakedsplit
 			--dpi-desync-autottl=2
-			--dpi-desync-fooling=md5sig
+			--dpi-desync-fooling=badsum
 			--new
 			--filter-tcp=443 --hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
 			--dpi-desync=fake,multidisorder
 			--dpi-desync-split-pos=1,midsld
 			--dpi-desync-repeats=11
-			--dpi-desync-fooling=md5sig
-			--dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+			--dpi-desync-fooling=badsum
+			--dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com
 			--new
 			--filter-udp=443 --hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
 			--dpi-desync=fake
@@ -60,10 +60,8 @@ function set_cfg_default_values
 			--dpi-desync-repeats=11
 			--new
 			--filter-tcp=443 <HOSTLIST>
-			--dpi-desync=fake,multidisorder
-			--dpi-desync-split-pos=midsld
-			--dpi-desync-repeats=6
-			--dpi-desync-fooling=badseq,md5sig
+			--dpi-desync=multidisorder
+			--dpi-desync-split-pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1
 		"
 		# save changes
 		commit $cfgname
