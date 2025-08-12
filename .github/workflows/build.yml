@@ -113,6 +113,7 @@ jobs:
         branch: [ openwrt-24.10, SNAPSHOT ]
         arch:
           - aarch64_cortex-a53
+          - aarch64_cortex-a53
           - aarch64_cortex-a72
           - aarch64_cortex-a76
           - aarch64_generic
