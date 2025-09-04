@@ -110,17 +110,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [ openwrt-24.10, SNAPSHOT ]
+        branch: [ openwrt-24.10 ]
         arch:
           - mipsel_24kc
         isTestOrFake:
           - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
-        exclude:
-          - branch: SNAPSHOT
-            arch: arm_cortex-a9_vfpv3-d16
-          - branch: SNAPSHOT
-            arch: arm_cortex-a7_neon-vfpv4
-          - { isTestOrFake: true }
     container:
       image: openwrt/sdk:${{ matrix.arch }}-${{ matrix.branch }}
       options: --user root
@@ -215,11 +209,7 @@ jobs:
               echo "------------- .config BEG -------------------"
               cat .config
               echo "------------- .config END -------------------"
-              if [ "$ARCH" = "$LUCI_ARCH" ]; then
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
-              else
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net}/compile`
-              fi
+              PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
               if [ "$MAX_SPEED" = "false" ]; then
                   make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
               else
