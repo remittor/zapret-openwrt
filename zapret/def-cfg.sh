@@ -29,6 +29,7 @@ function set_cfg_default_values
 		set $cfgname.config.NFQWS_ENABLE='1'
 		set $cfgname.config.DESYNC_MARK='0x40000000'
 		set $cfgname.config.DESYNC_MARK_POSTNAT='0x20000000'
+		set $cfgname.config.FILTER_MARK='$TAB'
 		set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 		set $cfgname.config.NFQWS_PORTS_UDP='443'
 		set $cfgname.config.NFQWS_TCP_PKT_OUT='9'
