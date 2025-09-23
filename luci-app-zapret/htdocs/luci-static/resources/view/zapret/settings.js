@@ -363,7 +363,16 @@ return view.extend({
             o.inputtitle = _('Edit');
             o.inputstyle = 'edit btn';
             o.description = fn;
-            let desc = (num == tools.discord_num) ? _('Example') + ': <a href=%s>%s</a>'.format(tools.discord_url) : '';
+            let desc = '';
+            if (num == tools.discord_num) {
+                desc = _('Example') + ': ';
+                for (let k = 0; k < tools.discord_url.length; k++) {
+                    let url = tools.discord_url[k];
+                    if (k > 0) desc += ' <br> ';
+                    const filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
+                    desc += '<a href=' + url + '>' + filename + '</a>';
+                }
+            }
             o.onclick = () => new tools.fileEditDialog(fn, name, desc, '', 15).show();
         }
 
