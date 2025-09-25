@@ -149,7 +149,7 @@ return view.extend({
             };
             let desc = locname;
             if (multiline == 2) {
-                desc += '<br/>' + _('Example') + ': <a href=%s>%s</a>'.format(tools.nfqws_opt_url);
+                desc += '<br/>' + _('Example') + ': <a target=_blank href=%s>%s</a>'.format(tools.nfqws_opt_url);
             }
             btn.onclick = () => new tools.longstrEditDialog('config', param, param, desc, rows, multiline).show();
         };
