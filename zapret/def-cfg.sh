@@ -31,7 +31,7 @@ function set_cfg_default_values
 		set $cfgname.config.DESYNC_MARK_POSTNAT='0x20000000'
 		set $cfgname.config.FILTER_MARK='$TAB'
 		set $cfgname.config.NFQWS_PORTS_TCP='80,443'
-		set $cfgname.config.NFQWS_PORTS_UDP='443'
+		set $cfgname.config.NFQWS_PORTS_UDP='443,19294-19344,50000-50100'
 		set $cfgname.config.NFQWS_TCP_PKT_OUT='9'
 		set $cfgname.config.NFQWS_TCP_PKT_IN='3'
 		set $cfgname.config.NFQWS_UDP_PKT_OUT='9'
@@ -55,6 +55,11 @@ function set_cfg_default_values
 			--dpi-desync=fake
 			--dpi-desync-repeats=11
 			--dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin
+            --new
+            --filter-udp=19294-19344,50000-50100
+            --filter-l7=discord,stun
+            --dpi-desync=fake
+            --dpi-desync-repeats=6
 			--new
 			--filter-udp=443 <HOSTLIST_NOAUTO>
 			--dpi-desync=fake
