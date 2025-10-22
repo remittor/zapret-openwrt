@@ -114,7 +114,7 @@ return view.extend({
             o.rawhtml = true;
             o.default = '<hr style="width: 620px; height: 1px; margin: 1px 0 1px; border-top: 1px solid;">';
             if (url) {
-                o.default += '<br/>' + _('Help') + ': <a href=%s>%s</a>'.format(url);
+                o.default += '<br/>' + _('Help') + ': <a target=_blank href=%s>%s</a>'.format(url);
             }
         };
 
@@ -149,7 +149,7 @@ return view.extend({
             };
             let desc = locname;
             if (multiline == 2) {
-                desc += '<br/>' + _('Example') + ': <a href=%s>%s</a>'.format(tools.nfqws_opt_url);
+                desc += '<br/>' + _('Example') + ': <a target=_blank href=%s>%s</a>'.format(tools.nfqws_opt_url);
             }
             btn.onclick = () => new tools.longstrEditDialog('config', param, param, desc, rows, multiline).show();
         };
@@ -370,7 +370,7 @@ return view.extend({
                     let url = tools.discord_url[k];
                     if (k > 0) desc += ' <br> ';
                     const filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
-                    desc += '<a href=' + url + '>' + filename + '</a>';
+                    desc += '<a target=_blank href=' + url + '>' + filename + '</a>';
                 }
             }
             o.onclick = () => new tools.fileEditDialog(fn, name, desc, '', 15).show();
