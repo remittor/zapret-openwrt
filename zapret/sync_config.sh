@@ -95,6 +95,7 @@ sync_param AUTOHOSTLIST_DEBUGLOG
 sync_param NFQWS_ENABLE
 sync_param DESYNC_MARK
 sync_param DESYNC_MARK_POSTNAT
+sync_param FILTER_MARK str
 sync_param NFQWS_PORTS_TCP str
 sync_param NFQWS_PORTS_UDP str
 sync_param NFQWS_TCP_PKT_OUT str

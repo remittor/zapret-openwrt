@@ -114,7 +114,7 @@ return view.extend({
             o.rawhtml = true;
             o.default = '<hr style="width: 620px; height: 1px; margin: 1px 0 1px; border-top: 1px solid;">';
             if (url) {
-                o.default += '<br/>' + _('Help') + ': <a href=%s>%s</a>'.format(url);
+                o.default += '<br/>' + _('Help') + ': <a target=_blank href=%s>%s</a>'.format(url);
             }
         };
 
@@ -149,7 +149,7 @@ return view.extend({
             };
             let desc = locname;
             if (multiline == 2) {
-                desc += '<br/>' + _('Example') + ': <a href=%s>%s</a>'.format(tools.nfqws_opt_url);
+                desc += '<br/>' + _('Example') + ': <a target=_blank href=%s>%s</a>'.format(tools.nfqws_opt_url);
             }
             btn.onclick = () => new tools.longstrEditDialog('config', param, param, desc, rows, multiline).show();
         };
@@ -167,6 +167,11 @@ return view.extend({
         //o.description = _("nfqws option for DPI desync attack");
         o.rmempty     = false;
         o.datatype    = 'string';
+
+        o = s.taboption(tabname, form.Value, 'FILTER_MARK', _('FILTER_MARK'));
+        o.rmempty     = false;
+        o.validate = function(section_id, value) { return true; };
+        o.write = function(section_id, value) { return form.Value.prototype.write.call(this, section_id, (value == null || value.trim() == '') ? "\t" : value.trim()); };
         
         o = s.taboption(tabname, form.Value, 'NFQWS_PORTS_TCP', _('NFQWS_PORTS_TCP'));
         o.rmempty     = false;
@@ -358,7 +363,16 @@ return view.extend({
             o.inputtitle = _('Edit');
             o.inputstyle = 'edit btn';
             o.description = fn;
-            let desc = (num == tools.discord_num) ? _('Example') + ': <a href=%s>%s</a>'.format(tools.discord_url) : '';
+            let desc = '';
+            if (num == tools.discord_num) {
+                desc = _('Example') + ': ';
+                for (let k = 0; k < tools.discord_url.length; k++) {
+                    let url = tools.discord_url[k];
+                    if (k > 0) desc += ' <br> ';
+                    const filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
+                    desc += '<a target=_blank href=' + url + '>' + filename + '</a>';
+                }
+            }
             o.onclick = () => new tools.fileEditDialog(fn, name, desc, '', 15).show();
         }
 
