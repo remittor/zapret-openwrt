@@ -39,30 +39,27 @@ function set_cfg_default_values
 		set $cfgname.config.NFQWS_PORTS_TCP_KEEPALIVE='0'
 		set $cfgname.config.NFQWS_PORTS_UDP_KEEPALIVE='0'
 		set $cfgname.config.NFQWS_OPT="
-			--filter-tcp=80 <HOSTLIST>
-			--dpi-desync=fake,fakedsplit
-			--dpi-desync-autottl=2
-			--dpi-desync-fooling=badsum
+			--filter-tcp=443
+			--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+			--hostlist=/opt/zapret/ipset/zapret-hosts-user.txt
+			--hostlist-exclude-domains=openwrt.org
+			--dpi-desync=fake,fakeddisorder
+			--dpi-desync-split-pos=10,midsld
+			--dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+			--dpi-desync-fake-tls-mod=rnd,dupsid,sni=fonts.google.com
+			--dpi-desync-fake-tls=0x0F0F0F0F
+			--dpi-desync-fake-tls-mod=none
+			--dpi-desync-fakedsplit-pattern=/opt/zapret/files/fake/tls_clienthello_vk_com.bin
+			--dpi-desync-split-seqovl=336
+			--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_gosuslugi_ru.bin
+			--dpi-desync-fooling=badseq,badsum
+			--dpi-desync-badseq-increment=0
 			--new
-			--filter-tcp=443 --hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
-			--dpi-desync=fake,multidisorder
-			--dpi-desync-split-pos=1,midsld
-			--dpi-desync-repeats=11
-			--dpi-desync-fooling=badsum
-			--dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com
-			--new
-			--filter-udp=443 --hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+			--filter-udp=443
+			--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
 			--dpi-desync=fake
-			--dpi-desync-repeats=11
+			--dpi-desync-repeats=6
 			--dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin
-			--new
-			--filter-udp=443 <HOSTLIST_NOAUTO>
-			--dpi-desync=fake
-			--dpi-desync-repeats=11
-			--new
-			--filter-tcp=443 <HOSTLIST>
-			--dpi-desync=multidisorder
-			--dpi-desync-split-pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1
 		"
 		# save changes
 		commit $cfgname
