@@ -173,16 +173,16 @@ return view.extend({
             
             let tab = E('div', { 'data-tab': tabname, 'data-tab-title': tabNameText }, [
                 E('div', { 'id': 'content_dmnlog_' + log_num }, [
-                    E('div', {'style': 'padding-bottom: 20px'}, [ scrollDownButton ]),
+                    E('div', {'style': 'margin-bottom: 20px; '}, [ scrollDownButton ]),
                     E('textarea', {
                         'id': log_id,
                         'name': log_name,
-                        'style': 'font-size:12px',
+                        'style': 'font-size:12px; width: 100%; max-height: 50vh;',
                         'readonly': 'readonly',
                         'wrap': 'off',
                         'rows': logdata[log_num].rows,
                     }, [ log_text ]),
-                    E('div', {'style': 'padding-bottom: 20px'}, [ scrollUpButton ]),
+                    E('div', {'style': 'margin-top: 20px'}, [ scrollUpButton ]),
                 ]),
             ]);
             
