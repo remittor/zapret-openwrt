@@ -5,6 +5,7 @@
 
 cfg_run_on_boot="$( uci -q get zapret.config.run_on_boot )"
 
+restore_all_ipset_cfg
 create_default_cfg
 
 if [ "$cfg_run_on_boot" = "1" ]; then
