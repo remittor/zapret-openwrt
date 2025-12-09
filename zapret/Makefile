@@ -79,8 +79,14 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./init.d.sh $(1)/etc/init.d/zapret
 	$(INSTALL_DATA) ./config.default $(1)/opt/zapret/config.default
 	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
+	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
 	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
 	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
+	$(INSTALL_DIR) $(1)/opt/zapret/ipset_def
+	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset_def/zapret-hosts-google.txt
+	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset_def/zapret-hosts-user.txt
+	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset_def/zapret-hosts-user-exclude.txt
+	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset_def/zapret-ip-exclude.txt
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret/uci-def-cfg.sh
@@ -91,6 +97,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./sync_config.sh     $(1)/opt/zapret/sync_config.sh
 	# Fix permisions
 	chmod 644 $(1)/opt/zapret/ipset/*.txt
+	chmod 644 $(1)/opt/zapret/ipset_def/*.txt
 	chmod 644 $(1)/opt/zapret/config.default
 	chmod 755 $(1)/opt/zapret/*.sh
 endef
