@@ -87,6 +87,10 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset_def/zapret-hosts-user.txt
 	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset_def/zapret-hosts-user-exclude.txt
 	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset_def/zapret-ip-exclude.txt
+	$(INSTALL_DIR) $(1)/opt/zapret/init.d
+	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt
+	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt/custom.d
+	$(CP) ./custom.d/* $(1)/opt/zapret/init.d/openwrt/custom.d/
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret/uci-def-cfg.sh
@@ -98,6 +102,7 @@ define Package/$(PKG_NAME)/install
 	# Fix permisions
 	chmod 644 $(1)/opt/zapret/ipset/*.txt
 	chmod 644 $(1)/opt/zapret/ipset_def/*.txt
+	chmod 644 $(1)/opt/zapret/init.d/openwrt/custom.d/*.sh
 	chmod 644 $(1)/opt/zapret/config.default
 	chmod 755 $(1)/opt/zapret/*.sh
 endef
