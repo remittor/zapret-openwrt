@@ -90,7 +90,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/opt/zapret/init.d
 	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt
 	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt/custom.d
-    $(CP) $(PKG_BUILD_DIR)/custom.d/* $(1)/opt/zapret/init.d/openwrt/custom.d/
+	$(CP) $(PKG_BUILD_DIR)/custom.d/* $(1)/opt/zapret/init.d/openwrt/custom.d/
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret/uci-def-cfg.sh
