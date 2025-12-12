@@ -16,7 +16,7 @@ function set_cfg_default_values
 		set $cfgname.config.DISABLE_IPV6='1'
 		set $cfgname.config.FILTER_TTL_EXPIRED_ICMP='1'
 		set $cfgname.config.MODE_FILTER='hostlist'
-		set $cfgname.config.DISABLE_CUSTOM='0'
+		set $cfgname.config.DISABLE_CUSTOM='1'
 		set $cfgname.config.WS_USER='daemon'
 		set $cfgname.config.DAEMON_LOG_ENABLE='0'
 		set $cfgname.config.DAEMON_LOG_FILE='/tmp/zapret+<DAEMON_NAME>+<DAEMON_IDNUM>+<DAEMON_CFGNAME>.log'
