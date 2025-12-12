@@ -90,14 +90,32 @@ function get_run_on_boot_option
 	fi
 }
 
+function restore_ipset_txt
+{
+	local cfgname=$1
+	if [ -f "$ZAPRET_BASE/ipset_def/$cfgname" ]; then
+		cp -f "$ZAPRET_BASE/ipset_def/$cfgname" "$ZAPRET_BASE/ipset/$cfgname"
+	fi
+}
+
+function restore_all_ipset_cfg
+{
+	restore_ipset_txt zapret-hosts-google.txt
+	restore_ipset_txt zapret-hosts-user.txt
+	restore_ipset_txt zapret-hosts-user-exclude.txt
+	restore_ipset_txt zapret-ip-exclude.txt.txt
+}
+
 function create_default_cfg
 {
-	local cfgname=${1:-$ZAPRET_CFG_NAME}
+	local opt_flags=${1:--}
+	local opt_strat=$2
+	local cfgname=${3:-$ZAPRET_CFG_NAME}
 	local cfgfile=/etc/config/$cfgname
 	rm -f $cfgfile
 	touch $cfgfile
 	uci set $cfgname.config=main
-	set_cfg_default_values $cfgname
+	set_cfg_default_values "$opt_flags" "$opt_strat" $cfgname
 	return 0
 }
 
@@ -112,7 +130,7 @@ function merge_cfg_with_def_values
 	local cfg_sec_name="$( uci -q get $ZAPRET_CFG_NAME.config )"
 	[ -z "$cfg_sec_name" ] && create_default_cfg
 
-	create_default_cfg "$NEWCFGNAME"
+	create_default_cfg "-" "" "$NEWCFGNAME"
 	[ ! -f "$NEWCFGFILE" ] && return 1 
 
 	uci -m -f $cfgfile import "$NEWCFGNAME"

@@ -39,6 +39,7 @@ return baseclass.extend({
     appName           : 'zapret',
     execPath          : '/etc/init.d/zapret',
     syncCfgPath       : '/opt/zapret/sync_config.sh',
+    defCfgPath        : '/opt/zapret/def-cfg.sh',
     defaultCfgPath    : '/opt/zapret/restore-def-cfg.sh',
 
     hostsGoogleFN     : '/opt/zapret/ipset/zapret-hosts-google.txt',
@@ -139,6 +140,20 @@ return baseclass.extend({
         });
     },
 
+    getStratList: function() {
+        this.init_consts();
+        let exec_cmd = '/bin/busybox';
+        let exec_arg = [ 'awk', '-F', '"', '/if \\[ "\\$strat" = "/ {print $4}', this.defCfgPath ];
+        return fs.exec(exec_cmd, exec_arg).then(res => {
+            if (res.code == 0) {
+                return this.getWordsArray(res.stdout);
+            }
+            return [ ];
+        }).catch(e => {
+            ui.addNotification(null, E('p', _('Failed to get strat list: %s').format(e)));
+        });
+    },
+
     handleServiceAction: function(name, action) {
         return this.callInitAction(name, action).then(success => {
             if (!success) {
@@ -152,6 +167,12 @@ return baseclass.extend({
 
     normalizeValue: function(v) {
         return (v && typeof(v) === 'string') ? v.trim().replace(/\r?\n/g, '') : v;
+    },
+
+    getWordsArray: function (text, { trim = true, removeEmpty = true } = {}) {
+        const rawLines = text.split(/\n/);
+        const processed = trim ? rawLines.map(line => line.trim()) : rawLines.slice();
+        return removeEmpty ? processed.filter(line => line.length > 0) : processed;
     },
 
     decode_pkg_list: function(pkg_list) {
@@ -448,9 +469,12 @@ return baseclass.extend({
             if (typeof(value) === 'string') {
                 value = value.trim();
                 if (this.multiline == 2) {
-                    value = value.replace(/\n\t\t\t--/g, "\n--");
-                    value = value.replace(/\n\t\t--/g, "\n--");
-                    value = value.replace(/\n\t--/g, "\n--");
+                    value = value.replace(/\n\t/g, "\n");
+                    value = value.replace(/\n\t/g, "\n");
+                    value = value.replace(/\n\t/g, "\n");
+                    value = value.replace(/\n\t/g, "\n");
+                    value = value.replace(/\n\t/g, "\n");
+                    value = value.replace(/\n\t/g, "\n");
                     value = value.replace(/\n  --/g, "\n--");
                     value = value.replace(/\n --/g, "\n--");
                     value = value.replace(/ --/g, "\n--");

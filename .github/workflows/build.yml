@@ -148,8 +148,6 @@ jobs:
         exclude:
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
-          - branch: SNAPSHOT
-            arch: arm_cortex-a7_neon-vfpv4
           - { isTestOrFake: true }
         include:
           - branch: openwrt-24.10
@@ -177,6 +175,7 @@ jobs:
         shell: bash
         run: |
           # gpg --verbose --recv-keys 0x1D53D1877742E911
+          # gpg --verbose --import <(wget -qO- 'https://git.openwrt.org/?p=keyring.git;a=blob_plain;f=gpg/0x1D53D1877742E911.asc')
           gpg --verbose --import <(wget -qO- 'https://raw.githubusercontent.com/openwrt/keyring/refs/heads/master/gpg/0x1D53D1877742E911.asc')
           # disable check signatures
           sed -i 's/gpg --/#gpg --/g' setup.sh
@@ -442,11 +441,11 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-  
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  
+
       - name: Repository deployed summary
         run: |
           echo "Repository deployed" >> $GITHUB_STEP_SUMMARY

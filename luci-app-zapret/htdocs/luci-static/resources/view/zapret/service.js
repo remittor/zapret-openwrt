@@ -48,6 +48,7 @@ return view.extend({
             tools.getSvcInfo(),                     // svc_info
             fs.exec('/bin/busybox', [ 'ps' ]),      // process list
             fs.exec(tools.packager.path, tools.packager.args),  // installed packages
+            tools.getStratList(),                   // nfqws strategy list
             uci.load(tools.appName),              // config
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
@@ -71,6 +72,7 @@ return view.extend({
         let svc_info  = status_array[2];   // stdout: JSON as text
         let proc_list = status_array[3];   // stdout: multiline text
         let pkg_list  = status_array[4];   // stdout: installed packages
+        this.nfqws_strat_list = status_array[5];   // array of strat names
         
         //console.log('svc_en: ' + svc_en.code);
         svc_en = (svc_en.code == 0) ? true : false;
@@ -147,7 +149,7 @@ return view.extend({
         });
     },
 
-    serviceActionEx: function(action, button, hide_modal = false) {
+    serviceActionEx: function(action, button, args = [ ], hide_modal = false) {
         if (button) {
             let elem = document.getElementById(button);
             this.disableButtons(true, elem);
@@ -164,7 +166,7 @@ return view.extend({
         }
         else if (action == 'reset') {
             exec_cmd = tools.defaultCfgPath;
-            exec_arg = [ 'sync' ];  // restore config + sync configs
+            exec_arg = args;  // (reset_ipset)(sync) ==> restore all configs + sync config
             errmsg = _('Unable to run restore-def-cfg.sh script.');
             action = null;
         } else {
@@ -228,6 +230,33 @@ return view.extend({
 
     dialogResetCfg: function(ev) {
         ev.target.blur();
+
+        let reset_base = E('label', [
+            E('input', { type: 'checkbox', id: 'cfg_reset_base',  checked: true }),
+            ' ', _('Restore all base settings')
+        ]);
+        
+        let reset_ipset = E('label', [
+            E('input', { type: 'checkbox', id: 'cfg_reset_ipset',  checked: true }),
+            ' ', _('Restore ipset configs')
+        ]);
+
+        let set_autohostlist = E('label', [
+            E('input', { type: 'checkbox', id: 'cfg_autohostlist',  checked: true }),
+            ' ', _('Set AutoHostList mode')
+        ]);
+
+        let strat_list = [ ];
+        strat_list.push( E('option', { value: 'strat__skip__' }, [ '-' ] ) );
+        for (let id = 0; id < this.nfqws_strat_list.length; id++) {
+            let strat = '' + this.nfqws_strat_list[id];
+            strat_list.push( E('option', { value: 'strat_' + id }, [ strat ] ) );
+        }
+        let nfqws_strat = E('label', [
+            _('NFQWS_OPT strategy: '),
+            E('select', { id: 'cfg_nfqws_strat' }, strat_list)
+        ]);
+
         let cancel_button = E('button', {
             'class': btn_style_neutral,
             'click': ui.hideModal,
@@ -238,12 +267,35 @@ return view.extend({
         }, _('Reset settings'));
         resetcfg_btn.onclick = ui.createHandlerFn(this, () => {
             //cancel_button.disabled = true;
-            return this.serviceActionEx('reset', resetcfg_btn, true);
+            let opt_flags = '';
+            if (document.getElementById('cfg_reset_base').checked == false) {
+                opt_flags += '(skip_base)';
+            };
+            if (document.getElementById('cfg_reset_ipset').checked) {
+                opt_flags += '(reset_ipset)';
+            };
+            if (document.getElementById('cfg_autohostlist').checked) {
+                opt_flags += '(set_mode_autohostlist)';
+            };
+            //console.log('RESET: opt_flags = ' + opt_flags);
+            let sel_strat = document.getElementById('cfg_nfqws_strat');
+            let opt_strat = sel_strat.options[sel_strat.selectedIndex].text;
+            //console.log('RESET: strat = ' + opt_strat);
+            opt_flags += '(sync)';
+            let args = [ opt_flags, opt_strat ];
+            return this.serviceActionEx('reset', resetcfg_btn, args, true);
         });
 
         ui.showModal(_('Reset settings to default'), [
             E('div', { 'class': 'cbi-section' }, [
-                E('p', _('All settings will be reset to default. Continue?')),
+                reset_base,
+                E('br'), E('br'),
+                reset_ipset,
+                E('br'), E('br'),
+                set_autohostlist,
+                E('br'), E('br'),
+                nfqws_strat,
+                E('br'), E('br')
             ]),
             E('div', { 'class': 'right' }, [
                 cancel_button,
