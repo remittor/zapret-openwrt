@@ -77,11 +77,8 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_OPT="
 				# Strategy $strat
 				
-				--filter-tcp=443
+				--filter-tcp=443 <HOSTLIST>
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
-				--hostlist=/opt/zapret/ipset/zapret-hosts-user.txt
-				--hostlist-auto=/opt/zapret/ipset/zapret-hosts-auto.txt
-				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
 				--dpi-desync=fake,multidisorder
 				--dpi-desync-split-seqovl=681
 				--dpi-desync-split-pos=1
@@ -109,11 +106,8 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_OPT="
 				# Strategy $strat
 				
-				--filter-tcp=443
+				--filter-tcp=443 <HOSTLIST>
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
-				--hostlist=/opt/zapret/ipset/zapret-hosts-user.txt
-				--hostlist-auto=/opt/zapret/ipset/zapret-hosts-auto.txt
-				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
 				--hostlist-exclude-domains=openwrt.org
 				--dpi-desync=fake,fakeddisorder
 				--dpi-desync-split-pos=10,midsld
@@ -145,11 +139,8 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_OPT="
 				# Strategy $strat
 				
-				--filter-tcp=443
+				--filter-tcp=443 <HOSTLIST>
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
-				--hostlist=/opt/zapret/ipset/zapret-hosts-user.txt
-				--hostlist-auto=/opt/zapret/ipset/zapret-hosts-auto.txt
-				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
 				--hostlist-exclude-domains=openwrt.org
 				--dpi-desync=fake,fakeddisorder
 				--dpi-desync-split-pos=10,midsld
@@ -195,10 +186,7 @@ function set_cfg_nfqws_strat
 				--dpi-desync-fooling=badseq
 				
 				--new
-				--filter-tcp=443
-				--hostlist=/opt/zapret/ipset/zapret-hosts-user.txt
-				--hostlist-auto=/opt/zapret/ipset/zapret-hosts-auto.txt
-				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+				--filter-tcp=443 <HOSTLIST>
 				--hostlist-exclude-domains=openwrt.org
 				--dpi-desync-any-protocol=1
 				--dpi-desync-cutoff=n5
@@ -236,10 +224,7 @@ function set_cfg_nfqws_strat
 				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
 				
 				--new
-				--filter-tcp=443
-				--hostlist=/opt/zapret/ipset/zapret-hosts-user.txt
-				--hostlist-auto=/opt/zapret/ipset/zapret-hosts-auto.txt
-				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+				--filter-tcp=443 <HOSTLIST>
 				--hostlist-exclude-domains=openwrt.org
 				--dpi-desync=fake,fakeddisorder
 				--dpi-desync-split-pos=10,midsld
