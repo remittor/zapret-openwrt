@@ -1,0 +1,17 @@
+# Подпись Packages.sig для OpenWRT репозитория opkg
+
+# собираем usign
+git clone https://git.openwrt.org/project/usign.git
+cd usign/
+cmake .
+make
+
+# генерируем ключи
+./usign -G -s secret.key -p public.key -c "zapret-openwrt OpenWRT repository"
+
+# подписываем пакет
+./usign -S -m out/_pages/openwrt/Packages -s secret.key -c "zapret-openwrt OpenWRT repository"
+
+# Ключи для OpenWRT репозитория apk
+openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem
+openssl ec -in private-key.pem -pubout > public-key.pem
