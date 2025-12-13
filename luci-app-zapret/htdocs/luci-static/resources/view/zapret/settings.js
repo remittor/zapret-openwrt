@@ -90,11 +90,11 @@ return view.extend({
         o.rmempty = false;
         o.default = 1;
 
-        o = s.taboption(tabname, form.ListValue, 'MODE_FILTER', _('MODE_FILTER'));
+        //o = s.taboption(tabname, form.ListValue, 'MODE_FILTER', _('MODE_FILTER'));
         //o.value('none',         'none');
         //o.value('ipset',        'ipset');
-        o.value('hostlist',     'hostlist');
-        o.value('autohostlist', 'autohostlist');
+        //o.value('hostlist',     'hostlist');
+        //o.value('autohostlist', 'autohostlist');
 
         o = s.taboption(tabname, form.Value, 'WS_USER', _('WS_USER'));
         o.rmempty  = false;
@@ -212,6 +212,20 @@ return view.extend({
 
         tabname = 'autohostlist_tab'; 
         s.tab(tabname, _('AutoHostList'));
+
+        o = s.taboption(tabname, form.Flag, 'MODE_FILTER', _('Use AutoHostList mode'));
+        o.rmempty = false;
+        o.default = '0';
+        o.validate = function(section_id, value) { return true; };
+        o.load = function(section_id) {
+            return uci.load(tools.appName).then(L.bind(function() {
+                var v = uci.get(tools.appName, section_id, 'MODE_FILTER');
+                return (v === 'autohostlist') ? '1' : '0';
+            }, this));
+        };
+        o.write = function(section_id, value) {
+            return uci.set(tools.appName, section_id, 'MODE_FILTER', value === '1' ? 'autohostlist' : 'hostlist');
+        };
         
         o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_THRESHOLD', _('RETRANS_THRESHOLD'));
         o.rmempty     = false;
