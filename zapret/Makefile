@@ -54,6 +54,7 @@ define Package/$(PKG_NAME)/conffiles
 /etc/config/zapret
 /opt/zapret/config
 /opt/zapret/ipset/
+/opt/zapret/init.d/openwrt/custom.d/
 endef
 
 define Package/$(PKG_NAME)/install
