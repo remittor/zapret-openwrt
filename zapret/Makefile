@@ -67,6 +67,7 @@ define Package/$(PKG_NAME)/install
 	#$(CP) $(PKG_BUILD_DIR)/docs/* $(1)/opt/zapret/docs/
 	$(INSTALL_DIR) $(1)/opt/zapret/files
 	$(CP) $(PKG_BUILD_DIR)/files/* $(1)/opt/zapret/files/
+	$(CP)                ./files/* $(1)/opt/zapret/files/
 	$(INSTALL_DIR) $(1)/opt/zapret/ipset
 	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)/opt/zapret/ipset/
 	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck.sh  $(1)/opt/zapret/blockcheck.sh
