@@ -458,9 +458,11 @@ jobs:
 
       - name: Commit and push ALL releases.json
         run: |
+          mkdir -p releases
+          mv releases*.json releases/
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git checkout -B gh-pages
-          git add releases.json releases_*.json
-          git commit -m "Update releases.json" || exit 0
+          git add releases/*
+          git commit -m "Update releases" || exit 0
           git push origin gh-pages
