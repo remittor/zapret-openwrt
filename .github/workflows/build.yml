@@ -137,10 +137,13 @@ jobs:
           - mipsel_24kc_24kf
           - mipsel_74kc
           - mipsel_mips32
+          - riscv64_riscv64
           - x86_64
         isTestOrFake:
           - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
         exclude:
+          - branch: openwrt-24.10
+            arch: riscv64_riscv64
           - branch: SNAPSHOT
             arch: arm_cortex-a9_vfpv3-d16
           - { isTestOrFake: true }
