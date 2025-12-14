@@ -363,9 +363,19 @@ return view.extend({
         tabname = 'custom_d_tab'; 
         s.tab(tabname, 'custom.d');
 
-        o = s.taboption(tabname, form.Flag, 'DISABLE_CUSTOM', _('DISABLE_CUSTOM'));
+        o = s.taboption(tabname, form.Flag, 'DISABLE_CUSTOM', _('Use custom.d scripts'));
         o.rmempty = false;
-        o.default = 0;
+        o.default = '0';
+        o.validate = function(section_id, value) { return true; };
+        o.load = function(section_id) {
+            return uci.load(tools.appName).then(L.bind(function() {
+                var v = uci.get(tools.appName, section_id, 'DISABLE_CUSTOM');
+                return (v === '1') ? '0' : '1';
+            }, this));
+        };
+        o.write = function(section_id, value) {
+            return uci.set(tools.appName, section_id, 'DISABLE_CUSTOM', value === '1' ? '0' : '1');
+        };
 
         add_delim(s);
         
