@@ -365,7 +365,19 @@ jobs:
         with:
           ref: main
 
-      - name: Generate releases.json
+      - name: Save FULL releases.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          curl -s \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/$OWNER/$REPO/releases \
+          > releases.json
+
+      - name: Generate filtered releases_XXX.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
@@ -381,6 +393,7 @@ jobs:
                 id: .id,
                 version: (.tag_name | sub("^v"; "")),
                 tag: .tag_name,
+                name: .name,
                 draft: .draft,
                 prerelease: .prerelease,
                 created_at: .created_at,
@@ -396,31 +409,35 @@ jobs:
                   })
                 )
               };
-
             sort_by(.created_at) | reverse
             | {
-                generated_at: (now | todate),
-                latest: (
-                  map(select(.draft == false))
-                  | .[0]
+                zap1: (
+                  map(select(.name | startswith("zapret ")))
+                  | .[0:20]
                   | {
-                      version: (.tag_name | sub("^v"; "")),
-                      tag: .tag_name,
-                      draft: .draft,
-                      prerelease: .prerelease,
-                      published_at: .published_at,
-                      url: .html_url
+                      generated_at: (now | todate),
+                      releases: map(normalize_release)
                     }
                 ),
-                releases: map(normalize_release)
+                zap2: (
+                  map(select(.name | startswith("zapret2 ")))
+                  | .[0:20]
+                  | {
+                      generated_at: (now | todate),
+                      releases: map(normalize_release)
+                    }
+                )
               }
-          ' > releases.json
+          ' \
+          | tee \
+            >(jq '.zap1' > releases_zap1.json) \
+            >(jq '.zap2' > releases_zap2.json)
 
-      - name: Commit and push releases.json
+      - name: Commit and push ALL releases.json
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git checkout -B gh-pages
-          git add releases.json
+          git add releases.json releases_zap1.json releases_zap2.json
           git commit -m "Update releases.json" || exit 0
           git push origin gh-pages
