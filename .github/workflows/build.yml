@@ -352,3 +352,75 @@ jobs:
           body: |
             zapret v${{ needs.build.outputs.pkgver }} for OpenWrt
           files: ./public/*.zip
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+        continue-on-error: true
+
+      - name: Checkout main if gh-pages missing
+        if: failure()
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Generate releases.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          curl -s \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/$OWNER/$REPO/releases \
+          | jq '
+            def normalize_release:
+              {
+                id: .id,
+                version: (.tag_name | sub("^v"; "")),
+                tag: .tag_name,
+                draft: .draft,
+                prerelease: .prerelease,
+                created_at: .created_at,
+                published_at: .published_at,
+                url: .html_url,
+                assets: (
+                  .assets | map({
+                    id: .id,
+                    name: .name,
+                    size: .size,
+                    content_type: .content_type,
+                    download_url: .browser_download_url
+                  })
+                )
+              };
+
+            sort_by(.created_at) | reverse
+            | {
+                generated_at: (now | todate),
+                latest: (
+                  map(select(.draft == false))
+                  | .[0]
+                  | {
+                      version: (.tag_name | sub("^v"; "")),
+                      tag: .tag_name,
+                      draft: .draft,
+                      prerelease: .prerelease,
+                      published_at: .published_at,
+                      url: .html_url
+                    }
+                ),
+                releases: map(normalize_release)
+              }
+          ' > releases.json
+
+      - name: Commit and push releases.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git checkout -B gh-pages
+          git add releases.json
+          git commit -m "Update releases.json" || exit 0
+          git push origin gh-pages
