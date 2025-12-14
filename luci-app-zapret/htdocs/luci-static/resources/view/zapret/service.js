@@ -21,8 +21,7 @@ return view.extend({
             start   : elems.btn_start   || document.getElementById('btn_start'),
             restart : elems.btn_restart || document.getElementById('btn_restart'),
             stop    : elems.btn_stop    || document.getElementById('btn_stop'),
-            update  : elems.btn_update  || document.getElementById('btn_update'),
-            reset   : elems.btn_update  || document.getElementById('btn_reset'),
+            reset   : elems.btn_reset   || document.getElementById('btn_reset'),
         };
     },
     
@@ -37,7 +36,6 @@ return view.extend({
         btn.start.disabled   = flag;
         btn.restart.disabled = flag;
         btn.stop.disabled    = flag;
-        btn.update.disabled  = true; // TODO
         btn.reset.disabled   = (error_code == 0) ? flag : false;
     },
 
@@ -99,7 +97,6 @@ return view.extend({
             svcinfo = tools.decode_svc_info(svc_en, svc_info, proc_list, cfg);
         }
         let btn = this.get_svc_buttons(elems);
-        btn.update.disabled = true;   // TODO
         btn.reset.disabled = false;
 
         if (Number.isInteger(svcinfo)) {
@@ -381,10 +378,6 @@ return view.extend({
         btn_stop.onclick    = ui.createHandlerFn(this, this.serviceAction, 'stop', 'btn_stop');
         layout_append(_('Service daemons control'), null, [ btn_start, btn_restart, btn_stop ] );
 
-        let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
-        btn_update.onclick  = ui.createHandlerFn(this, () => { this.appAction('update', 'btn_update') });
-        layout_append(_('Update HostLists'), null, [ btn_update ] );
-        
         let btn_reset       = create_btn('btn_reset', btn_style_action, _('Reset settings'));
         btn_reset.onclick   = L.bind(this.dialogResetCfg, this);
         layout_append(_('Reset settings to default'), null, [ btn_reset ] );
@@ -396,7 +389,6 @@ return view.extend({
             "btn_start": btn_start,
             "btn_restart": btn_restart,
             "btn_stop": btn_stop,
-            "btn_update": btn_update,
             "btn_reset": btn_reset,
         };
         this.setAppStatus(status_array, elems);

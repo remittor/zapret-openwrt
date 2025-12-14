@@ -295,8 +295,6 @@ return baseclass.extend({
                 svc_daemons += ' [' + svcinfo.dmn.working + '/' + svcinfo.dmn.total + ']';
             }
         }
-        let update_mode = _('user entries only');
-        
         let td_name_width = 40;
         let td_name_style = `style="width: ${td_name_width}%; min-width:${td_name_width}%; max-width:${td_name_width}%;"`;
         let out = `
@@ -315,22 +313,6 @@ return baseclass.extend({
                         </td>
                         <td class="td left %s">
                             ${svc_daemons}
-                        </td>
-                    </tr>
-                    <tr class="tr">
-                        <td class="td left" ${td_name_style}>
-                            ${_('FW type')}:
-                        </td>
-                        <td class="td left">
-                            ${fwtype}
-                        </td>
-                    </tr>
-                    <tr class="tr">
-                        <td class="td left" ${td_name_style}>
-                            ${_('HostLists update mode')}:
-                        </td>
-                        <td class="td left">
-                            ${update_mode}
                         </td>
                     </tr>
                     <tr class="tr">
