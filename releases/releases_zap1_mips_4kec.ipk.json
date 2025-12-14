@@ -1,0 +1,117 @@
+{
+  "generated_at": "2025-12-14T12:23:50Z",
+  "releases": [
+    {
+      "tag": null,
+      "name": "zapret v72.20251213",
+      "draft": false,
+      "prerelease": true,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v72.20251213",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v72.20251122",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v72.20251022",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v72.20250924",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v71.20250918",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v71.20250708",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v71.20250607",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250505",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250419",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250405",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250323",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250213",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250210",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250116",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    },
+    {
+      "tag": null,
+      "name": "zapret v70.20250109",
+      "draft": false,
+      "prerelease": false,
+      "assets": []
+    }
+  ]
+}
