@@ -1,15 +1,15 @@
 {
-  "generated_at": "2025-12-14T12:23:51Z",
+  "generated_at": "2025-12-15T20:17:08Z",
   "releases": [
     {
-      "tag": null,
+      "tag": "v72.20251213-fake",
       "name": "zapret v72.20251213",
-      "draft": false,
+      "draft": true,
       "prerelease": true,
       "assets": []
     },
     {
-      "tag": null,
+      "tag": "v72.20251213",
       "name": "zapret v72.20251213",
       "draft": false,
       "prerelease": false,
@@ -45,7 +45,7 @@
           "state": "uploaded",
           "size": 452843,
           "digest": "sha256:888fe52ae389c8db5a220fc988268c284ce3c73a781272f2e7182d38f24f5f92",
-          "download_count": 10,
+          "download_count": 21,
           "created_at": "2025-12-13T08:23:37Z",
           "updated_at": "2025-12-13T08:23:37Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_mipsel_74kc.zip"
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v72.20251122",
       "name": "zapret v72.20251122",
       "draft": false,
       "prerelease": false,
@@ -89,7 +89,7 @@
           "state": "uploaded",
           "size": 447442,
           "digest": "sha256:47dd08be08498866a3a24af261e0bf63dfc268a7850baf4ef62c8a1df56dacf3",
-          "download_count": 118,
+          "download_count": 121,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_mipsel_74kc.zip"
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v72.20251022",
       "name": "zapret v72.20251022",
       "draft": false,
       "prerelease": false,
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v72.20250924",
       "name": "zapret v72.20250924",
       "draft": false,
       "prerelease": false,
@@ -185,7 +185,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v71.20250918",
       "name": "zapret v71.20250918",
       "draft": false,
       "prerelease": false,
@@ -229,7 +229,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v71.20250708",
       "name": "zapret v71.20250708",
       "draft": false,
       "prerelease": false,
@@ -273,7 +273,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v71.20250607",
       "name": "zapret v71.20250607",
       "draft": false,
       "prerelease": false,
@@ -317,7 +317,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250505",
       "name": "zapret v70.20250505",
       "draft": false,
       "prerelease": false,
@@ -361,7 +361,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250419",
       "name": "zapret v70.20250419",
       "draft": false,
       "prerelease": false,
@@ -405,7 +405,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250405",
       "name": "zapret v70.20250405",
       "draft": false,
       "prerelease": false,
@@ -441,7 +441,7 @@
           "state": "uploaded",
           "size": 400605,
           "digest": null,
-          "download_count": 71,
+          "download_count": 72,
           "created_at": "2025-04-05T10:26:40Z",
           "updated_at": "2025-04-05T10:26:40Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v70.20250405/zapret_v70.20250405_mipsel_74kc.zip"
@@ -449,7 +449,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250323",
       "name": "zapret v70.20250323",
       "draft": false,
       "prerelease": false,
@@ -493,7 +493,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250213",
       "name": "zapret v70.20250213",
       "draft": false,
       "prerelease": false,
@@ -537,7 +537,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250210",
       "name": "zapret v70.20250210",
       "draft": false,
       "prerelease": false,
@@ -581,7 +581,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250116",
       "name": "zapret v70.20250116",
       "draft": false,
       "prerelease": false,
@@ -625,7 +625,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70-20250109-23.05",
       "name": "zapret v70.20250109",
       "draft": false,
       "prerelease": false,

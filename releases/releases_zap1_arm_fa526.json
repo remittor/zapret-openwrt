@@ -1,15 +1,15 @@
 {
-  "generated_at": "2025-12-14T12:23:50Z",
+  "generated_at": "2025-12-15T20:17:07Z",
   "releases": [
     {
-      "tag": null,
+      "tag": "v72.20251213-fake",
       "name": "zapret v72.20251213",
-      "draft": false,
+      "draft": true,
       "prerelease": true,
       "assets": []
     },
     {
-      "tag": null,
+      "tag": "v72.20251213",
       "name": "zapret v72.20251213",
       "draft": false,
       "prerelease": false,
@@ -45,7 +45,7 @@
           "state": "uploaded",
           "size": 473934,
           "digest": "sha256:f979443b725c4f5d54f28237c6dacdf8e2db0bb4dcaa319820d90d41aa3875c6",
-          "download_count": 5,
+          "download_count": 6,
           "created_at": "2025-12-13T08:23:37Z",
           "updated_at": "2025-12-13T08:23:37Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_arm_fa526.zip"
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v72.20251122",
       "name": "zapret v72.20251122",
       "draft": false,
       "prerelease": false,
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v72.20251022",
       "name": "zapret v72.20251022",
       "draft": false,
       "prerelease": false,
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v72.20250924",
       "name": "zapret v72.20250924",
       "draft": false,
       "prerelease": false,
@@ -185,7 +185,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v71.20250918",
       "name": "zapret v71.20250918",
       "draft": false,
       "prerelease": false,
@@ -229,7 +229,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v71.20250708",
       "name": "zapret v71.20250708",
       "draft": false,
       "prerelease": false,
@@ -273,7 +273,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v71.20250607",
       "name": "zapret v71.20250607",
       "draft": false,
       "prerelease": false,
@@ -317,7 +317,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250505",
       "name": "zapret v70.20250505",
       "draft": false,
       "prerelease": false,
@@ -361,7 +361,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250419",
       "name": "zapret v70.20250419",
       "draft": false,
       "prerelease": false,
@@ -405,7 +405,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250405",
       "name": "zapret v70.20250405",
       "draft": false,
       "prerelease": false,
@@ -449,7 +449,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250323",
       "name": "zapret v70.20250323",
       "draft": false,
       "prerelease": false,
@@ -493,7 +493,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250213",
       "name": "zapret v70.20250213",
       "draft": false,
       "prerelease": false,
@@ -537,7 +537,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250210",
       "name": "zapret v70.20250210",
       "draft": false,
       "prerelease": false,
@@ -581,7 +581,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70.20250116",
       "name": "zapret v70.20250116",
       "draft": false,
       "prerelease": false,
@@ -625,7 +625,7 @@
       ]
     },
     {
-      "tag": null,
+      "tag": "v70-20250109-23.05",
       "name": "zapret v70.20250109",
       "draft": false,
       "prerelease": false,
