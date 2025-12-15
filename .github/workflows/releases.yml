@@ -1,6 +1,9 @@
 name: Update releases.json
 
 on:
+  workflow_run:
+    workflows: ["build"]
+    types: [completed]
   release:
     types: [published, created, edited]
 
@@ -9,6 +12,10 @@ permissions:
 
 jobs:
   update-json:
+    if: |
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+
     runs-on: ubuntu-latest
 
     steps:
