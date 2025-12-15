@@ -341,7 +341,7 @@ jobs:
           ls -lh ./public/*.zip
 
       - name: Upload assets
-        uses: andelf/nightly-release@main
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.check.outputs.tag }}
