@@ -1,0 +1,127 @@
+name: Update releases.json
+
+on:
+  release:
+    types: [published, created, edited]
+
+permissions:
+  contents: write
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+        continue-on-error: true
+
+      - name: Save FULL releases.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          curl -s \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/$OWNER/$REPO/releases \
+          > releases.json
+
+      - name: Generate releases_BRANCH.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          curl -s \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/$OWNER/$REPO/releases \
+          | jq '
+            def normalize_release:
+              {
+                id: .id,
+                version: (.tag_name | sub("^v"; "")),
+                tag: .tag_name,
+                name: .name,
+                draft: .draft,
+                prerelease: .prerelease,
+                created_at: .created_at,
+                published_at: .published_at,
+                url: .html_url,
+                assets: (
+                  .assets | map({
+                    id: .id,
+                    name: .name,
+                    size: .size,
+                    content_type: .content_type,
+                    download_url: .browser_download_url
+                  })
+                )
+              };
+            sort_by(.created_at) | reverse
+            | {
+                zap1: (
+                  map(select(.name | startswith("zapret ")))
+                  | .[0:20]
+                  | {
+                      generated_at: (now | todate),
+                      releases: map(normalize_release)
+                    }
+                ),
+                zap2: (
+                  map(select(.name | startswith("zapret2 ")))
+                  | .[0:20]
+                  | {
+                      generated_at: (now | todate),
+                      releases: map(normalize_release)
+                    }
+                )
+              }
+          ' \
+          | tee \
+            >(jq '.zap1' > releases_zap1.json) \
+            >(jq '.zap2' > releases_zap2.json)
+
+      - name: Generate releases_BRANCH_ARCH.json
+        run: |
+          BRANCHES=("zap1" "zap2")
+          for ARCH in $(jq -r '.[] | .assets[].name | capture("^[^_]+_[^_]+_(?<arch>.+)\\.zip$").arch' releases.json | sort -u); do
+            for BRANCH in "${BRANCHES[@]}"; do
+              if [ "$BRANCH" == "zap1" ]; then
+                PREFIX="zapret "
+              else
+                PREFIX="zapret2 "
+              fi
+              jq --arg prefix "$PREFIX" --arg arch "$ARCH" '
+                sort_by(.created_at) | reverse
+                | map(select(.name | startswith($prefix)))
+                | .[0:20]
+                | map(
+                    . as $release
+                    | {
+                        tag: $release.tag_name,
+                        name: $release.name,
+                        draft: $release.draft,
+                        prerelease: $release.prerelease,
+                        assets: ($release.assets | map(select(.name | test("_\($arch)\\.zip$"))))
+                      }
+                  )
+                | { generated_at: (now | todate), releases: . }
+              ' releases.json > "releases_${BRANCH}_${ARCH}.json"
+            done
+          done
+
+      - name: Commit and push ALL releases.json
+        run: |
+          mkdir -p releases
+          mv releases*.json releases/
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git checkout -B gh-pages
+          git add releases/*
+          git commit -m "Update releases" || exit 0
+          git push origin gh-pages
