@@ -282,7 +282,7 @@ return baseclass.extend({
         return result;
     },
 
-    makeStatusString: function(svcinfo, fwtype, bllist_preset) {
+    makeStatusString: function(svcinfo, pkg_arch, bllist_preset) {
         let svc_autorun = _('Unknown');
         let svc_daemons = _('Unknown');
         
@@ -299,6 +299,14 @@ return baseclass.extend({
         let td_name_style = `style="width: ${td_name_width}%; min-width:${td_name_width}%; max-width:${td_name_width}%;"`;
         let out = `
                 <table class="table">
+                    <tr class="tr">
+                        <td class="td left" ${td_name_style}>
+                            ${_('CPU architecture')}:
+                        </td>
+                        <td class="td left">
+                            ${pkg_arch}
+                        </td>
+                    </tr>
                     <tr class="tr">
                         <td class="td left" ${td_name_style}>
                             ${_('Service autorun status')}:

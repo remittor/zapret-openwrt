@@ -47,6 +47,7 @@ return view.extend({
             fs.exec('/bin/busybox', [ 'ps' ]),      // process list
             fs.exec(tools.packager.path, tools.packager.args),  // installed packages
             tools.getStratList(),                   // nfqws strategy list
+            fs.exec('sh', [ '-c', '. /etc/openwrt_release && printf "%s" "$DISTRIB_ARCH"' ]),  // CPU arch
             uci.load(tools.appName),              // config
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
@@ -60,7 +61,7 @@ return view.extend({
         let cfg = uci.get(tools.appName, 'config');
         if (!status_array || cfg == null || typeof(cfg) !== 'object') {
             let elem_status = elems.status || document.getElementById("status");
-            elem_status.innerHTML = tools.makeStatusString(null);
+            elem_status.innerHTML = tools.makeStatusString(null, '', '');
             ui.addNotification(null, E('p', _('Unable to read the contents') + ': setAppStatus()'));
             this.disableButtons(true, -1, elems);
             return;
@@ -71,6 +72,9 @@ return view.extend({
         let proc_list = status_array[3];   // stdout: multiline text
         let pkg_list  = status_array[4];   // stdout: installed packages
         this.nfqws_strat_list = status_array[5];   // array of strat names
+        let pkg_arch  = status_array[6];   // stdout: CPU arch
+        
+        this.pkg_arch = (pkg_arch.code == 0) ? pkg_arch.stdout.trim() : 'unknown';
         
         //console.log('svc_en: ' + svc_en.code);
         svc_en = (svc_en.code == 0) ? true : false;
@@ -117,7 +121,7 @@ return view.extend({
             }
         }
         let elem_status = elems.status || document.getElementById("status");
-        elem_status.innerHTML = tools.makeStatusString(svcinfo, cfg.FWTYPE, 'user_only');
+        elem_status.innerHTML = tools.makeStatusString(svcinfo, this.pkg_arch, '');
         
         if (!poll.active()) {
             poll.start();
