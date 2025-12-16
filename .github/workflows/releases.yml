@@ -65,14 +65,15 @@ jobs:
                     name: .name,
                     size: .size,
                     content_type: .content_type,
-                    download_url: .browser_download_url
+                    browser_download_url: .browser_download_url
                   })
                 )
               };
             sort_by(.created_at) | reverse
             | {
                 zap1: (
-                  map(select(.name | startswith("zapret ")))
+                  map(select(.draft == false))
+                  | map(select(.name | startswith("zapret ")))
                   | .[0:20]
                   | {
                       generated_at: (now | todate),
@@ -80,7 +81,8 @@ jobs:
                     }
                 ),
                 zap2: (
-                  map(select(.name | startswith("zapret2 ")))
+                  map(select(.draft == false))
+                  | map(select(.name | startswith("zapret2 ")))
                   | .[0:20]
                   | {
                       generated_at: (now | todate),
@@ -105,6 +107,7 @@ jobs:
               fi
               jq --arg prefix "$PREFIX" --arg arch "$ARCH" '
                 sort_by(.created_at) | reverse
+                | map(select(.draft == false))
                 | map(select(.name | startswith($prefix)))
                 | .[0:20]
                 | map(
@@ -112,8 +115,11 @@ jobs:
                     | {
                         tag: $release.tag_name,
                         name: $release.name,
-                        draft: $release.draft,
                         prerelease: $release.prerelease,
+                        created_at: $release.created_at,
+                        updated_at: $release.updated_at,
+                        published_at: $release.published_at,
+                        url: $release.html_url,
                         assets: ($release.assets | map(select(.name | test("_\($arch)\\.zip$"))))
                       }
                   )
