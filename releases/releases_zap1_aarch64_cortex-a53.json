@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-16T08:51:04Z",
+  "generated_at": "2025-12-16T09:39:51Z",
   "releases": [
     {
       "tag": "v72.20251216-test",
@@ -41,10 +41,57 @@
           "state": "uploaded",
           "size": 243532,
           "digest": "sha256:e116db1c1365aeae66e78fa3b6bd7a54bb58b922fb72b7b8b8bc1c9eb934aee8",
-          "download_count": 1,
+          "download_count": 6,
           "created_at": "2025-12-16T05:41:14Z",
           "updated_at": "2025-12-16T05:41:14Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251216-test/zapret_v72.20251216_aarch64_cortex-a53.zip"
+        }
+      ]
+    },
+    {
+      "tag": "v72.20251216",
+      "name": "zapret v72.20251216",
+      "prerelease": true,
+      "created_at": "2025-12-16T05:23:47Z",
+      "updated_at": "2025-12-16T09:39:35Z",
+      "published_at": "2025-12-16T09:39:35Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251216",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329290291",
+          "id": 329290291,
+          "node_id": "RA_kwDOM-Npcs4ToJIz",
+          "name": "zapret_v72.20251216_aarch64_cortex-a53.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 485325,
+          "digest": "sha256:b47bf9b8ab4f752a40b8e2bd6c51691d1bed26dd67523519369abc6ba5b54385",
+          "download_count": 0,
+          "created_at": "2025-12-16T09:39:34Z",
+          "updated_at": "2025-12-16T09:39:34Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251216/zapret_v72.20251216_aarch64_cortex-a53.zip"
         }
       ]
     },
@@ -88,7 +135,7 @@
           "state": "uploaded",
           "size": 484376,
           "digest": "sha256:ea953cfc33edc7b0ef4db7ae58b8449f35bba222f723aa75d21dc3581109b9c8",
-          "download_count": 1460,
+          "download_count": 1471,
           "created_at": "2025-12-13T08:23:37Z",
           "updated_at": "2025-12-13T08:23:37Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_aarch64_cortex-a53.zip"
@@ -135,7 +182,7 @@
           "state": "uploaded",
           "size": 479136,
           "digest": "sha256:e31e14e588c2add6940a63a1c3785ec656a2c9d216be7af5b467b6b2d0842c17",
-          "download_count": 13167,
+          "download_count": 13181,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_aarch64_cortex-a53.zip"
