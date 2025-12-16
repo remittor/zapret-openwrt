@@ -210,6 +210,8 @@ jobs:
           PKGDIR=$GITHUB_WORKSPACE/zapret-openwrt
           MKFN=$PKGDIR/luci-app-zapret/Makefile
           PKGVER=$( grep -s '^PKG_VERSION:=.*' $MKFN | cut -d'=' -f2 )
+          PKGREL=$( grep -s '^PKG_RELEASE:=.*' $MKFN | cut -d'=' -f2 )
+          [ "$PKGREL" != "1" ] && PKGVER=$PKGVER-r$PKGREL
           echo "PKG_VERSION = $PKGVER"
           cp -vr $PKGDIR ./package/zapret-openwrt/
           
