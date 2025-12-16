@@ -3,7 +3,7 @@
     "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/270620025",
     "assets_url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/270620025/assets",
     "upload_url": "https://uploads.github.com/repos/remittor/zapret-openwrt/releases/270620025/assets{?name,label}",
-    "html_url": "https://github.com/remittor/zapret-openwrt/releases/tag/untagged-51585fe56ab00a8c3749",
+    "html_url": "https://github.com/remittor/zapret-openwrt/releases/tag/untagged-333895ba49f305089ac1",
     "id": 270620025,
     "author": {
       "login": "github-actions[bot]",
@@ -34,13 +34,13 @@
     "immutable": false,
     "prerelease": true,
     "created_at": "2025-12-16T05:05:23Z",
-    "updated_at": "2025-12-16T05:05:24Z",
+    "updated_at": "2025-12-16T05:16:08Z",
     "published_at": null,
     "assets": [
       {
-        "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329215416",
-        "id": 329215416,
-        "node_id": "RA_kwDOM-Npcs4Tn224",
+        "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329218285",
+        "id": 329218285,
+        "node_id": "RA_kwDOM-Npcs4Tn3jt",
         "name": "zapret_v72.20251216_aarch64_cortex-a53.zip",
         "label": "",
         "uploader": {
@@ -67,16 +67,16 @@
         "content_type": "application/zip",
         "state": "uploaded",
         "size": 910,
-        "digest": "sha256:5ace5754bbe8754aa59f77d615377d2815e2390cebb4e29118d3a240b79025fc",
+        "digest": "sha256:2b3acd67a86ec7c2bb282d0ef838aca42ac1bab588b54ae95d0da49926b3acb5",
         "download_count": 0,
-        "created_at": "2025-12-16T05:05:24Z",
-        "updated_at": "2025-12-16T05:05:24Z",
-        "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/untagged-51585fe56ab00a8c3749/zapret_v72.20251216_aarch64_cortex-a53.zip"
+        "created_at": "2025-12-16T05:16:08Z",
+        "updated_at": "2025-12-16T05:16:08Z",
+        "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/untagged-333895ba49f305089ac1/zapret_v72.20251216_aarch64_cortex-a53.zip"
       },
       {
-        "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329215417",
-        "id": 329215417,
-        "node_id": "RA_kwDOM-Npcs4Tn225",
+        "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329218283",
+        "id": 329218283,
+        "node_id": "RA_kwDOM-Npcs4Tn3jr",
         "name": "zapret_v72.20251216_x86_64.zip",
         "label": "",
         "uploader": {
@@ -103,11 +103,11 @@
         "content_type": "application/zip",
         "state": "uploaded",
         "size": 374,
-        "digest": "sha256:2930a3a52476e9909e09e89f636812e3bf8713faac994e4133be5f37f3622ee7",
+        "digest": "sha256:9b471823e2227d53646125ab2975777771051ee1a36348307b9a07ba90f3b069",
         "download_count": 0,
-        "created_at": "2025-12-16T05:05:24Z",
-        "updated_at": "2025-12-16T05:05:24Z",
-        "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/untagged-51585fe56ab00a8c3749/zapret_v72.20251216_x86_64.zip"
+        "created_at": "2025-12-16T05:16:07Z",
+        "updated_at": "2025-12-16T05:16:08Z",
+        "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/untagged-333895ba49f305089ac1/zapret_v72.20251216_x86_64.zip"
       }
     ],
     "tarball_url": null,
