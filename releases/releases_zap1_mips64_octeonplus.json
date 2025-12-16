@@ -1,17 +1,9 @@
 {
-  "generated_at": "2025-12-15T20:17:08Z",
+  "generated_at": "2025-12-16T05:05:38Z",
   "releases": [
-    {
-      "tag": "v72.20251213-fake",
-      "name": "zapret v72.20251213",
-      "draft": true,
-      "prerelease": true,
-      "assets": []
-    },
     {
       "tag": "v72.20251213",
       "name": "zapret v72.20251213",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -45,7 +37,7 @@
           "state": "uploaded",
           "size": 493581,
           "digest": "sha256:74264a8cc47645e8852a59f5339a48ed3d8de91a620c363e0314aa1b2e8b5213",
-          "download_count": 9,
+          "download_count": 10,
           "created_at": "2025-12-13T08:23:37Z",
           "updated_at": "2025-12-13T08:23:37Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_mips64_octeonplus.zip"
@@ -55,7 +47,6 @@
     {
       "tag": "v72.20251122",
       "name": "zapret v72.20251122",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -99,7 +90,6 @@
     {
       "tag": "v72.20251022",
       "name": "zapret v72.20251022",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -143,7 +133,6 @@
     {
       "tag": "v72.20250924",
       "name": "zapret v72.20250924",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -187,7 +176,6 @@
     {
       "tag": "v71.20250918",
       "name": "zapret v71.20250918",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -231,7 +219,6 @@
     {
       "tag": "v71.20250708",
       "name": "zapret v71.20250708",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -275,7 +262,6 @@
     {
       "tag": "v71.20250607",
       "name": "zapret v71.20250607",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -319,7 +305,6 @@
     {
       "tag": "v70.20250505",
       "name": "zapret v70.20250505",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -363,7 +348,6 @@
     {
       "tag": "v70.20250419",
       "name": "zapret v70.20250419",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -407,7 +391,6 @@
     {
       "tag": "v70.20250405",
       "name": "zapret v70.20250405",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -451,7 +434,6 @@
     {
       "tag": "v70.20250323",
       "name": "zapret v70.20250323",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -495,7 +477,6 @@
     {
       "tag": "v70.20250213",
       "name": "zapret v70.20250213",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -539,7 +520,6 @@
     {
       "tag": "v70.20250210",
       "name": "zapret v70.20250210",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -583,7 +563,6 @@
     {
       "tag": "v70.20250116",
       "name": "zapret v70.20250116",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
@@ -627,7 +606,6 @@
     {
       "tag": "v70-20250109-23.05",
       "name": "zapret v70.20250109",
-      "draft": false,
       "prerelease": false,
       "assets": [
         {
