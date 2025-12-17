@@ -90,6 +90,16 @@ function get_run_on_boot_option
 	fi
 }
 
+function get_cpu_arch
+{
+	if [ -f /etc/openwrt_release ]; then
+		. /etc/openwrt_release
+		printf '%s' "$DISTRIB_ARCH"
+	else
+		printf 'unknown'
+	fi
+}
+
 function restore_ipset_txt
 {
 	local cfgname=$1

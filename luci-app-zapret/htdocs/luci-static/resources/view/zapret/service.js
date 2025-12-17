@@ -5,6 +5,7 @@
 'require ui';
 'require view';
 'require view.zapret.tools as tools';
+'require view.zapret.updater as updater';
 
 const btn_style_neutral  = 'btn';
 const btn_style_action   = 'btn cbi-button-action';
@@ -22,6 +23,7 @@ return view.extend({
             restart : elems.btn_restart || document.getElementById('btn_restart'),
             stop    : elems.btn_stop    || document.getElementById('btn_stop'),
             reset   : elems.btn_reset   || document.getElementById('btn_reset'),
+            update  : elems.btn_update  || document.getElementById('btn_update'),
         };
     },
     
@@ -37,6 +39,7 @@ return view.extend({
         btn.restart.disabled = flag;
         btn.stop.disabled    = flag;
         btn.reset.disabled   = (error_code == 0) ? flag : false;
+        btn.update.disabled  = (error_code == 0) ? flag : false;
     },
 
     getAppStatus: function() {
@@ -103,6 +106,7 @@ return view.extend({
         }
         let btn = this.get_svc_buttons(elems);
         btn.reset.disabled = false;
+        btn.update.disabled = false;
 
         if (Number.isInteger(svcinfo)) {
             ui.addNotification(null, E('p', _('Error')
@@ -203,17 +207,7 @@ return view.extend({
             let elem = document.getElementById(button);
             this.disableButtons(true, elem);
         }
-
         poll.stop();
-
-        if (action === 'update') {
-            this.getAppStatus().then(
-                (status_array) => {
-                    this.setAppStatus(status_array, [], 4);
-                }
-            );
-        }
-
         return fs.exec_direct(tools.execPath, [ action ]).then(res => {
             return this.getAppStatus().then(
                 (status_array) => {
@@ -387,6 +381,10 @@ return view.extend({
         btn_reset.onclick   = L.bind(this.dialogResetCfg, this);
         layout_append(_('Reset settings to default'), null, [ btn_reset ] );
 
+        let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
+        btn_update.onclick  = ui.createHandlerFn(this, () => { updater.openUpdateDialog(this.pkg_arch) });
+        layout_append(_('Update package'), null, [ btn_update ] );
+
         let elems = {
             "status": status_string,
             "btn_enable": btn_enable,
@@ -395,6 +393,7 @@ return view.extend({
             "btn_restart": btn_restart,
             "btn_stop": btn_stop,
             "btn_reset": btn_reset,
+            "btn_update": btn_update,
         };
         this.setAppStatus(status_array, elems);
 
