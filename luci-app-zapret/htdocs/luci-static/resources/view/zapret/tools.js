@@ -174,6 +174,12 @@ return baseclass.extend({
         const processed = trim ? rawLines.map(line => line.trim()) : rawLines.slice();
         return removeEmpty ? processed.filter(line => line.length > 0) : processed;
     },
+    
+    getConfigPar: function(txt, key, defval = null) {
+        const re = new RegExp(`^${key}\\s*=\\s*(['"])(.*?)\\1`, 'm');
+        const m = txt.match(re);
+        return m ? m[2] : defval;        
+    },
 
     decode_pkg_list: function(pkg_list) {
         let pkg_dict = { };

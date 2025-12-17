@@ -47,7 +47,7 @@ return view.extend({
             fs.exec('/bin/busybox', [ 'ps' ]),      // process list
             fs.exec(tools.packager.path, tools.packager.args),  // installed packages
             tools.getStratList(),                   // nfqws strategy list
-            fs.exec('sh', [ '-c', '. /etc/openwrt_release && printf "%s" "$DISTRIB_ARCH"' ]),  // CPU arch
+            fs.exec('/bin/cat', [ '/etc/openwrt_release' ]),  // CPU arch
             uci.load(tools.appName),              // config
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
@@ -71,10 +71,11 @@ return view.extend({
         let svc_info  = status_array[2];   // stdout: JSON as text
         let proc_list = status_array[3];   // stdout: multiline text
         let pkg_list  = status_array[4];   // stdout: installed packages
-        this.nfqws_strat_list = status_array[5];   // array of strat names
-        let pkg_arch  = status_array[6];   // stdout: CPU arch
+        let stratlist = status_array[5];   // array of strat names
+        let sys_info  = status_array[6];   // stdout: openwrt distrib info
         
-        this.pkg_arch = (pkg_arch.code == 0) ? pkg_arch.stdout.trim() : 'unknown';
+        this.nfqws_strat_list = stratlist;
+        this.pkg_arch = tools.getConfigPar(sys_info.stdout, 'DISTRIB_ARCH', 'unknown');
         
         //console.log('svc_en: ' + svc_en.code);
         svc_en = (svc_en.code == 0) ? true : false;
