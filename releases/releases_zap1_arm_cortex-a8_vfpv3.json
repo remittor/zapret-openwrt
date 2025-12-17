@@ -1,29 +1,19 @@
 {
-  "generated_at": "2025-12-16T09:39:52Z",
+  "generated_at": "2025-12-17T08:01:33Z",
   "releases": [
-    {
-      "tag": "v72.20251216-test",
-      "name": "zapret v72.20251216",
-      "prerelease": true,
-      "created_at": "2025-12-16T05:23:47Z",
-      "updated_at": "2025-12-16T08:50:54Z",
-      "published_at": "2025-12-16T08:50:54Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251216-test",
-      "assets": []
-    },
     {
       "tag": "v72.20251216",
       "name": "zapret v72.20251216",
       "prerelease": true,
-      "created_at": "2025-12-16T05:23:47Z",
-      "updated_at": "2025-12-16T09:39:35Z",
-      "published_at": "2025-12-16T09:39:35Z",
+      "created_at": "2025-12-17T07:10:18Z",
+      "updated_at": "2025-12-17T08:01:20Z",
+      "published_at": "2025-12-17T08:01:20Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251216",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329290274",
-          "id": 329290274,
-          "node_id": "RA_kwDOM-Npcs4ToJIi",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329713303",
+          "id": 329713303,
+          "node_id": "RA_kwDOM-Npcs4TpwaX",
           "name": "zapret_v72.20251216_arm_cortex-a8_vfpv3.zip",
           "label": "",
           "uploader": {
@@ -49,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 472796,
-          "digest": "sha256:b1015017c74c781f43129aaebfe20cc36e685004bb6827a9cebe868adb5e56f6",
+          "size": 472975,
+          "digest": "sha256:6aaaed0ba25a9f7df94f6ae00053658541a3bf7a44cbc099e7dbd952307095ff",
           "download_count": 0,
-          "created_at": "2025-12-16T09:39:34Z",
-          "updated_at": "2025-12-16T09:39:34Z",
+          "created_at": "2025-12-17T08:01:20Z",
+          "updated_at": "2025-12-17T08:01:20Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251216/zapret_v72.20251216_arm_cortex-a8_vfpv3.zip"
         }
       ]
@@ -98,7 +88,7 @@
           "state": "uploaded",
           "size": 471993,
           "digest": "sha256:1f6d6653f5a853fbc2cd0509cebb24ca7ed900dde65bb1e77673ee9ffd647009",
-          "download_count": 11,
+          "download_count": 12,
           "created_at": "2025-12-13T08:23:37Z",
           "updated_at": "2025-12-13T08:23:37Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_arm_cortex-a8_vfpv3.zip"

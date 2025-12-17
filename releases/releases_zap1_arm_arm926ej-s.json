@@ -1,29 +1,19 @@
 {
-  "generated_at": "2025-12-16T09:39:51Z",
+  "generated_at": "2025-12-17T08:01:32Z",
   "releases": [
-    {
-      "tag": "v72.20251216-test",
-      "name": "zapret v72.20251216",
-      "prerelease": true,
-      "created_at": "2025-12-16T05:23:47Z",
-      "updated_at": "2025-12-16T08:50:54Z",
-      "published_at": "2025-12-16T08:50:54Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251216-test",
-      "assets": []
-    },
     {
       "tag": "v72.20251216",
       "name": "zapret v72.20251216",
       "prerelease": true,
-      "created_at": "2025-12-16T05:23:47Z",
-      "updated_at": "2025-12-16T09:39:35Z",
-      "published_at": "2025-12-16T09:39:35Z",
+      "created_at": "2025-12-17T07:10:18Z",
+      "updated_at": "2025-12-17T08:01:20Z",
+      "published_at": "2025-12-17T08:01:20Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251216",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329290279",
-          "id": 329290279,
-          "node_id": "RA_kwDOM-Npcs4ToJIn",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/329713309",
+          "id": 329713309,
+          "node_id": "RA_kwDOM-Npcs4Tpwad",
           "name": "zapret_v72.20251216_arm_arm926ej-s.zip",
           "label": "",
           "uploader": {
@@ -49,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 474817,
-          "digest": "sha256:4b57934dfbd4f212f20dea90f168626b48e3cc5d25cce32b49d95a5da8fce59f",
+          "size": 474981,
+          "digest": "sha256:e8d69fff982b2b4be2da619b5a69eee21419d4f8e3a2a6e1fddb1a614e81d449",
           "download_count": 0,
-          "created_at": "2025-12-16T09:39:34Z",
-          "updated_at": "2025-12-16T09:39:34Z",
+          "created_at": "2025-12-17T08:01:20Z",
+          "updated_at": "2025-12-17T08:01:20Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251216/zapret_v72.20251216_arm_arm926ej-s.zip"
         }
       ]
