@@ -226,6 +226,14 @@ return view.extend({
         o.write = function(section_id, value) {
             return uci.set(tools.appName, section_id, 'MODE_FILTER', value === '1' ? 'autohostlist' : 'hostlist');
         };
+
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_INCOMING_MAXSEQ', _('INCOMING_MAXSEQ'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_MAXSEQ', _('RETRANS_MAXSEQ'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
         
         o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_THRESHOLD', _('RETRANS_THRESHOLD'));
         o.rmempty     = false;
@@ -236,6 +244,14 @@ return view.extend({
         o.datatype    = 'uinteger';
 
         o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_FAIL_TIME', _('FAIL_TIME'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_UDP_IN', _('UDP_IN'));
+        o.rmempty     = false;
+        o.datatype    = 'uinteger';
+
+        o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_UDP_OUT', _('UDP_OUT'));
         o.rmempty     = false;
         o.datatype    = 'uinteger';
 

@@ -21,9 +21,13 @@ function set_cfg_reset_values
 		set $cfgname.config.DAEMON_LOG_ENABLE='0'
 		set $cfgname.config.DAEMON_LOG_FILE='/tmp/zapret+<DAEMON_NAME>+<DAEMON_IDNUM>+<DAEMON_CFGNAME>.log'
 		# autohostlist options
+		set $cfgname.config.AUTOHOSTLIST_INCOMING_MAXSEQ='4096'
+		set $cfgname.config.AUTOHOSTLIST_RETRANS_MAXSEQ='32768'
 		set $cfgname.config.AUTOHOSTLIST_RETRANS_THRESHOLD='3'
 		set $cfgname.config.AUTOHOSTLIST_FAIL_THRESHOLD='3'
 		set $cfgname.config.AUTOHOSTLIST_FAIL_TIME='60'
+		set $cfgname.config.AUTOHOSTLIST_UDP_IN='1'
+		set $cfgname.config.AUTOHOSTLIST_UDP_OUT='4'
 		set $cfgname.config.AUTOHOSTLIST_DEBUGLOG='0'
 		# nfqws options
 		set $cfgname.config.NFQWS2_ENABLE='1'

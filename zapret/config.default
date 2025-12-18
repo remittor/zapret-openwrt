@@ -30,9 +30,15 @@ IP2NET_OPT4="--prefix-length=22-30 --v4-threshold=3/4"
 IP2NET_OPT6="--prefix-length=56-64 --v6-threshold=5"
 
 # options for auto hostlist
+# NOTE : in order for these adjustment to work it's required to redirect enough starting packets
+# NOTE : set PKT_IN, PKT_OUT variables appropriately
+AUTOHOSTLIST_INCOMING_MAXSEQ=4096
+AUTOHOSTLIST_RETRANS_MAXSEQ=32768
 AUTOHOSTLIST_RETRANS_THRESHOLD=3
 AUTOHOSTLIST_FAIL_THRESHOLD=3
 AUTOHOSTLIST_FAIL_TIME=60
+AUTOHOSTLIST_UDP_IN=1
+AUTOHOSTLIST_UDP_OUT=4
 # 1 = debug autohostlist positives to ipset/zapret-hosts-auto-debug.log
 AUTOHOSTLIST_DEBUGLOG=0
 
