@@ -104,80 +104,66 @@ return baseclass.extend({
         }
         let rpc_opt = { timeout: 5*1000 }
         //rpc_opt.uid = 0;  // run under root
-        const x_filename = 'zapret_pkg_install';
-        const pidFile = '/tmp/' + x_filename + '.pid';
-        const logFile = '/tmp/' + x_filename + '.log';
-        const errFile = '/tmp/' + x_filename + '.err';
+        const logFile = '/tmp/zapret_pkg_install.log';
+        const rcFile = logFile + '.rc';
         try {
-            await fs.exec('/bin/busybox', [ 'rm', '-f', '/tmp/' + x_filename + '.*' ], null, rpc_opt);
+            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null, rpc_opt);
             this.appendLog('Install log cleared.');
         } catch (e) {
             this.appendLog('ERROR: Failed to clear log file');
             this.setStage(999);
             return 1;
         }
-        //console.log(`Start ${fn_update_pkg_sh}...`);
         try {
-            let opt = [ x_filename, fn_update_pkg_sh ];
-            //opt.push('-t');  // only for testing
+            let opt = [ logFile, fn_update_pkg_sh ];
+            //opt.push('-t'); opt.push('0');  // only for testing
             opt.push(...opt_list);
-            await fs.exec('/opt/zapret/script-exec.sh', opt, null, rpc_opt);
-            this.appendLog('Process started...');
+            let res = await fs.exec('/opt/zapret/script-exec.sh', opt, null, rpc_opt);
+            if (res.code == 0) {
+                this.appendLog('Process started...');
+            } else {
+                this.appendLog('ERROR: cannot run ' + fn_update_pkg_sh + ' script! (error = ' + res.code + ')');
+                throw new Error('cannot run script');
+            }
         } catch (e) {
             this.appendLog('ERROR: Failed to start process: ' + e.message);
             this.setStage(999);
             return 1;
         }
         let lastLen = 0;
-        let pid = 0;
-        //console.log('setInterval...');
+        let retCode = -1;
         let timer = setInterval(async () => {
             try {
-                if (pid == 0) {
-                    try {
-                        let pid_data = await fs.exec('/bin/cat', [ pidFile ], null, rpc_opt);
-                        pid = parseInt(pid_data.stdout.trim(), 10);
-                    } catch (e) {
-                        //return;  // goto next timer iteration
-                    }
-                }
-                let alive = null;
-                if (pid > 0) {
-                    try {
-                        await fs.stat(`/proc/${pid}`, [ ], null, { timeout: 4*1000 });
-                        alive = true;
-                    } catch (e) {
-                        // file "/proc/${pid}" not founded ==> sh process terminated
-                        alive = false;
-                    }
-                }
                 let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
-                if (res.stdout.length > lastLen) {
+                if (res.stdout && res.stdout.length > lastLen) {
                     let log = res.stdout.slice(lastLen);
                     log = log.replace(/^ \* resolve_conffiles.*(?:\r?\n|$)/gm, '');
                     this.appendLog(log, '');
                     lastLen = res.stdout.length;
                 }
-                if (pid > 0 && !alive) {
+                if (retCode < 0) {
+                    let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
+                    if (rc.code != 0) {
+                        throw new Error('cannot read file "' + rcFile + '"');
+                    }
+                    if (rc.stdout) {
+                        retCode = parseInt(rc.stdout.trim(), 10);
+                    }
+                }
+                if (retCode >= 0) {
                     clearInterval(timer);
-                    this.appendLog('\nProcess finished.');
-                    let err_code = -1;
-                    try {
-                        let err_data = await fs.exec('/bin/cat', [ errFile ], null, rpc_opt);
-                        err_code = parseInt(err_data.stdout.trim(), 10);
-                    } catch (e) {
-                        // nothing
+                    this.appendLog('\n' + 'Process finished.');
+                    if (res.stdout) {
+                        let code = res.stdout.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
+                        if (retCode == 0 && code && code[1] == '+') {
+                            this.stage = 999;
+                            this.btn_action.textContent = _('OK');
+                            this.btn_action.disabled = false;
+                            this.btn_cancel.disabled = true;
+                            return 0;
+                        }
                     }
-                    let log = res.stdout;
-                    let code = log.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
-                    if (code && code[1] == '+') {
-                        this.stage = 999;
-                        this.btn_action.textContent = _('OK');
-                        this.btn_action.disabled = false;
-                        this.btn_cancel.disabled = true;
-                        return 0;
-                    }
-                    this.appendLog('ERROR: Install updates failed with error ' + err_code);
+                    this.appendLog('ERROR: Install updates failed with error ' + retCode);
                     this.setStage(999);
                 }
             } catch (e) {
@@ -235,9 +221,6 @@ return baseclass.extend({
 
         ui.showModal(_('Package update'), [
             E('div', { 'class': 'cbi-section' }, [
-                E('div', {}, [
-                    E('p', {'class': 'cbi-title-field'}, [ 'CPU architecture: ' + pkg_arch ]),
-                ]),
                 exclude_prereleases,
                 E('br'), E('br'),
                 forced_reinstall,

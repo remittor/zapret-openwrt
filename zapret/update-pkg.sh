@@ -11,26 +11,26 @@ opt_update=
 opt_forced=
 opt_test=
 
-while getopts "cu:pft" opt; do
+while getopts "cu:pft:" opt; do
 	case $opt in
 		c) opt_check=true;;
 		p) opt_prerelease=true;;
 		u) opt_update="$OPTARG";;
 		f) opt_forced=true;;
-		t) opt_test=true;;
+		t) opt_test="$OPTARG";;
 	esac
 done
 
 ZAP_PKG_DIR=/tmp/zapret_pkg
 
-if [ "$opt_test" = "true" ]; then
+if [ "$opt_test" != "" ]; then
 	echo 1; sleep 2;
 	echo 2; sleep 2;
 	echo 3; sleep 2;
 	echo ' * resolve_conffiles 123456'; sleep 1;
 	echo 4; sleep 2; 
 	echo END
-	return 0;
+	return "$opt_test"
 fi
 
 ZAP_CPU_ARCH=$(get_cpu_arch)
