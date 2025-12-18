@@ -31,6 +31,10 @@ on:
     tags:
       - v[0-9]+*
 
+permissions:
+  id-token: write
+  pages: write
+
 env:
   TEST_BUILD: ${{ github.event.inputs.test_build == 'true' }}
   FAKE_BUILD: ${{ github.event.inputs.fake_build == 'true' }}
@@ -139,6 +143,7 @@ jobs:
           - mipsel_mips32
           - riscv64_generic
           - x86_64
+          - riscv64_riscv64
         isTestOrFake:
           - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
         exclude:
@@ -213,17 +218,20 @@ jobs:
           PKGREL=$( grep -s '^PKG_RELEASE:=.*' $MKFN | cut -d'=' -f2 )
           [ "$PKGREL" != "1" ] && PKGVER=$PKGVER-r$PKGREL
           echo "PKG_VERSION = $PKGVER"
-          cp -vr $PKGDIR ./package/zapret-openwrt/
           
           mv feeds.conf.default feeds.conf
           sed -i -e 's|base.*\.git|base https://github.com/openwrt/openwrt.git|' feeds.conf
           sed -i -e 's|packages.*\.git|packages https://github.com/openwrt/packages.git|' feeds.conf
           sed -i -e 's|luci.*\.git|luci https://github.com/openwrt/luci.git|' feeds.conf
+
+          echo "src-link zapret $PKGDIR" >> feeds.conf
+          cat feeds.conf
+          
           mkdir -p ./logs
           
           if [ "$FAKE_BUILD" = "false" ]; then
-              ./scripts/feeds update base packages luci
-              ./scripts/feeds install -a
+              ./scripts/feeds update base packages luci zapret
+              ./scripts/feeds install -a -p zapret
           fi
           echo "FAKE_BUILD=$FAKE_BUILD" >> $GITHUB_ENV
           echo "PKGVER=$PKGVER" >> $GITHUB_ENV
@@ -239,11 +247,20 @@ jobs:
           ARCH: ${{ matrix.arch }}
           BRANCH: ${{ matrix.branch }}
           SIGN_KEY: ${{ secrets.SIGN_PRIVATE_KEY }}
+          OPENWRT_PUBLIC_KEY: ${{ secrets.OPENWRT_PUBLIC_KEY }}
+          OPENWRT_SECRET_KEY: ${{ secrets.OPENWRT_SECRET_KEY }}
+          OPENWRT_APK_PUBLIC_KEY: ${{ secrets.OPENWRT_APK_PUBLIC_KEY }}
+          OPENWRT_APK_SECRET_KEY: ${{ secrets.OPENWRT_APK_SECRET_KEY }}
           CCACHE_DIR: '/builder/.ccache'
         shell: bash
         run: |
           MAKE_JOBS=$(($(nproc)+1))
           echo "$MAKE_JOBS thread compile"
+
+          echo "$OPENWRT_SECRET_KEY" > /builder/key-build
+          echo "$OPENWRT_PUBLIC_KEY" > /builder/key-build.pub
+          echo "$OPENWRT_APK_SECRET_KEY" > /builder/private-key.pem
+          echo "$OPENWRT_APK_PUBLIC_KEY" > /builder/public-key.pem
           
           if [ "$FAKE_BUILD" = "false" ]; then
               make defconfig
@@ -251,11 +268,9 @@ jobs:
               echo "------------- .config BEG -------------------"
               cat .config
               echo "------------- .config END -------------------"
-              if [ "$ARCH" = "$LUCI_ARCH" ]; then
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
-              else
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net}/compile`
-              fi
+
+              PKGLIST=`echo package/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
+
               if [ "$MAX_SPEED" = "false" ]; then
                   make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
               else
@@ -267,17 +282,23 @@ jobs:
               touch $OUT_DIR/zapret_$PKGVER-$ARCH.$PKGTYPE
               touch $OUT_DIR/luci-app-zapret_$PKGVER-all.$PKGTYPE
           fi
+
+          # echo "--- [1] find . ---"
+          # find .
+          # echo "--- END [1] find . ---"
           
-          find ./bin/packages/*/base -type f ! -regex ".*\(zapret\).*\.[ai]pk$" -delete
-          
-          #echo ">>>>>>> build a repository index to make the output directory usable as local OPKG source"
-          #ln -s `which usign` staging_dir/host/bin/usign
-          #echo "$SIGN_KEY" | base64 -d > key-build
-          #make package/index
-          
+          echo ">>>>>>> build a repository index to make the output directory usable as local OPKG source"
+          ln -s `which usign` staging_dir/host/bin/usign
+          # echo "$SIGN_KEY" | base64 -d > key-build
+          make package/index V=sc
+
+          # echo "--- [2] find . ---"
+          # find .
+          # echo "--- END [2] find . ---"
+
           OUTDIR=$GITHUB_WORKSPACE/$PKGTYPE-$ARCH
           mkdir -p $OUTDIR
-          cp -R ./bin/packages/*/base/. $OUTDIR/
+          cp -R ./bin/packages/*/zapret/. $OUTDIR/
           ./staging_dir/host/bin/ccache --max-size=10M --show-stats
           
           echo "OUTDIR=$OUTDIR" >> $GITHUB_ENV
@@ -334,10 +355,10 @@ jobs:
           find . -maxdepth 1 -type d -name "zapret,apk,*" -exec sh -c 'mkdir -p sorted/$(basename "{}" | cut -d, -f3)/apk' \;
           find . -maxdepth 1 -type d -name "zapret,ipk,*" -exec sh -c 'cp -R "{}/." sorted/$(basename "{}" | cut -d, -f3)' \;
           find . -maxdepth 1 -type d -name "zapret,apk,*" -exec sh -c 'cp -R "{}/." sorted/$(basename "{}" | cut -d, -f3)/apk' \;
-          LUCI_IPK=$( find . -type f -path "*/zapret,ipk,*/luci-app-zapret*.ipk" -print | head -n 1 )
-          LUCI_APK=$( find . -type f -path "*/zapret,apk,*/luci-app-zapret*.apk" -print | head -n 1 )
-          find ./sorted -mindepth 1 -maxdepth 1 -type d -exec cp -f "$LUCI_IPK" "{}/" \;
-          find ./sorted -mindepth 2 -maxdepth 2 -type d -name "apk" -exec cp -f "$LUCI_APK" "{}/" \;
+
+          # delete all except apk and ipk files
+          find ./sorted -type f ! -regex ".*\(zapret\).*\.[ai]pk$" -delete
+
           mkdir -p public
           find ./sorted -mindepth 1 -maxdepth 1 -type d -exec sh -c '7z a ./public/zapret_v${PKGVER}_$(basename "{}" | cut -d, -f3).zip {}/*' \;
           ls -lh ./public/*.zip
@@ -355,3 +376,82 @@ jobs:
           body: |
             zapret v${{ needs.build.outputs.pkgver }} for OpenWrt
           files: ./public/*.zip
+
+  repository:
+    needs: [ check, build ]
+    permissions:
+      id-token: write
+      pages: write
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: zapret,*
+
+      - name: Prepare gh-pages repo
+        env:
+          TAG: ${{ needs.check.outputs.tag }}
+          DATE: ${{ needs.check.outputs.date }}
+          BUILD_DATE: ${{ needs.check.outputs.build_date }}
+          PKGVER: ${{ needs.build.outputs.pkgver }}
+          OPENWRT_PUBLIC_KEY: ${{ secrets.OPENWRT_PUBLIC_KEY }}
+          OPENWRT_APK_PUBLIC_KEY: ${{ secrets.OPENWRT_APK_PUBLIC_KEY }}
+        run: |
+          echo "------------- DIR BEG -------------------"
+          ls -la
+          echo "------------- DIR END -------------------"
+
+          mkdir -p _pages/repo
+
+          for dir in `find . -maxdepth 1 -type d -name "zapret,*,*"`
+          do
+              ARCH=`basename $dir | cut -d, -f3`
+              PKGTYPE=`basename $dir | cut -d, -f2`
+
+              echo "Building $ARCH $PKGTYPE"
+          
+              mkdir -p _pages/repo/$PKGTYPE/$ARCH
+          
+              # Copy openwrt indexes
+              if [ $PKGTYPE = 'ipk' ]; then
+                  echo "$OPENWRT_PUBLIC_KEY" > ./_pages/repo/$PKGTYPE/$ARCH/public.key
+              
+                  cp $dir/Packages ./_pages/repo/$PKGTYPE/$ARCH
+                  cp $dir/Packages.gz ./_pages/repo/$PKGTYPE/$ARCH
+                  cp $dir/Packages.sig ./_pages/repo/$PKGTYPE/$ARCH
+              else
+                  echo "$OPENWRT_APK_PUBLIC_KEY" > ./_pages/repo/$PKGTYPE/$ARCH/public-key.pem
+              
+                  cp $dir/packages.adb ./_pages/repo/$PKGTYPE/$ARCH/packages.adb
+              fi
+          
+              find $dir -type f -regex ".*\(zapret\).*\.[ai]pk$" -exec cp {} ./_pages/repo/$PKGTYPE/$ARCH/ \;
+          done
+
+          echo "------------- DIR BEG 2 -------------------"
+          find .
+          echo "------------- DIR END 2 -------------------"
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_pages
+
+      - name: Pages artifact summary
+        run: |
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ls -R ./_pages >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Repository deployed summary
+        run: |
+          echo "Repository deployed" >> $GITHUB_STEP_SUMMARY
