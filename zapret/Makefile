@@ -34,7 +34,7 @@ define Package/$(PKG_NAME)
 	TITLE:=$(PKG_NAME)
 	SUBMENU:=Zapret2
 	URL:=https://github.com/bol-van/zapret2
-	DEPENDS:= +nftables +curl +gzip +liblua
+	DEPENDS:= +nftables +curl +gzip +liblua +luajit
 	DEPENDS+= +coreutils +coreutils-sort +coreutils-sleep
 	DEPENDS+= +kmod-nft-nat +kmod-nft-offload +kmod-nft-queue
 	DEPENDS+= +libnetfilter-queue +libcap +zlib
