@@ -181,40 +181,49 @@ return baseclass.extend({
         return m ? m[2] : defval;        
     },
 
-    decode_pkg_list: function(pkg_list) {
+    decode_pkg_list: function(pkg_list, with_suffix_r1 = true) {
         let pkg_dict = { };
+        if (!pkg_list) {
+            return pkg_dict;
+        }
         let lines = pkg_list.trim().split('\n');
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i].trim();
             let name;
             let ver;
+            let rev = -1;
             if (this.packager.name == 'apk') {
                 let fullname = line.split(' ')[0];
-                let mpos = fullname.lastIndexOf("-");
-                if (mpos <= 0)
-                    continue;
-                if (fullname.substring(mpos+1, mpos+2) == 'r') {
-                    // release number
-                    fullname = fullname.substring(0, mpos);
+                let match = fullname.match(/^(.*)-r(\d+)$/);
+                if (match) {
+                    fullname = match[1];
+                    rev = parseInt(match[2], 10);
                 }
-                mpos = fullname.lastIndexOf("-");
+                let mpos = fullname.lastIndexOf('-');
                 if (mpos <= 0)
-                    continue;
-                name = fullname.substring(0, mpos).trim();
-                ver = fullname.substring(mpos+1).trim();
+                    continue;   // incorrect format
+                name = fullname.slice(0, mpos).trim();
+                ver = fullname.slice(mpos + 1).trim();
             } else {
                 if (!line.includes(' - '))
-                    continue;
+                    continue;   // incorrect format
                 name = line.split(' - ')[0].trim();
                 ver  = line.split(' - ')[1].trim();
                 let spos = ver.indexOf(" ");
                 if (spos > 0) {
                     ver = ver.substring(0, spos);
                 }
-                let mpos = ver.lastIndexOf("-");
-                if (mpos > 0 && ver.substring(mpos+1, mpos+2) == 'r') {
-                    // release number
-                    ver = ver.substring(0, mpos);
+                let match = ver.match(/^(.*)-r(\d+)$/);
+                if (match) {
+                    ver = match[1];
+                    rev = parseInt(match[2], 10);
+                }
+            }
+            if (rev >= 0) {
+                if (rev == 1 && !with_suffix_r1) {
+                    // nothing
+                } else {
+                    ver += '-r' + rev;
                 }
             }
             pkg_dict[name] = ver;

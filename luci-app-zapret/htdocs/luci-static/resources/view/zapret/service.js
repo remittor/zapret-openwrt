@@ -400,7 +400,7 @@ return view.extend({
         poll.add(L.bind(this.statusPoll, this));
 
         let page_title = _('Zapret');
-        let pkgdict = tools.decode_pkg_list(pkg_list.stdout);
+        let pkgdict = tools.decode_pkg_list(pkg_list.stdout, false);
         page_title += ' &nbsp ';
         if (pkgdict['zapret'] === undefined || pkgdict['zapret'] == '') {
             page_title += 'unknown version';
