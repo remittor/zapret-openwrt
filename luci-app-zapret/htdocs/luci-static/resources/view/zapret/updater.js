@@ -32,11 +32,13 @@ return baseclass.extend({
     setStage: function(stage, btn_flag = true) {
         if (stage == 0) {
             this.btn_action.textContent = _('Check for updates');
+            this.btn_action.classList.remove('hidden');
         } else
         if (stage == 1) {
             this.btn_action.textContent = _('Update packages');
+            this.btn_action.classList.remove('hidden');
         } else {
-            this.btn_action.textContent = _('');
+            this.btn_action.classList.add('hidden');
         }
         if (stage > 1 && typeof(this.btn_action) == 'object') {
             this.setBtnMode(1);
@@ -102,10 +104,12 @@ return baseclass.extend({
         }
         let rpc_opt = { timeout: 5*1000 }
         //rpc_opt.uid = 0;  // run under root
-        const logFile = '/tmp/zapret_pkg_install.log';
-        const pidFile = '/tmp/zapret_pkg_install.pid';
+        const x_filename = 'zapret_pkg_install';
+        const pidFile = '/tmp/' + x_filename + '.pid';
+        const logFile = '/tmp/' + x_filename + '.log';
+        const errFile = '/tmp/' + x_filename + '.err';
         try {
-            await fs.exec('/bin/busybox', [ 'rm', '-f', '/tmp/zapret_pkg_install.*' ], null, rpc_opt);
+            await fs.exec('/bin/busybox', [ 'rm', '-f', '/tmp/' + x_filename + '.*' ], null, rpc_opt);
             this.appendLog('Install log cleared.');
         } catch (e) {
             this.appendLog('ERROR: Failed to clear log file');
@@ -114,7 +118,7 @@ return baseclass.extend({
         }
         //console.log(`Start ${fn_update_pkg_sh}...`);
         try {
-            let opt = [ logFile, pidFile, fn_update_pkg_sh ];
+            let opt = [ x_filename, fn_update_pkg_sh ];
             //opt.push('-t');  // only for testing
             opt.push(...opt_list);
             await fs.exec('/opt/zapret/script-exec.sh', opt, null, rpc_opt);
@@ -157,21 +161,28 @@ return baseclass.extend({
                 if (pid > 0 && !alive) {
                     clearInterval(timer);
                     this.appendLog('\nProcess finished.');
+                    let err_code = -1;
+                    try {
+                        let err_data = await fs.exec('/bin/cat', [ errFile ], null, rpc_opt);
+                        err_code = parseInt(err_data.stdout.trim(), 10);
+                    } catch (e) {
+                        // nothing
+                    }
                     let log = res.stdout;
                     let code = log.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
                     if (code && code[1] == '+') {
-                        this.setStage(999);
+                        this.stage = 999;
                         this.btn_action.textContent = _('OK');
                         this.btn_action.disabled = false;
                         this.btn_cancel.disabled = true;
                         return 0;
                     }
-                    this.appendLog('ERROR: Install updates failed!');
+                    this.appendLog('ERROR: Install updates failed with error ' + err_code);
                     this.setStage(999);
                 }
             } catch (e) {
                 clearInterval(timer);
-                this.appendLog('ERROR: reading log: ' + e.message);
+                this.appendLog('ERROR: installUpdates: ' + e.message);
                 this.setStage(999);
             }
         }, 500);

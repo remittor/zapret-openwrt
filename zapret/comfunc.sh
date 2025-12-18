@@ -90,14 +90,28 @@ function get_run_on_boot_option
 	fi
 }
 
+function get_distrib_param
+{
+	local parname=$1
+	local value="__unknown__"
+	if [ -f /etc/openwrt_release ]; then
+		while IFS='=' read -r key val; do
+			val="${val#\'}"
+			val="${val%\'}"
+			val="${val#\"}"
+			val="${val%\"}"
+			if [ "$key" = "$parname" ]; then
+				value="$val"
+				break
+			fi
+		done < /etc/openwrt_release
+	fi
+	printf '%s' "$value"
+}
+
 function get_cpu_arch
 {
-	if [ -f /etc/openwrt_release ]; then
-		. /etc/openwrt_release
-		printf '%s' "$DISTRIB_ARCH"
-	else
-		printf 'unknown'
-	fi
+	get_distrib_param DISTRIB_ARCH
 }
 
 function restore_ipset_txt

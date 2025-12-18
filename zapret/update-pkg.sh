@@ -3,6 +3,7 @@
 
 . /opt/zapret/comfunc.sh
 . /usr/share/libubox/jshn.sh
+. /etc/openwrt_release
 
 opt_check=
 opt_prerelease=
@@ -35,9 +36,9 @@ fi
 ZAP_CPU_ARCH=$(get_cpu_arch)
 ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap1_$ZAP_CPU_ARCH.json"
 
-WGET_TIMEOUT=5
-WGET_HEADER1="Accept: application/json"
-WGET_HEADER2="Cache-Control: no-cache"
+CURL_TIMEOUT=5
+CURL_HEADER1="Accept: application/json"
+CURL_HEADER2="Cache-Control: no-cache"
 
 REL_JSON=
 REL_ACTUAL_TAG=
@@ -47,13 +48,6 @@ REL_ACTUAL_URL=
 ZAP_OUT=
 ZAP_ERR=
 ZAP_PKG_URL=
-
-function download_json
-{
-	local url="$1"
-	wget -q -T "$WGET_TIMEOUT" --header="$WGET_HEADER1" --header="$WGET_HEADER2" -O - "$url"
-	return $?
-}
 
 if command -v apk >/dev/null; then
 	PKG_MGR=apk
@@ -67,6 +61,13 @@ else
 fi
 
 # -------------------------------------------------------------------------------------------------------
+
+function download_json
+{
+	local url="$1"
+	curl -s -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER1" -H "$CURL_HEADER2" "$url" 2>/dev/null
+	return $?
+}
 
 function get_pkg_version
 {
@@ -148,7 +149,6 @@ function download_releases_info
 {
 	local txt txtlen txtlines generated_at
 	REL_JSON=
-	echo "CPU arch: $ZAP_CPU_ARCH"
 	echo "Download releases info..."
 	txt=$(download_json $ZAP_REL_URL)
 	txtlen=${#txt}
@@ -229,11 +229,30 @@ function get_actual_release
 
 if [ "$opt_check" != "true" -a "$opt_update" = "" ]; then
 	echo 'ERROR: Incorrect arguments'
-	return 1
+	return 4
 fi
 
 if [ "$opt_update" = "@" ]; then
 	opt_check="true"
+fi
+
+#echo "DISTRIB_ID: $DISTRIB_ID"
+echo "DISTRIB_RELEASE: $DISTRIB_RELEASE"
+echo "DISTRIB_DESCRIPTION:" $(get_distrib_param DISTRIB_DESCRIPTION)
+echo "DISTRIB_ARCH:" $(get_distrib_param DISTRIB_ARCH)
+
+if ! command -v curl >/dev/null 2>&1; then
+	echo "ERROR: package \"curl\" not installed!"
+	return 10
+fi
+CURL_INFO=$( curl -V )
+if ! echo "$CURL_INFO" | grep -q 'https'; then
+    echo "------- package curl"
+	echo "$CURL_INFO"
+	echo "-------"
+	echo "ERROR: package \"curl\" not supported HTTPS protocol!"
+	echo "NOTE: Please install package \"curl-ssl\""
+	return 11
 fi
 
 if [ "$opt_check" = "true" ]; then
@@ -317,7 +336,8 @@ if [ "$opt_update" != "" ]; then
 	fi
 	ZAP_PKG_DIR=/tmp/zapret_pkg
 	rm -rf $ZAP_PKG_DIR
-	ZAP_PKG_SIZE=$( wget --spider -T $WGET_TIMEOUT --header="$WGET_HEADER2" -S "$ZAP_PKG_URL" 2>&1 | grep -i 'Content-Length:' | tail -n1 | awk '{print $2}' | tr -d '\r' )
+	ZAP_PKG_HDRS=$( curl -s -I -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER2" "$ZAP_PKG_URL" )
+	ZAP_PKG_SIZE=$( echo "$ZAP_PKG_HDRS" | grep -i 'content-length: ' | tail -n1 | awk '{print $2}' | tr -d '\r' )
 	echo "Downloded ZIP-file size = $ZAP_PKG_SIZE bytes"
 	[ "$ZAP_PKG_SIZE" = "" ] || [[ $ZAP_PKG_SIZE -lt 256 ]] && {
 		echo "ERROR: incorrect package size!"
@@ -326,14 +346,14 @@ if [ "$opt_update" != "" ]; then
 	mkdir $ZAP_PKG_DIR
 	ZAP_PKG_FN="$ZAP_PKG_DIR/${ZAP_PKG_URL##*/}"
 	echo "Download ZIP-file..."
-	wget -q -T 15 --header="$WGET_HEADER2" -O "$ZAP_PKG_FN" "$ZAP_PKG_URL"
+	curl -s -L --max-time 15 -H "$CURL_HEADER2" "$ZAP_PKG_URL" -o "$ZAP_PKG_FN"
 	if [ $? -ne 0 ]; then
 		echo "ERROR: cannot download package!"
 		return 215
 	fi
 	ZAP_PKG_SZ=$( wc -c < "$ZAP_PKG_FN" )
 	if [ "$ZAP_PKG_SZ" != "$ZAP_PKG_SIZE" ]; then
-		echo "ERROR: downloaded package is incorrect!"
+		echo "ERROR: downloaded package is incorrect! (size = $ZAP_PKG_SZ)"
 		return 216
 	fi
 	unzip -q "$ZAP_PKG_FN" -d $ZAP_PKG_DIR
@@ -384,5 +404,4 @@ if [ "$opt_update" != "" ]; then
 		return 247
 	fi
 	echo "RESULT: (+) Packages from $ZAP_PKG_ZIP_NAME successfully installed!"
-	sleep 1
 fi
