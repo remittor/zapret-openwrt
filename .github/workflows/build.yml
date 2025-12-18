@@ -208,7 +208,7 @@ jobs:
         shell: bash
         run: |
           PKGDIR=$GITHUB_WORKSPACE/zapret-openwrt
-          MKFN=$PKGDIR/luci-app-zapret/Makefile
+          MKFN=$PKGDIR/luci-app-zapret2/Makefile
           PKGVER=$( grep -s '^PKG_VERSION:=.*' $MKFN | cut -d'=' -f2 )
           PKGREL=$( grep -s '^PKG_RELEASE:=.*' $MKFN | cut -d'=' -f2 )
           [ "$PKGREL" != "1" ] && PKGVER=$PKGVER-r$PKGREL
@@ -252,9 +252,9 @@ jobs:
               cat .config
               echo "------------- .config END -------------------"
               if [ "$ARCH" = "$LUCI_ARCH" ]; then
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
+                  PKGLIST=`echo package/zapret-openwrt/{zapret2,zapret2-mdig,zapret2-ip2net,luci-app-zapret2}/compile`
               else
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net}/compile`
+                  PKGLIST=`echo package/zapret-openwrt/{zapret2,zapret2-mdig,zapret2-ip2net}/compile`
               fi
               if [ "$MAX_SPEED" = "false" ]; then
                   make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
@@ -264,11 +264,11 @@ jobs:
           else
               OUT_DIR=./bin/packages/dev_x/base
               mkdir -p $OUT_DIR
-              touch $OUT_DIR/zapret_$PKGVER-$ARCH.$PKGTYPE
-              touch $OUT_DIR/luci-app-zapret_$PKGVER-all.$PKGTYPE
+              touch $OUT_DIR/zapret2_$PKGVER-$ARCH.$PKGTYPE
+              touch $OUT_DIR/luci-app-zapret2_$PKGVER-all.$PKGTYPE
           fi
           
-          find ./bin/packages/*/base -type f ! -regex ".*\(zapret\).*\.[ai]pk$" -delete
+          find ./bin/packages/*/base -type f ! -regex ".*\(zapret2\).*\.[ai]pk$" -delete
           
           #echo ">>>>>>> build a repository index to make the output directory usable as local OPKG source"
           #ln -s `which usign` staging_dir/host/bin/usign
@@ -339,7 +339,7 @@ jobs:
           find ./sorted -mindepth 1 -maxdepth 1 -type d -exec cp -f "$LUCI_IPK" "{}/" \;
           find ./sorted -mindepth 2 -maxdepth 2 -type d -name "apk" -exec cp -f "$LUCI_APK" "{}/" \;
           mkdir -p public
-          find ./sorted -mindepth 1 -maxdepth 1 -type d -exec sh -c '7z a ./public/zapret_v${PKGVER}_$(basename "{}" | cut -d, -f3).zip {}/*' \;
+          find ./sorted -mindepth 1 -maxdepth 1 -type d -exec sh -c '7z a ./public/zapret2_v${PKGVER}_$(basename "{}" | cut -d, -f3).zip {}/*' \;
           ls -lh ./public/*.zip
 
       - name: Upload assets
@@ -351,7 +351,7 @@ jobs:
           draft: ${{ env.TEST_BUILD == 'true' || env.FAKE_BUILD == 'true' }}
           prerelease: true
           tag_name: v${{ needs.build.outputs.pkgver }}${{ env.TAG_SUFFIX }}
-          name: zapret v${{ needs.build.outputs.pkgver }}
+          name: zapret2 v${{ needs.build.outputs.pkgver }}
           body: |
-            zapret v${{ needs.build.outputs.pkgver }} for OpenWrt
+            zapret2 v${{ needs.build.outputs.pkgver }} for OpenWrt
           files: ./public/*.zip

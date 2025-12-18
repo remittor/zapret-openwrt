@@ -63,47 +63,31 @@ DESYNC_MARK_POSTNAT=0x20000000
 FILTER_MARK=""
 
 
-TPWS_SOCKS_ENABLE=0
-# tpws socks listens on this port on localhost and LAN interfaces
-TPPORT_SOCKS=987
-# use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
-# hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
-# <HOSTLIST_NOAUTO> appends ipset/zapret-hosts-auto.txt as normal list
-TPWS_SOCKS_OPT="--filter-tcp=80 --methodeol <HOSTLIST> --new --filter-tcp=443 --split-tls=sni --disorder <HOSTLIST>"
-
-TPWS_ENABLE=0
-TPWS_PORTS="80,443"
-# use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
-# hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
-# <HOSTLIST_NOAUTO> appends ipset/zapret-hosts-auto.txt as normal list
-TPWS_OPT="--filter-tcp=80 --methodeol <HOSTLIST> --new --filter-tcp=443 --split-tls=sni --disorder <HOSTLIST>"
-
-
-NFQWS_ENABLE=1
+NFQWS2_ENABLE=1
 
 # redirect outgoing traffic with connbytes limiter applied in both directions.
-NFQWS_PORTS_TCP="80,443"
-NFQWS_PORTS_UDP="443"
+NFQWS2_PORTS_TCP="80,443"
+NFQWS2_PORTS_UDP="443"
 
 # PKT_OUT means connbytes dir original
 # PKT_IN means connbytes dir reply
 # this is --dpi-desync-cutoff=nX kernel mode implementation for linux. it saves a lot of CPU.
-NFQWS_TCP_PKT_OUT="9"
-NFQWS_TCP_PKT_IN="3"
-NFQWS_UDP_PKT_OUT="9"
-NFQWS_UDP_PKT_IN="0"
+NFQWS2_TCP_PKT_OUT="9"
+NFQWS2_TCP_PKT_IN="3"
+NFQWS2_UDP_PKT_OUT="9"
+NFQWS2_UDP_PKT_IN="0"
 
 # redirect outgoing traffic without connbytes limiter and incoming with connbytes limiter
 # normally it's needed only for stateless DPI that matches every packet in a single TCP session
 # typical example are plain HTTP keep alives
 # this mode can be very CPU consuming. enable with care !
-NFQWS_PORTS_TCP_KEEPALIVE=""
-NFQWS_PORTS_UDP_KEEPALIVE=""
+NFQWS2_PORTS_TCP_KEEPALIVE=""
+NFQWS2_PORTS_UDP_KEEPALIVE=""
 
 # use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
 # hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
 # <HOSTLIST_NOAUTO> appends ipset/zapret-hosts-auto.txt as normal list
-NFQWS_OPT="--filter-tcp=80 <HOSTLIST> --dpi-desync=fake,fakedsplit --dpi-desync-autottl=2 --dpi-desync-fooling=badsum --new --filter-tcp=443 --hostlist=/opt/zapret/ipset/zapret-hosts-google.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=1,midsld --dpi-desync-repeats=11 --dpi-desync-fooling=badsum --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new --filter-udp=443 --hostlist=/opt/zapret/ipset/zapret-hosts-google.txt --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin --new --filter-udp=443 <HOSTLIST_NOAUTO> --dpi-desync=fake --dpi-desync-repeats=11 --new --filter-tcp=443 <HOSTLIST> --dpi-desync=multidisorder --dpi-desync-split-pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"
+NFQWS2_OPT="--filter-tcp=80 --filter-l7=http <HOSTLIST> --payload=http_req --lua-desync=fake:blob=fake_default_http:tcp_md5 --lua-desync=multisplit:pos=method+2 --new --filter-tcp=443 --filter-l7=tls <HOSTLIST> --payload=tls_client_hello --lua-desync=fake:blob=fake_default_tls:tcp_md5:tcp_seq=-10000 --lua-desync=multidisorder:pos=1,midsld --new --filter-udp=443 --filter-l7=quic <HOSTLIST_NOAUTO> --payload=quic_initial --lua-desync=fake:blob=fake_default_quic:repeats=6"
 
 
 DISABLE_CUSTOM=1
@@ -121,9 +105,8 @@ FLOWOFFLOAD=none
 # for routers based on desktop linux and macos. has no effect in openwrt.
 # CHOOSE LAN and optinally WAN/WAN6 NETWORK INTERFACES
 # or leave them commented if its not router
-# it's possible to specify multiple interfaces like this : IFACE_LAN="eth0 eth1 eth2"
+# it's possible to specify multiple interfaces like this : IFACE_WAN="eth0 eth1 eth2"
 # if IFACE_WAN6 is not defined it take the value of IFACE_WAN
-#IFACE_LAN=eth0
 #IFACE_WAN=eth1
 #IFACE_WAN6="ipsec0 wireguard0 he_net"
 
@@ -132,10 +115,10 @@ FLOWOFFLOAD=none
 INIT_APPLY_FW=1
 
 # firewall apply hooks
-#INIT_FW_PRE_UP_HOOK="/etc/firewall.zapret.hook.pre_up"
-#INIT_FW_POST_UP_HOOK="/etc/firewall.zapret.hook.post_up"
-#INIT_FW_PRE_DOWN_HOOK="/etc/firewall.zapret.hook.pre_down"
-#INIT_FW_POST_DOWN_HOOK="/etc/firewall.zapret.hook.post_down"
+#INIT_FW_PRE_UP_HOOK="/etc/firewall.zapret2.hook.pre_up"
+#INIT_FW_POST_UP_HOOK="/etc/firewall.zapret2.hook.post_up"
+#INIT_FW_PRE_DOWN_HOOK="/etc/firewall.zapret2.hook.pre_down"
+#INIT_FW_POST_DOWN_HOOK="/etc/firewall.zapret2.hook.post_down"
 
 # do not work with ipv4
 DISABLE_IPV4=0
@@ -156,4 +139,4 @@ FILTER_TTL_EXPIRED_ICMP=1
 
 DAEMON_LOG_ENABLE=0
 
-DAEMON_LOG_FILE="/tmp/zapret+<DAEMON_NAME>+<DAEMON_IDNUM>+<DAEMON_CFGNAME>.log"
+DAEMON_LOG_FILE="/tmp/zapret2+<DAEMON_NAME>+<DAEMON_IDNUM>+<DAEMON_CFGNAME>.log"

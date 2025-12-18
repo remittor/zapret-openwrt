@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2025 remittor
 
-. /opt/zapret/comfunc.sh
+. /opt/zapret2/comfunc.sh
 . /usr/share/libubox/jshn.sh
 . /etc/openwrt_release
 
@@ -21,7 +21,7 @@ while getopts "cu:pft:" opt; do
 	esac
 done
 
-ZAP_PKG_DIR=/tmp/zapret_pkg
+ZAP_PKG_DIR=/tmp/zapret2_pkg
 
 if [ "$opt_test" != "" ]; then
 	echo 1; sleep 2;
@@ -34,7 +34,7 @@ if [ "$opt_test" != "" ]; then
 fi
 
 ZAP_CPU_ARCH=$(get_cpu_arch)
-ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap1_$ZAP_CPU_ARCH.json"
+ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap2_$ZAP_CPU_ARCH.json"
 
 CURL_TIMEOUT=5
 CURL_HEADER1="Accept: application/json"
@@ -279,7 +279,7 @@ ZAP_PKG_FN=
 ZAP_PKG_BASE_FN=
 ZAP_PKG_LUCI_FN=
 
-ZAP_CUR_PKG_VER=$( get_pkg_version zapret )
+ZAP_CUR_PKG_VER=$( get_pkg_version zapret2 )
 echo "Current installed version: $ZAP_CUR_PKG_VER"
 
 if [ "$opt_update" = "" ]; then
@@ -334,7 +334,7 @@ if [ "$opt_update" != "" ]; then
 			return 0
 		fi
 	fi
-	ZAP_PKG_DIR=/tmp/zapret_pkg
+	ZAP_PKG_DIR=/tmp/zapret2_pkg
 	rm -rf $ZAP_PKG_DIR
 	ZAP_PKG_HDRS=$( curl -s -I -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER2" "$ZAP_PKG_URL" )
 	ZAP_PKG_SIZE=$( echo "$ZAP_PKG_HDRS" | grep -i 'content-length: ' | tail -n1 | awk '{print $2}' | tr -d '\r' )
@@ -372,10 +372,10 @@ if [ "$opt_update" != "" ]; then
 	echo "------ Downloaded packages:"
 	echo "$ZAP_PKG_LIST"
 	echo "------"
-	ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret_*.${ZAP_PKG_EXT}" | head -n 1 )
+	ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret2_*.${ZAP_PKG_EXT}" | head -n 1 )
 	ZAP_PKG_LUCI_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "luci-app-*.${ZAP_PKG_EXT}" | head -n 1 )
 	if [ ! -f "$ZAP_PKG_BASE_FN" ]; then
-		echo "ERROR: File \"zapret_*.${ZAP_PKG_EXT}\" not found!"
+		echo "ERROR: File \"zapret2_*.${ZAP_PKG_EXT}\" not found!"
 		return 231
 	fi
 	echo "ZAP_PKG_BASE_FN = $ZAP_PKG_BASE_FN"

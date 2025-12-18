@@ -4,8 +4,8 @@
 'require uci';
 'require ui';
 'require view';
-'require view.zapret.tools as tools';
-'require view.zapret.updater as updater';
+'require view.zapret2.tools as tools';
+'require view.zapret2.updater as updater';
 
 const btn_style_neutral  = 'btn';
 const btn_style_action   = 'btn cbi-button-action';
@@ -55,7 +55,7 @@ return view.extend({
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
                 + ': %s [ %s | %s | %s ]'.format(
-                    e.message, tools.execPath, 'tools.getInitState', 'uci.zapret'
+                    e.message, tools.execPath, 'tools.getInitState', 'uci.zapret2'
             )));
         });
     },
@@ -249,8 +249,8 @@ return view.extend({
             strat_list.push( E('option', { value: 'strat_' + id }, [ strat ] ) );
         }
         let nfqws_strat = E('label', [
-            _('NFQWS_OPT strategy: '),
-            E('select', { id: 'cfg_nfqws_strat' }, strat_list)
+            _('NFQWS2_OPT strategy: '),
+            E('select', { id: 'cfg_nfqws2_strat' }, strat_list)
         ]);
 
         let cancel_button = E('button', {
@@ -274,7 +274,7 @@ return view.extend({
                 opt_flags += '(set_mode_autohostlist)';
             };
             //console.log('RESET: opt_flags = ' + opt_flags);
-            let sel_strat = document.getElementById('cfg_nfqws_strat');
+            let sel_strat = document.getElementById('cfg_nfqws2_strat');
             let opt_strat = sel_strat.options[sel_strat.selectedIndex].text;
             //console.log('RESET: strat = ' + opt_strat);
             opt_flags += '(sync)';
@@ -399,23 +399,23 @@ return view.extend({
 
         poll.add(L.bind(this.statusPoll, this));
 
-        let page_title = _('Zapret');
+        let page_title = _('Zapret2');
         let pkgdict = tools.decode_pkg_list(pkg_list.stdout, false);
         page_title += ' &nbsp ';
-        if (pkgdict['zapret'] === undefined || pkgdict['zapret'] == '') {
+        if (pkgdict['zapret2'] === undefined || pkgdict['zapret2'] == '') {
             page_title += 'unknown version';
         } else {
-            page_title += 'v' + pkgdict['zapret'];
+            page_title += 'v' + pkgdict['zapret2'];
         }
         let aux1 = E('em');
         let aux2 = E('em');
-        if (pkgdict['zapret'] != pkgdict['luci-app-zapret']) {
-            let errtxt = 'LuCI APP v' + pkgdict['luci-app-zapret'] + ' [ incorrect version! ]';
+        if (pkgdict['zapret2'] != pkgdict['luci-app-zapret2']) {
+            let errtxt = 'LuCI APP v' + pkgdict['luci-app-zapret2'] + ' [ incorrect version! ]';
             aux1 = E('div', { 'class': 'label-status error' }, errtxt);
             aux2 = E('div', { }, '&nbsp');
         }
         
-        let url1 = 'https://github.com/bol-van/zapret';
+        let url1 = 'https://github.com/bol-van/zapret2';
         let url2 = 'https://github.com/remittor/zapret-openwrt';
 
         return E([

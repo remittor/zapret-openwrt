@@ -3,7 +3,7 @@
 # NOTE: @ih requires nft 1.0.1+ and updated kernel version. it's confirmed to work on 5.15 (openwrt 23) and not work on 5.10 (openwrt 22)
 
 # can override in config :
-NFQWS_OPT_DESYNC_STUN="${NFQWS_OPT_DESYNC_STUN:---dpi-desync=fake --dpi-desync-repeats=2}"
+NFQWS_OPT_DESYNC_STUN="${NFQWS_OPT_DESYNC_STUN:---payload stun --lua-desync=fake:blob=0x00000000000000000000000000000000:repeats=2}"
 
 alloc_dnum DNUM_STUN4ALL
 alloc_qnum QNUM_STUN4ALL
@@ -17,14 +17,14 @@ zapret_custom_daemons()
 }
 zapret_custom_firewall()
 {
-        # $1 - 1 - run, 0 - stop
+	# $1 - 1 - run, 0 - stop
 
 	local f='-p udp -m u32 --u32'
 	fw_nfqws_post $1 "$f 0>>22&0x3C@4>>16=28:65535&&0>>22&0x3C@12=0x2112A442&&0>>22&0x3C@8&0xC0000003=0" "$f 44>>16=28:65535&&52=0x2112A442&&48&0xC0000003=0" $QNUM_STUN4ALL
 }
 zapret_custom_firewall_nft()
 {
-        # stop logic is not required
+	# stop logic is not required
 
 	local f="udp length >= 28 @ih,32,32 0x2112A442 @ih,0,2 0 @ih,30,2 0"
 	nft_fw_nfqws_post "$f" "$f" $QNUM_STUN4ALL

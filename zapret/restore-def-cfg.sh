@@ -1,9 +1,9 @@
 #!/bin/sh
 # Copyright (c) 2024 remittor
 
-. /opt/zapret/comfunc.sh
+. /opt/zapret2/comfunc.sh
 
-cfg_run_on_boot="$( uci -q get zapret.config.run_on_boot )"
+cfg_run_on_boot="$( uci -q get $ZAPRET_CFG_NAME.config.run_on_boot )"
 
 opt_flags=${1:--}
 opt_strat=$2
@@ -15,7 +15,7 @@ fi
 create_default_cfg "$opt_flags" "$opt_strat"
 
 if [ "$cfg_run_on_boot" = "1" ]; then
-	uci set zapret.config.run_on_boot=1
+	uci set $ZAPRET_CFG_NAME.config.run_on_boot=1
 	uci commit
 fi
 
@@ -29,5 +29,5 @@ fi
 
 if [ "$ZAPRET_SYNC_CONFIG" = "1" ]; then
 	# renew main config
-	/opt/zapret/sync_config.sh
+	/opt/zapret2/sync_config.sh
 fi

@@ -36,32 +36,31 @@ document.head.append(E('style', {'type': 'text/css'},
 
 return baseclass.extend({
     packager          : null,
-    appName           : 'zapret',
-    execPath          : '/etc/init.d/zapret',
-    syncCfgPath       : '/opt/zapret/sync_config.sh',
-    defCfgPath        : '/opt/zapret/def-cfg.sh',
-    defaultCfgPath    : '/opt/zapret/restore-def-cfg.sh',
+    appName           : 'zapret2',
+    execPath          : '/etc/init.d/zapret2',
+    syncCfgPath       : '/opt/zapret2/sync_config.sh',
+    defCfgPath        : '/opt/zapret2/def-cfg.sh',
+    defaultCfgPath    : '/opt/zapret2/restore-def-cfg.sh',
 
-    hostsGoogleFN     : '/opt/zapret/ipset/zapret-hosts-google.txt',
-    hostsUserFN       : '/opt/zapret/ipset/zapret-hosts-user.txt',
-    hostsUserExcludeFN: '/opt/zapret/ipset/zapret-hosts-user-exclude.txt',
-    iplstExcludeFN    : '/opt/zapret/ipset/zapret-ip-exclude.txt',
-    iplstUserFN       : '/opt/zapret/ipset/zapret-ip-user.txt',
-    iplstUserExcludeFN: '/opt/zapret/ipset/zapret-ip-user-exclude.txt',
+    hostsGoogleFN     : '/opt/zapret2/ipset/zapret-hosts-google.txt',
+    hostsUserFN       : '/opt/zapret2/ipset/zapret-hosts-user.txt',
+    hostsUserExcludeFN: '/opt/zapret2/ipset/zapret-hosts-user-exclude.txt',
+    iplstExcludeFN    : '/opt/zapret2/ipset/zapret-ip-exclude.txt',
+    iplstUserFN       : '/opt/zapret2/ipset/zapret-ip-user.txt',
+    iplstUserExcludeFN: '/opt/zapret2/ipset/zapret-ip-user-exclude.txt',
     custFileMax       : 4,
-    custFileTemplate  : '/opt/zapret/ipset/cust%s.txt',
+    custFileTemplate  : '/opt/zapret2/ipset/cust%s.txt',
     customdPrefixList : [ 10, 20, 50, 60, 90 ] ,
-    customdFileFormat : '/opt/zapret/init.d/openwrt/custom.d/%s-script.sh',
+    customdFileFormat : '/opt/zapret2/init.d/openwrt/custom.d/%s-script.sh',
     discord_num       : 50,
-    discord_url       : [ 'https://github.com/bol-van/zapret/blob/4e8e3a9ed9dbeb1156db68dfaa7b353051c13797/init.d/custom.d.examples.linux/50-discord',
-                          'https://github.com/bol-van/zapret/blob/b251ea839cc8f04c45090314ef69fce69f2c00f2/init.d/custom.d.examples.linux/50-discord-media',
-                          'https://github.com/bol-van/zapret/blob/b251ea839cc8f04c45090314ef69fce69f2c00f2/init.d/custom.d.examples.linux/50-stun4all',
-                          'https://github.com/bol-van/zapret/tree/master/init.d/custom.d.examples.linux'
+    discord_url       : [ 'https://github.com/bol-van/zapret2/blob/master/init.d/custom.d.examples.linux/50-discord-media',
+                          'https://github.com/bol-van/zapret2/blob/master/init.d/custom.d.examples.linux/50-stun4all',
+                          'https://github.com/bol-van/zapret2/tree/master/init.d/custom.d.examples.linux'
                         ],
-    nfqws_opt_url     : 'https://github.com/remittor/zapret-openwrt/discussions/168',
+    nfqws_opt_url     : 'https://github.com/remittor/zapret-openwrt/discussions/',
 
-    autoHostListFN    : '/opt/zapret/ipset/zapret-hosts-auto.txt',
-    autoHostListDbgFN : '/opt/zapret/ipset/zapret-hosts-auto-debug.log',
+    autoHostListFN    : '/opt/zapret2/ipset/zapret-hosts-auto.txt',
+    autoHostListDbgFN : '/opt/zapret2/ipset/zapret-hosts-auto-debug.log',
 
     infoLabelRunning  : '<span class="label-status running">'  + _('Running')  + '</span>',
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
@@ -106,11 +105,11 @@ return baseclass.extend({
             if (L.hasSystemFeature('apk')) {
                 this.packager.name = 'apk';
                 this.packager.path = '/usr/bin/apk';
-                this.packager.args = [ 'list', '-I', '*zapret*' ];
+                this.packager.args = [ 'list', '-I', '*zapret2*' ];
             } else {
                 this.packager.name = 'opkg';
                 this.packager.path = '/bin/opkg';
-                this.packager.args = [ 'list-installed', '*zapret*' ];
+                this.packager.args = [ 'list-installed', '*zapret2*' ];
             }
             //console.log('PACKAGER: ' + this.packager.name);
         }
@@ -271,9 +270,9 @@ return baseclass.extend({
             return -4;
         }
         let jdata = svc_info;
-        if (typeof(jdata.zapret) == 'object') {
+        if (typeof(jdata.zapret2) == 'object') {
             result.dmn.inited = true;
-            let dmn_list = jdata.zapret.instances;
+            let dmn_list = jdata.zapret2.instances;
             if (typeof(dmn_list) == 'object') {
                 for (const [dmn_name, daemon] of Object.entries(dmn_list)) {
                     result.dmn.total += 1;
@@ -470,7 +469,7 @@ return baseclass.extend({
         },
 
         load: function() {
-            let value = uci.get('zapret', this.cfgsec, this.cfgparam);
+            let value = uci.get('zapret2', this.cfgsec, this.cfgparam);
             if (typeof(value) === 'string') {
                 value = value.trim();
                 if (this.multiline == 2) {
@@ -544,7 +543,7 @@ return baseclass.extend({
             }
             value = value.replace(/˂/g, '<');
             value = value.replace(/˃/g, '>');
-            uci.set('zapret', this.cfgsec, this.cfgparam, value);
+            uci.set('zapret2', this.cfgsec, this.cfgparam, value);
             uci.save();
             let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
             if (elem) {

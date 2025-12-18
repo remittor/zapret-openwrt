@@ -11,7 +11,7 @@ return view.extend({
     retrieveLog: async function() {
         return Promise.all([
             L.resolveDefault(fs.stat('/bin/cat'), null),
-            fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', 'zapret+*.log' ]),
+            fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', 'zapret2+*.log' ]),
             uci.load(tools.appName),
         ]).then(function(status_array) {
             var filereader = status_array[0] ? status_array[0].path : null;
@@ -130,7 +130,7 @@ return view.extend({
             return;
         }
         var h2 = E('div', {'class' : 'cbi-title-section'}, [
-            E('h2', {'class': 'cbi-title-field'}, [ _('Zapret') + ' - ' + _('Log Viewer') ]),
+            E('h2', {'class': 'cbi-title-field'}, [ _('Zapret2') + ' - ' + _('Log Viewer') ]),
         ]);
 
         var tabs = E('div', {}, E('div'));
@@ -140,7 +140,7 @@ return view.extend({
             var logfn = logdata[log_num].filename;
             let filename = logfn.replace(/.*\//, '');
             let fname = filename.split('.')[0];
-            fname = fname.replace(/^(zapret\+)/, '');
+            fname = fname.replace(/^(zapret2\+)/, '');
             let fn = fname.split('+');
             
             let tabNameText = fname.replace(/\+/g, ' ');

@@ -6,7 +6,7 @@
 [![Donations Page](https://github.com/andry81-cache/gh-content-static-cache/raw/master/common/badges/donate/donate.svg)](https://github.com/remittor/donate)
 # zapret-openwrt
 
-Zapret is not a VPN! Zapret is an Anti-DPI utility!
+Zapret2 is not a VPN! Zapret2 is an Anti-DPI utility!
 
 [Instructions for installing](https://github.com/remittor/zapret-openwrt/wiki/Installing-zapret‐openwrt-package)
 

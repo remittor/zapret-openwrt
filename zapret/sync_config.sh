@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2024 remittor
 
-. /opt/zapret/comfunc.sh
+. /opt/zapret2/comfunc.sh
 
 function uncomment_param
 {
@@ -41,17 +41,17 @@ function sync_param
 {
 	local param=$1
 	local vtype=$2
-	local value="$( uci -q get zapret.config.$param )"
+	local value="$( uci -q get zapret2.config.$param )"
 	uncomment_param $param
 	append_param $param
 	local TAB="$( echo -n -e '\t' )"
 	if [ "$value" = "$TAB" ]; then
 		value=""
 	fi
-	if [ "$param" = "NFQWS_PORTS_TCP_KEEPALIVE" -o "$param" = "NFQWS_PORTS_UDP_KEEPALIVE" ]; then
+	if [ "$param" = "NFQWS2_PORTS_TCP_KEEPALIVE" -o "$param" = "NFQWS2_PORTS_UDP_KEEPALIVE" ]; then
 		[ "$value" = "0" ] && value=""
 	fi
-	if [ "$param" = "NFQWS_OPT" -a "$value" != "" ]; then
+	if [ "$param" = "NFQWS2_OPT" -a "$value" != "" ]; then
 		value=$( echo -n "$value" | sed '/^#/d' )
 	fi
 	if [ "$vtype" = "str" ]; then
@@ -92,19 +92,19 @@ sync_param AUTOHOSTLIST_FAIL_THRESHOLD
 sync_param AUTOHOSTLIST_FAIL_TIME
 sync_param AUTOHOSTLIST_DEBUGLOG
 
-sync_param NFQWS_ENABLE
+sync_param NFQWS2_ENABLE
 sync_param DESYNC_MARK
 sync_param DESYNC_MARK_POSTNAT
 sync_param FILTER_MARK str
-sync_param NFQWS_PORTS_TCP str
-sync_param NFQWS_PORTS_UDP str
-sync_param NFQWS_TCP_PKT_OUT str
-sync_param NFQWS_TCP_PKT_IN str
-sync_param NFQWS_UDP_PKT_OUT str
-sync_param NFQWS_UDP_PKT_IN str
-sync_param NFQWS_PORTS_TCP_KEEPALIVE str
-sync_param NFQWS_PORTS_UDP_KEEPALIVE str
-sync_param NFQWS_OPT str
+sync_param NFQWS2_PORTS_TCP str
+sync_param NFQWS2_PORTS_UDP str
+sync_param NFQWS2_TCP_PKT_OUT str
+sync_param NFQWS2_TCP_PKT_IN str
+sync_param NFQWS2_UDP_PKT_OUT str
+sync_param NFQWS2_UDP_PKT_IN str
+sync_param NFQWS2_PORTS_TCP_KEEPALIVE str
+sync_param NFQWS2_PORTS_UDP_KEEPALIVE str
+sync_param NFQWS2_OPT str
 
 ZAPRET_CONFIG="$ZAPRET_CONFIG__SAVED"
 

@@ -1,27 +1,27 @@
 {
-	"luci-app-zapret": {
-		"description": "Grant access to zapret procedures",
+	"luci-app-zapret2": {
+		"description": "Grant access to zapret2 procedures",
 		"read": {
 			"cgi-io": [ "exec" ],
 			"file": {
-				"/opt/zapret/config": [ "read" ],
-				"/opt/zapret/ipset/*": [ "read" ],
-				"/opt/zapret/init.d/openwrt/custom.d/*": [ "read" ],
+				"/opt/zapret2/config": [ "read" ],
+				"/opt/zapret2/ipset/*": [ "read" ],
+				"/opt/zapret2/init.d/openwrt/custom.d/*": [ "read" ],
 				"/etc/crontabs/root": [ "read" ],
 				"/tmp/zapret*": [ "read" ],
-				"/etc/init.d/zapret*": [ "exec" ],
+				"/etc/init.d/zapret2*": [ "exec" ],
 				"/bin/ps*": [ "exec" ],
 				"/bin/cat*": [ "exec" ],
 				"/bin/busybox*": [ "exec" ],
 				"/bin/opkg*": [ "exec" ],
 				"/usr/bin/apk*": [ "exec" ],
 				"/usr/bin/find*": [ "exec" ],
-				"/opt/zapret/restore-def-cfg.sh*": [ "exec" ],
-				"/opt/zapret/script-exec.sh*": [ "exec" ],
-				"/opt/zapret/update-pkg.sh*": [ "exec" ],
-				"/opt/zapret/sync_config.sh*": [ "exec" ]
+				"/opt/zapret2/restore-def-cfg.sh*": [ "exec" ],
+				"/opt/zapret2/script-exec.sh*": [ "exec" ],
+				"/opt/zapret2/update-pkg.sh*": [ "exec" ],
+				"/opt/zapret2/sync_config.sh*": [ "exec" ]
 			},
-			"uci": [ "zapret", "network" ],
+			"uci": [ "zapret2", "network" ],
 			"ubus": {
 				"luci": [ "getInitList", "setInitAction" ],
 				"service": [ "list" ]
@@ -29,12 +29,12 @@
 		},
 		"write": {
 			"file": {
-				"/opt/zapret/config": [ "write" ],
-				"/opt/zapret/ipset/*": [ "write" ],
-				"/opt/zapret/init.d/openwrt/custom.d/*": [ "write" ],
+				"/opt/zapret2/config": [ "write" ],
+				"/opt/zapret2/ipset/*": [ "write" ],
+				"/opt/zapret2/init.d/openwrt/custom.d/*": [ "write" ],
 				"/etc/crontabs/root": [ "write" ]
 			},
-			"uci": [ "zapret" ]
+			"uci": [ "zapret2" ]
 		}
 	}
 }
