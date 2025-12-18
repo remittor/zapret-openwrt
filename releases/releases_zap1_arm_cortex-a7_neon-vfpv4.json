@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-18T10:27:59Z",
+  "generated_at": "2025-12-18T15:33:25Z",
   "releases": [
     {
       "tag": "v72.20251218",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 484903,
           "digest": "sha256:65da69b3b14c70e061715f81e461bb44595c917fd8dd0b9d4bdd2b8ac11a31ab",
-          "download_count": 0,
+          "download_count": 4,
           "created_at": "2025-12-18T10:27:46Z",
           "updated_at": "2025-12-18T10:27:46Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251218/zapret_v72.20251218_arm_cortex-a7_neon-vfpv4.zip"
