@@ -73,8 +73,8 @@ define Package/$(PKG_NAME)/install
 	$(CP)                ./files/* $(1)/opt/zapret2/files/
 	$(INSTALL_DIR) $(1)/opt/zapret2/ipset
 	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)/opt/zapret2/ipset/
-    $(INSTALL_DIR) $(1)/opt/zapret2/blockcheck2.d
-    $(CP) $(PKG_BUILD_DIR)/blockcheck2.d/* $(1)/opt/zapret2/blockcheck2.d/
+	$(INSTALL_DIR) $(1)/opt/zapret2/blockcheck2.d
+	$(CP) $(PKG_BUILD_DIR)/blockcheck2.d/* $(1)/opt/zapret2/blockcheck2.d/
 	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck2.sh  $(1)/opt/zapret2/blockcheck2.sh
 	#$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret2/config.default
 	$(INSTALL_DIR) $(1)/opt/zapret2/tmp
