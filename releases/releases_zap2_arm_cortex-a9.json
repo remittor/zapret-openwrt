@@ -1,6 +1,53 @@
 {
-  "generated_at": "2025-12-19T12:03:07Z",
+  "generated_at": "2025-12-19T15:05:02Z",
   "releases": [
+    {
+      "tag": "v0.7.20251219",
+      "name": "zapret2 v0.7.20251219",
+      "prerelease": true,
+      "created_at": "2025-12-19T14:23:10Z",
+      "updated_at": "2025-12-19T15:04:50Z",
+      "published_at": "2025-12-19T15:04:50Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.7.20251219",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/330683315",
+          "id": 330683315,
+          "node_id": "RA_kwDOM-Npcs4TtdOz",
+          "name": "zapret2_v0.7.20251219_arm_cortex-a9.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 454236,
+          "digest": "sha256:cb10c3ab128bf6aae318c8a734bb16e5eede9e762fc2bdaeb8b375c78fb509ae",
+          "download_count": 0,
+          "created_at": "2025-12-19T15:04:50Z",
+          "updated_at": "2025-12-19T15:04:50Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251219/zapret2_v0.7.20251219_arm_cortex-a9.zip"
+        }
+      ]
+    },
     {
       "tag": "v0.7.20251218-test",
       "name": "zapret2 v0.7.20251218",
