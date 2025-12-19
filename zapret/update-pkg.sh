@@ -104,7 +104,8 @@ function normalize_version
 {
 	local ver="$1"
 	local base
-	local major minor rel
+	local major minor build rel
+	local old_ifs
 	case "$ver" in
 		*-r[0-9]*)
 			rel="${ver##*-r}"
@@ -115,11 +116,12 @@ function normalize_version
 			base="$ver"
 			;;
 	esac
-	major="${base%%.*}"
-	minor="${base#*.}"
-	[ -z "$minor" ] && minor=0
-	[ -z "$rel" ] && rel=1
-	echo "$major.$minor.$rel"
+	old_ifs="$IFS" ; IFS='.' ; set -- $base ; IFS="$old_ifs"
+	major=${1:-0}
+	minor=${2:-0}
+	build=${3:-0}
+	rel=${rel:-1}
+	echo "$major.$minor.$build.$rel"
 }
 
 function pkg_version_cmp
@@ -137,9 +139,14 @@ function pkg_version_cmp
 	x2=$( echo "$ver2" | cut -d. -f2 )
 	[ "$x1" -gt "$x2" ] && { echo -n "G"; return 0; }
 	[ "$x1" -lt "$x2" ] && { echo -n "L"; return 0; }
-	# release
+	# build
 	x1=$( echo "$ver1" | cut -d. -f3 )
 	x2=$( echo "$ver2" | cut -d. -f3 )
+	[ "$x1" -gt "$x2" ] && { echo -n "G"; return 0; }
+	[ "$x1" -lt "$x2" ] && { echo -n "L"; return 0; }
+	# release
+	x1=$( echo "$ver1" | cut -d. -f4 )
+	x2=$( echo "$ver2" | cut -d. -f4 )
 	[ "$x1" -gt "$x2" ] && { echo -n "G"; return 0; }
 	[ "$x1" -lt "$x2" ] && { echo -n "L"; return 0; }
 	echo -n "E"
