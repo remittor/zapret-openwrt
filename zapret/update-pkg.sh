@@ -72,7 +72,7 @@ function download_json
 function get_pkg_version
 {
 	local pkg_name="$1"
-	local ver line pkg_prefix
+	local ver line base
 	if [ "$PKG_MGR" = opkg ]; then
 		ver=$( opkg list-installed "$pkg_name" 2>/dev/null | awk -F' - ' '{print $2}' | tr -d '\r' )
 		if [ -n "$ver" ]; then
@@ -83,16 +83,16 @@ function get_pkg_version
 	if [ "$PKG_MGR" = apk ]; then
 		line=$( apk info -e "$pkg_name" 2>/dev/null || true )
 		if [ -n "$line" ]; then
-			pkg_prefix="${pkg_name}-"
+			base=${line%-r[0-9]*}
+			ver=${base##*-}
 			case "$line" in
-				"$pkg_prefix"*)
-					ver=${line#"$pkg_prefix"}
+				*-r[0-9]*)
+					echo -n "$ver${line#$base}"
 					;;
 				*)
-					ver=${line##*-}
+					echo -n "$ver"
 					;;
 			esac
-			echo -n "$ver"
 			return 0
 		fi
 	fi
@@ -106,7 +106,7 @@ function normalize_version
 	local base
 	local major minor rel
 	case "$ver" in
-		*-r*)
+		*-r[0-9]*)
 			rel="${ver##*-r}"
 			base="${ver%-r*}"
 			;;
