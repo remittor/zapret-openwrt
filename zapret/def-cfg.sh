@@ -19,7 +19,7 @@ function set_cfg_reset_values
 		set $cfgname.config.DISABLE_CUSTOM='1'
 		set $cfgname.config.WS_USER='daemon'
 		set $cfgname.config.DAEMON_LOG_ENABLE='0'
-		set $cfgname.config.DAEMON_LOG_FILE='/tmp/zapret+<DAEMON_NAME>+<DAEMON_IDNUM>+<DAEMON_CFGNAME>.log'
+		set $cfgname.config.DAEMON_LOG_FILE='/tmp/zapret2+<DAEMON_NAME>+<DAEMON_IDNUM>+<DAEMON_CFGNAME>.log'
 		# autohostlist options
 		set $cfgname.config.AUTOHOSTLIST_INCOMING_MAXSEQ='4096'
 		set $cfgname.config.AUTOHOSTLIST_RETRANS_MAXSEQ='32768'
