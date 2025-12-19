@@ -8,13 +8,6 @@
 		},
 		"depends": {
 			"acl": [ "luci-app-zapret2" ],
-			"fs": {
-				"/opt/zapret2/sync_config.sh": "executable",
-				"/opt/zapret2/restore-def-cfg.sh": "executable",
-				"/opt/zapret2/script-exec.sh": "executable",
-				"/opt/zapret2/update-pkg.sh.sh": "executable",
-				"/etc/init.d/zapret2": "executable"
-			},
 			"uci": { "zapret2": true }
 		}
 	},
