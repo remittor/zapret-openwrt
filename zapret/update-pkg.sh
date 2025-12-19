@@ -363,6 +363,10 @@ if [ "$opt_update" != "" ]; then
 		echo "ERROR: downloaded package is incorrect! (size = $ZAP_PKG_SZ)"
 		return 216
 	fi
+	if ! command -v unzip >/dev/null 2>&1; then
+		echo "ERROR: package \"upzip\" not installed!"
+		return 218
+	fi
 	unzip -q "$ZAP_PKG_FN" -d $ZAP_PKG_DIR
 	rm -f "$ZAP_PKG_FN"
 	if [ "$PKG_MGR" = "apk" ]; then
