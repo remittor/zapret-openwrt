@@ -168,7 +168,7 @@ function merge_cfg_with_def_values
 function remove_cron_task_logs
 {
 	if [ -f "$CRONTAB_FILE" ]; then
-		sed -i "/-name 'zapret2\*.log' -size +/d" "$CRONTAB_FILE"
+		sed -i "/-name 'zapret2+\*.log' -size +/d" "$CRONTAB_FILE"
 	fi
 }
 
@@ -177,7 +177,7 @@ function insert_cron_task_logs
 	[ ! -f "$CRONTAB_FILE" ] && touch "$CRONTAB_FILE"
 	[ ! -f "$CRONTAB_FILE" ] && return 1
 	if ! grep -q -e "-name 'zapret2\*\.log' -size \+" "$CRONTAB_FILE"; then
-		echo "*/2 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name 'zapret2*.log' -size +2600k -exec rm -f {} \;" >> "$CRONTAB_FILE"
+		echo "*/2 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name 'zapret2+*.log' -size +2600k -exec rm -f {} \;" >> "$CRONTAB_FILE"
 		/etc/init.d/cron restart 2> /dev/null
 	fi
 	return 0
@@ -190,7 +190,7 @@ function init_before_start
 	[ ! -f "$HOSTLIST_FN" ] && touch "$HOSTLIST_FN"
 	chmod 644 $ZAPRET_BASE/ipset/*.txt
 	chmod 666 $ZAPRET_BASE/ipset/*.log
-	rm -f /tmp/zapret2*.log
+	rm -f /tmp/zapret2+*.log
 	#*/
 	if [ "$DAEMON_LOG_ENABLE" = "1" ]; then
 		insert_cron_task_logs
