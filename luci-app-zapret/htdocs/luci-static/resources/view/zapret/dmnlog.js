@@ -5,7 +5,7 @@
 'require poll';
 'require uci';
 'require ui';
-'require view.zapret.tools as tools';
+'require view.zapret2.tools as tools';
 
 return view.extend({
     retrieveLog: async function() {
