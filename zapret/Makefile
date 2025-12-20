@@ -21,6 +21,21 @@ PKG_SOURCE_DATE:=2025-12-19
 #PKG_SOURCE_URL:=https://github.com/bol-van/zapret2/archive/refs/tags/v$(PKG_VERSION).tar.gz?
 #PKG_HASH:=skip
 
+LUA_JIT?=1
+
+ifeq ($(LUA_JIT),1)
+	LUAJIT_VER?=2.1
+	LUA_VER?=5.1
+	LUA_DEPEND:=luajit
+	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/luajit-$(LUAJIT_VER)
+	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -lluajit-$(LUA_VER)
+else
+	LUA_VER?=5.3
+	LUA_DEPEND:=lua$(LUA_VER)
+	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/lua$(LUA_VER)
+	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -llua$(LUA_VER)
+endif
+
 include $(INCLUDE_DIR)/package.mk
 
 #TAR_OPTIONS:=--strip-components 1 $(TAR_OPTIONS)
@@ -34,7 +49,7 @@ define Package/$(PKG_NAME)
 	TITLE:=$(PKG_NAME)
 	SUBMENU:=Zapret2
 	URL:=https://github.com/bol-van/zapret2
-	DEPENDS:= +nftables +curl +gzip +liblua +luajit
+	DEPENDS:= +nftables +curl +gzip +$(LUA_DEPEND)
 	DEPENDS+= +coreutils +coreutils-sort +coreutils-sleep
 	DEPENDS+= +kmod-nft-nat +kmod-nft-offload +kmod-nft-queue
 	DEPENDS+= +libnetfilter-queue +libcap +zlib
@@ -48,8 +63,9 @@ endef
 #define Build/Configure
 #endef
 
-#define Build/Compile
-#endef
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
+endef
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/zapret2
