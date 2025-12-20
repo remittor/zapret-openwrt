@@ -201,7 +201,7 @@ return view.extend({
         o.rmempty     = false;
         o.datatype    = 'uinteger';
 
-        o = s.taboption(tabname, form.Value, 'NFQWS_PORTS_UDP_KEEPALIVE', _('NFQWS_PORTS_UDP_KEEPALIVE'));
+        o = s.taboption(tabname, form.Value, 'NFQWS2_PORTS_UDP_KEEPALIVE', _('NFQWS2_PORTS_UDP_KEEPALIVE'));
         o.rmempty     = false;
         o.datatype    = 'uinteger';
 
