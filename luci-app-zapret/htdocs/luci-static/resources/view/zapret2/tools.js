@@ -543,8 +543,6 @@ return baseclass.extend({
             }
             value = value.replace(/˂/g, '<');
             value = value.replace(/˃/g, '>');
-            uci.set('zapret2', this.cfgsec, this.cfgparam, value);
-            uci.save();
             let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
             if (elem) {
                 let val = value.trim();
@@ -557,7 +555,8 @@ return baseclass.extend({
                     elem.querySelector('div').textContent = val;
                 }
             }
-            ui.hideModal();
+            uci.set('zapret', this.cfgsec, this.cfgparam, value);
+            uci.save().then(() => window.location.reload());
             /*
             return uci.save()
             .then(L.bind(ui.changes.init, ui.changes))
