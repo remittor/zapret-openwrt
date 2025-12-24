@@ -132,7 +132,11 @@ return baseclass.extend({
         }
         let lastLen = 0;
         let retCode = -1;
+        let timerBusy = false;
         let timer = setInterval(async () => {
+            if (timerBusy)
+                return;  // skip iteration
+            timerBusy = true;
             try {
                 let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
                 if (res.stdout && res.stdout.length > lastLen) {
@@ -169,7 +173,10 @@ return baseclass.extend({
             } catch (e) {
                 clearInterval(timer);
                 this.appendLog('ERROR: installUpdates: ' + e.message);
+                this.appendLog('ERROR: installUpdates: ' + e.stack?.trim().split('\n').pop());
                 this.setStage(999);
+            } finally {
+                timerBusy = false;
             }
         }, 500);
     },
