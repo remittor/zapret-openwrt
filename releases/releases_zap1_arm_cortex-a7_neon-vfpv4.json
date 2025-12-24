@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-20T08:29:01Z",
+  "generated_at": "2025-12-24T08:13:31Z",
   "releases": [
     {
       "tag": "v72.20251219",
@@ -41,57 +41,10 @@
           "state": "uploaded",
           "size": 484943,
           "digest": "sha256:ecd95861456f3c5284cfc8cf551a9d0a2e714563d45b6f505ab25e8a0002c246",
-          "download_count": 6,
+          "download_count": 9,
           "created_at": "2025-12-19T10:17:52Z",
           "updated_at": "2025-12-19T10:17:52Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251219/zapret_v72.20251219_arm_cortex-a7_neon-vfpv4.zip"
-        }
-      ]
-    },
-    {
-      "tag": "v72.20251218",
-      "name": "zapret v72.20251218",
-      "prerelease": true,
-      "created_at": "2025-12-18T08:32:56Z",
-      "updated_at": "2025-12-18T10:27:47Z",
-      "published_at": "2025-12-18T10:27:47Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251218",
-      "assets": [
-        {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/330171159",
-          "id": 330171159,
-          "node_id": "RA_kwDOM-Npcs4TrgMX",
-          "name": "zapret_v72.20251218_arm_cortex-a7_neon-vfpv4.zip",
-          "label": "",
-          "uploader": {
-            "login": "github-actions[bot]",
-            "id": 41898282,
-            "node_id": "MDM6Qm90NDE4OTgyODI=",
-            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
-            "html_url": "https://github.com/apps/github-actions",
-            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
-            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
-            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
-            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
-            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
-            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
-            "type": "Bot",
-            "user_view_type": "public",
-            "site_admin": false
-          },
-          "content_type": "application/zip",
-          "state": "uploaded",
-          "size": 484903,
-          "digest": "sha256:65da69b3b14c70e061715f81e461bb44595c917fd8dd0b9d4bdd2b8ac11a31ab",
-          "download_count": 5,
-          "created_at": "2025-12-18T10:27:46Z",
-          "updated_at": "2025-12-18T10:27:46Z",
-          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251218/zapret_v72.20251218_arm_cortex-a7_neon-vfpv4.zip"
         }
       ]
     },
@@ -135,7 +88,7 @@
           "state": "uploaded",
           "size": 484313,
           "digest": "sha256:58cd48f2258673d1dbd03ae20ac166f9f0be29f0bde53176c8796a7cc980e529",
-          "download_count": 29,
+          "download_count": 64,
           "created_at": "2025-12-17T09:30:11Z",
           "updated_at": "2025-12-17T09:30:11Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_arm_cortex-a7_neon-vfpv4.zip"
