@@ -543,7 +543,7 @@ return baseclass.extend({
             }
             value = value.replace(/˂/g, '<');
             value = value.replace(/˃/g, '>');
-            let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
+            let elem = document.getElementById("cbi-zapret2-" + this.cfgsec + "-_" + this.cfgparam);
             if (elem) {
                 let val = value.trim();
                 if (this.multiline) {
@@ -555,20 +555,8 @@ return baseclass.extend({
                     elem.querySelector('div').textContent = val;
                 }
             }
-            uci.set('zapret', this.cfgsec, this.cfgparam, value);
-            uci.save().then(() => window.location.reload());
-            /*
-            return uci.save()
-            .then(L.bind(ui.changes.init, ui.changes))
-            .then(L.bind(ui.changes.displayChanges, ui.changes))
-            //.then(L.bind(ui.changes.apply, ui.changes))
-            .then(ui.addNotification(null, E('p', _('Contents have been saved.')), 'info'))
-            .catch(e => {
-                ui.addNotification(null, E('p', _('Unable to save the contents') + ': %s'.format(e.message)));
-            }).finally(() => {
-                ui.hideModal();
-            });
-            */
+            uci.set('zapret2', this.cfgsec, this.cfgparam, value);
+            uci.save().then(ui.hideModal);
         },
 
         error: function(e) {
