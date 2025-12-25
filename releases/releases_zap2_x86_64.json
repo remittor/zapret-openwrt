@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-25T07:23:03Z",
+  "generated_at": "2025-12-25T16:15:13Z",
   "releases": [
     {
       "tag": "v0.7.20251225",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 466722,
           "digest": "sha256:752968f607db6269f3c7fa240ad406392be995d68ec60033fac572eee493b34b",
-          "download_count": 0,
+          "download_count": 3,
           "created_at": "2025-12-25T07:22:45Z",
           "updated_at": "2025-12-25T07:22:45Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225/zapret2_v0.7.20251225_x86_64.zip"
