@@ -576,13 +576,17 @@ return baseclass.extend({
         },
 
         show: function() {
-            //ui.showModal(null, E('p', { 'class': 'spinning' }, _('Loading')) );
-            let content = this.load();
-            //ui.hideModal();
-            if (content === null) {
-                return this.error('Cannot load parameter');
-            }    
-            return this.render(content);
+            ui.showModal(null,
+                E('p', { 'class': 'spinning' }, _('Loading'))
+            );
+            L.resolveDefault(this.load(), null)
+            .then(content => {
+                ui.hideModal();
+                return this.render(content);
+            }).catch(e => {
+                ui.hideModal();
+                return this.error(e);
+            })
         },
     }),
 
