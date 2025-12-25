@@ -247,6 +247,84 @@ function set_cfg_nfqws_strat
 			commit $cfgname
 		EOF
 	fi
+	if [ "$strat" = "ALT7_by_Flowseal" ]; then
+		uci batch <<-EOF
+			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
+			set $cfgname.config.NFQWS_PORTS_UDP='443'
+			set $cfgname.config.NFQWS_OPT="
+				# Strategy $strat
+				
+				--filter-tcp=443
+				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+				--hostlist-exclude-domains=openwrt.org
+				--ip-id=zero
+				--dpi-desync=multisplit
+				--dpi-desync-split-pos=2,sniext+1
+				--dpi-desync-split-seqovl=679
+				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+				
+				--new
+				--filter-tcp=80,443 <HOSTLIST>
+				--hostlist-exclude-domains=openwrt.org
+				--dpi-desync=multisplit
+				--dpi-desync-split-pos=2,sniext+1
+				--dpi-desync-split-seqovl=679
+				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+				
+				--new
+				--filter-udp=443
+				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+				--dpi-desync=fake
+				--dpi-desync-repeats=6
+				--dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin
+			"
+			commit $cfgname
+		EOF
+	fi
+	if [ "$strat" = "TLS_AUTO_ALT3_by_Flowseal" ]; then
+		uci batch <<-EOF
+			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
+			set $cfgname.config.NFQWS_PORTS_UDP='443'
+			set $cfgname.config.NFQWS_OPT="
+				# Strategy $strat
+				
+				--filter-tcp=443
+				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+				--hostlist-exclude-domains=openwrt.org
+				--ip-id=zero
+				--dpi-desync=fake,multisplit
+				--dpi-desync-split-seqovl=681
+				--dpi-desync-split-pos=1
+				--dpi-desync-fooling=ts
+				--dpi-desync-repeats=8
+				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+				--dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com
+				
+				--new
+				--filter-tcp=80,443 <HOSTLIST>
+				--hostlist-exclude-domains=openwrt.org
+				--dpi-desync=fake,multisplit
+				--dpi-desync-split-seqovl=681
+				--dpi-desync-split-pos=1
+				--dpi-desync-fooling=ts
+				--dpi-desync-repeats=8
+				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+				--dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com
+				
+				--new
+				--filter-udp=443
+				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+				--hostlist-exclude=/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+				--dpi-desync=fake
+				--dpi-desync-repeats=11
+				--dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin
+			"
+			commit $cfgname
+		EOF
+	fi
 	return 0
 }
 
