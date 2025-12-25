@@ -376,15 +376,19 @@ if [ "$opt_update" != "" ]; then
 	echo "------ Downloaded packages:"
 	echo "$ZAP_PKG_LIST"
 	echo "------"
-	ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret_*.${ZAP_PKG_EXT}" | head -n 1 )
-	ZAP_PKG_LUCI_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "luci-app-*.${ZAP_PKG_EXT}" | head -n 1 )
+	if [ "$PKG_MGR" != "apk" ]; then
+		ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret_*.${ZAP_PKG_EXT}" | head -n 1 )
+	else
+		ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret-[0-9]*.?*.${ZAP_PKG_EXT}" | head -n 1 )
+	fi
+	ZAP_PKG_LUCI_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "luci-app-zapret2*.${ZAP_PKG_EXT}" | head -n 1 )
 	if [ ! -f "$ZAP_PKG_BASE_FN" ]; then
-		echo "ERROR: File \"zapret_*.${ZAP_PKG_EXT}\" not found!"
+		echo "ERROR: File \"zapret*.${ZAP_PKG_EXT}\" not found!"
 		return 231
 	fi
 	echo "ZAP_PKG_BASE_FN = $ZAP_PKG_BASE_FN"
 	if [ ! -f "$ZAP_PKG_LUCI_FN" ]; then
-		echo "ERROR: File \"luci-app-*.${ZAP_PKG_EXT}\" not found!"
+		echo "ERROR: File \"luci-app-zapret*.${ZAP_PKG_EXT}\" not found!"
 		return 232
 	fi
 	echo "ZAP_PKG_LUCI_FN = $ZAP_PKG_LUCI_FN"
