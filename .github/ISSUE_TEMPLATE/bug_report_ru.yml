@@ -60,7 +60,7 @@ body:
       required: true
 
   - type: textarea
-    id: expected
+    id: strategy
     attributes:
       label: ✅ Используемая стратегия NFQWS
       description: Все параметры стратегии NFQWS, либо её название
