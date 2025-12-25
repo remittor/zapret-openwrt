@@ -1,0 +1,66 @@
+---
+name: ✨ Feature Request
+description: Suggest a new feature or improvement
+title: "[FEATURE] "
+labels: ["enhancement", "needs-discussion"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before sending, please:
+        - Check [existing requests](https://github.com/remittor/zapret-openwrt/issues?q=is%3Aissue+label%3Aenhancement)
+        - Make sure the function doesn't exist in [documentation](https://github.com/remittor/zapret-openwrt/wiki/)
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Brief description
+      description: Brief description of the proposed function
+      placeholder: In one sentence, describe what you want to add...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem it solves
+      description: |
+        Description of the problem or inconvenience this feature will solve
+      placeholder: |
+        There is no possibility now [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 💡 Proposed solution
+      description: A clear and concise description of what you want to achieve
+      placeholder: |
+        I want Zapret to be able to [...]
+        I suggest adding a feature that [...]
+        Could be improved [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Workaround
+      description: |
+        Describe any alternative solutions or features you considered.
+        Are there any workarounds you currently use?
+      placeholder: |
+        I'm currently solving this problem by [...]
+        An alternative would be [...]
+        I tried using [...], but it doesn't work because [...]
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation ideas (optional)
+      description: |
+        If you have any ideas on how this could be implemented, please share them. Please keep LuCI's limitations in mind.
+      placeholder: |
+        This can be achieved using [...]

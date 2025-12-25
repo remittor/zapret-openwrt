@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Installation instructions / Инструкция по установке 
+    url: https://github.com/remittor/zapret-openwrt/wiki/Installing-zapret%E2%80%90openwrt-package
+    about: Installation instructions / Инструкция по установке
+
+  - name: 📚 Original documetation / Оригинальная документация к zapret'у
+    url: https://github.com/bol-van/zapret/blob/master/docs/readme.md
+    about: README zapret
