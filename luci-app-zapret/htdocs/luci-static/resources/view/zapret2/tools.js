@@ -403,13 +403,13 @@ return baseclass.extend({
                     E('button', {
                         'id': 'btn_save',
                         'class': 'btn cbi-button-positive important',
-                        'click': ui.createHandlerFn(this, this.handleSave),
+                        'click': ui.createHandlerFn(this, this.handleSaveAdv),
                     }, _('Save')),
                 ]),
             ]);
         },
 
-        handleSave: function(ev) {
+        handleSaveAdv: function(ev) {
             let txt = document.getElementById('widget.modal_content');
             let value = txt.value.trim().replace(/\r\n/g, '\n') + '\n';
 
@@ -514,13 +514,13 @@ return baseclass.extend({
                     E('button', {
                         'id': 'btn_save',
                         'class': 'btn cbi-button-positive important',
-                        'click': ui.createHandlerFn(this, this.handleSave),
+                        'click': ui.createHandlerFn(this, this.handleSaveAdv),
                     }, _('Save')),
                 ]),
             ]);
         },
 
-        handleSave: function(ev) {
+        handleSaveAdv: function(ev) {
             let txt = document.getElementById('widget.modal_content');
             let value = txt.value.trim();
             if (this.multiline) {
