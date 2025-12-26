@@ -352,7 +352,7 @@ if [ "$opt_update" != "" ]; then
 		fi
 	fi
 	ZAP_PKG_DIR=/tmp/zapret2_pkg
-	rm -rf $ZAP_PKG_DIR
+	rm -rf $ZAP_PKG_DIR 2>/dev/null
 	ZAP_PKG_HDRS=$( curl -s -I -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER2" "$ZAP_PKG_URL" )
 	ZAP_PKG_SIZE=$( echo "$ZAP_PKG_HDRS" | grep -i 'content-length: ' | tail -n1 | awk '{print $2}' | tr -d '\r' )
 	echo "Downloded ZIP-file size = $ZAP_PKG_SIZE bytes"
@@ -378,16 +378,16 @@ if [ "$opt_update" != "" ]; then
 		return 218
 	fi
 	unzip -q "$ZAP_PKG_FN" -d $ZAP_PKG_DIR
-	rm -f "$ZAP_PKG_FN"
+	rm -f "$ZAP_PKG_FN" 2>/dev/null
 	if [ "$PKG_MGR" = "apk" ]; then
 		if [ ! -d "$ZAP_PKG_DIR/apk" ]; then
 			echo "ERROR: APK-files not founded"
 			return 221
 		fi
-		rm -f "$ZAP_PKG_DIR/*.ipk"
-		mv "$ZAP_PKG_DIR/apk/*" "$ZAP_PKG_DIR/"
+		rm -f $ZAP_PKG_DIR/*.ipk 2>/dev/null
+		mv $ZAP_PKG_DIR/apk/* $ZAP_PKG_DIR/
 	else
-		rm -rf "$ZAP_PKG_DIR/apk"
+		rm -rf $ZAP_PKG_DIR/apk 2>/dev/null
 	fi
 	ZAP_PKG_LIST=$( ls -1 "$ZAP_PKG_DIR" )
 	echo "------ Downloaded packages:"
