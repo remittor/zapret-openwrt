@@ -154,14 +154,24 @@ function pkg_version_cmp
 
 function download_releases_info
 {
-	local txt txtlen txtlines generated_at
+	local fname resp hdr txt txtlen txtlines generated_at
 	REL_JSON=
 	echo "Download releases info..."
-	txt=$(download_json $ZAP_REL_URL)
+	fname="${ZAP_REL_URL##*/}"
+	resp=$( curl -s -D - --max-time $CURL_TIMEOUT -H "$CURL_HEADER1" -H "$CURL_HEADER2" "$ZAP_REL_URL" 2>/dev/null )
+	hdr="${resp%%$'\r\n\r\n'*}"
+	status=$( printf '%s\n' "$hdr" | head -n 1 | awk '{print $2}' )
+	if [ "$status" != 200 ]; then
+		echo "ERROR: Cannot download file \"$ZAP_REL_URL\" (status = $status)"
+		return 103
+	fi
+	txtlen=$( printf '%s\n' "$hdr" | awk -F': ' 'BEGIN{IGNORECASE=1} $1=="Content-Length"{print $2}' | tr -d '\r')
+	echo "Content-Length: $txtlen bytes"
+	txt="${resp#*$'\r\n\r\n'}"
 	txtlen=${#txt}
 	txtlines=$(printf '%s\n' "$txt" | wc -l)
 	if [[ $txtlen -lt 64 ]]; then
-		echo "ERROR: Cannot download releases info!"
+		echo "ERROR: Cannot download releases info! (size = $txtlen)"
 		return 104
 	fi
 	echo "Releases info downloaded! Size = $txtlen, Lines = $txtlines"
