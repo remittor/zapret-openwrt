@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-25T16:28:48Z",
+  "generated_at": "2025-12-26T06:46:39Z",
   "releases": [
     {
       "tag": "v72.20251225-r2",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 242243,
           "digest": "sha256:2aef22fb3704b6f2795a11fc77030a90e728cadbf7074db074af0e87412bc7a6",
-          "download_count": 0,
+          "download_count": 4,
           "created_at": "2025-12-25T16:14:58Z",
           "updated_at": "2025-12-25T16:14:58Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225-r2/zapret_v72.20251225-r2_arm_cortex-a9_vfpv3-d16.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 242238,
           "digest": "sha256:81f154bc758ba5e9b5a2635317de7f291542852752a33e4fcdcc7df9e10f962c",
-          "download_count": 4,
+          "download_count": 7,
           "created_at": "2025-12-25T06:59:54Z",
           "updated_at": "2025-12-25T06:59:55Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225/zapret_v72.20251225_arm_cortex-a9_vfpv3-d16.zip"
@@ -182,7 +182,7 @@
           "state": "uploaded",
           "size": 242007,
           "digest": "sha256:dffc330f1c24e4e60597badd98991f71cc699122025ef514d4cd458f0faecdef",
-          "download_count": 22,
+          "download_count": 24,
           "created_at": "2025-12-17T09:30:11Z",
           "updated_at": "2025-12-17T09:30:11Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_arm_cortex-a9_vfpv3-d16.zip"
@@ -276,7 +276,7 @@
           "state": "uploaded",
           "size": 233309,
           "digest": "sha256:0eb62fcdc3577dbc2d34cdd005efcd524cc19a9f1dcea59a50650263836489f0",
-          "download_count": 59,
+          "download_count": 60,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_arm_cortex-a9_vfpv3-d16.zip"
