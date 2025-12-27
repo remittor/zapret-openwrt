@@ -247,6 +247,51 @@ function set_cfg_nfqws_strat
 			commit $cfgname
 		EOF
 	fi
+	if [ "$strat" = "v6_by_StressOzz" ]; then
+		uci batch <<-EOF
+			set $cfgname.config.NFQWS_PORTS_TCP='80,443,2053,2083,2087,2096,8443'
+			set $cfgname.config.NFQWS_PORTS_UDP='443,19294-19344,50000-50100'
+			set $cfgname.config.NFQWS_OPT="
+				# Strategy $strat
+				
+				--filter-tcp=443
+				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
+				--dpi-desync=multisplit
+				--dpi-desync-split-pos=1,sniext+1
+				--dpi-desync-split-seqovl=1
+
+				--new
+				--filter-tcp=443 ˂HOSTLIST˃
+				--dpi-desync=hostfakesplit
+				--dpi-desync-hostfakesplit-mod=host=rzd.ru
+				--dpi-desync-hostfakesplit-midhost=host-2
+				--dpi-desync-split-seqovl=726
+				--dpi-desync-fooling=badsum,badseq
+				--dpi-desync-badseq-increment=0
+
+				--new
+				--filter-udp=443 ˂HOSTLIST_NOAUTO˃
+				--dpi-desync=fake
+				--dpi-desync-repeats=6
+				--dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin
+
+				--new
+				--filter-udp=19294-19344,50000-50100
+				--filter-l7=discord,stun
+				--dpi-desync=fake
+				--dpi-desync-repeats=6
+
+				--new
+				--filter-tcp=2053,2083,2087,2096,8443
+				--hostlist-domains=discord.media
+				--dpi-desync=multisplit
+				--dpi-desync-split-seqovl=652
+				--dpi-desync-split-pos=2
+				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
+			"
+			commit $cfgname
+		EOF
+	fi
 	if [ "$strat" = "ALT7_by_Flowseal" ]; then
 		uci batch <<-EOF
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
@@ -331,7 +376,7 @@ function set_cfg_nfqws_strat
 function set_cfg_default_values
 {
 	local opt_flags=${1:--}
-	local opt_strat=${2:-v2_by_StressOzz}
+	local opt_strat=${2:-v6_by_StressOzz}
 	local cfgname=${3:-$ZAPRET_CFG_NAME}
 
 	if ! echo "$opt_flags" | grep -q "(skip_base)"; then
