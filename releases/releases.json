@@ -32,9 +32,9 @@
     "name": "zapret v72.20251227",
     "draft": false,
     "immutable": false,
-    "prerelease": true,
+    "prerelease": false,
     "created_at": "2025-12-27T07:31:14Z",
-    "updated_at": "2025-12-27T08:20:00Z",
+    "updated_at": "2025-12-27T08:21:59Z",
     "published_at": "2025-12-27T08:20:00Z",
     "assets": [
       {
@@ -1012,7 +1012,7 @@
     ],
     "tarball_url": "https://api.github.com/repos/remittor/zapret-openwrt/tarball/v72.20251227",
     "zipball_url": "https://api.github.com/repos/remittor/zapret-openwrt/zipball/v72.20251227",
-    "body": "zapret v72.20251227 for OpenWrt\n"
+    "body": "zapret v72.20251227 for OpenWrt\r\n\r\n* Исправлено редактирование NFQWS_OPT\r\n* Исправлен код обновления пакетов\r\n* Добавлены новые стратегии (кнопка Reset Settings)\r\n"
   },
   {
     "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/272855049",
@@ -2170,7 +2170,7 @@
         "state": "uploaded",
         "size": 498707,
         "digest": "sha256:31398ae7ec3b489c29939a05e4319494904e0e45669e142364cb39a667ab9168",
-        "download_count": 13,
+        "download_count": 14,
         "created_at": "2025-12-25T06:59:54Z",
         "updated_at": "2025-12-25T06:59:55Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225/zapret_v72.20251225_aarch64_generic.zip"
@@ -9083,7 +9083,7 @@
         "state": "uploaded",
         "size": 497414,
         "digest": "sha256:40cad4945344fa9cc0c183d1bb1a256a0f5b002bf8384e29f5ded7fbd3fbac89",
-        "download_count": 6645,
+        "download_count": 6680,
         "created_at": "2025-12-17T09:30:11Z",
         "updated_at": "2025-12-17T09:30:11Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_aarch64_cortex-a53.zip"
@@ -9731,7 +9731,7 @@
         "state": "uploaded",
         "size": 464551,
         "digest": "sha256:39da45c8456ae5ce3b766a24fb464f4929105c6733877a400d9f359174310bd3",
-        "download_count": 1867,
+        "download_count": 1878,
         "created_at": "2025-12-17T09:30:11Z",
         "updated_at": "2025-12-17T09:30:11Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_mipsel_24kc.zip"
@@ -9875,7 +9875,7 @@
         "state": "uploaded",
         "size": 463508,
         "digest": "sha256:4fcb49cb0a223ab894eabb99a7bbcc51018dad403d564d2415a3f229f7b2c750",
-        "download_count": 278,
+        "download_count": 279,
         "created_at": "2025-12-17T09:30:11Z",
         "updated_at": "2025-12-17T09:30:11Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_mips_24kc.zip"
@@ -10110,7 +10110,7 @@
         "state": "uploaded",
         "size": 484376,
         "digest": "sha256:ea953cfc33edc7b0ef4db7ae58b8449f35bba222f723aa75d21dc3581109b9c8",
-        "download_count": 2384,
+        "download_count": 2385,
         "created_at": "2025-12-13T08:23:37Z",
         "updated_at": "2025-12-13T08:23:37Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_aarch64_cortex-a53.zip"
