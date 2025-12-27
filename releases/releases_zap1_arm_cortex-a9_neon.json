@@ -1,19 +1,19 @@
 {
-  "generated_at": "2025-12-27T08:22:08Z",
+  "generated_at": "2025-12-27T09:13:36Z",
   "releases": [
     {
       "tag": "v72.20251227",
       "name": "zapret v72.20251227",
-      "prerelease": false,
-      "created_at": "2025-12-27T07:31:14Z",
-      "updated_at": "2025-12-27T08:21:59Z",
-      "published_at": "2025-12-27T08:20:00Z",
+      "prerelease": true,
+      "created_at": "2025-12-27T08:27:41Z",
+      "updated_at": "2025-12-27T09:13:25Z",
+      "published_at": "2025-12-27T09:13:25Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251227",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/333408578",
-          "id": 333408578,
-          "node_id": "RA_kwDOM-Npcs4T32lC",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/333417181",
+          "id": 333417181,
+          "node_id": "RA_kwDOM-Npcs4T34rd",
           "name": "zapret_v72.20251227_arm_cortex-a9_neon.zip",
           "label": "",
           "uploader": {
@@ -39,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 485787,
-          "digest": "sha256:e834186cf8cc27b104391ddac45681ccc363fe99185638568c84c5998fa4009c",
+          "size": 485796,
+          "digest": "sha256:bcc812d9adb944937048971c764aabe77bb3fab2c2fddb4f37e0d7c00ace5f1b",
           "download_count": 0,
-          "created_at": "2025-12-27T08:19:59Z",
-          "updated_at": "2025-12-27T08:19:59Z",
+          "created_at": "2025-12-27T09:13:24Z",
+          "updated_at": "2025-12-27T09:13:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_arm_cortex-a9_neon.zip"
         }
       ]
@@ -229,7 +229,7 @@
           "state": "uploaded",
           "size": 484371,
           "digest": "sha256:efbd3c1570dc360e6fa0e83cf9002f3eb1db93508c729a24b525f5193f9928fd",
-          "download_count": 9,
+          "download_count": 10,
           "created_at": "2025-12-17T09:30:11Z",
           "updated_at": "2025-12-17T09:30:11Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_arm_cortex-a9_neon.zip"
