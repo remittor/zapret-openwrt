@@ -1,0 +1,78 @@
+---
+name: 🆘 Help wanted
+description: Ask for help or propose to help
+title: "[HELP] "
+labels: ["help wanted"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before sending, please:
+        - Check [existing issues](https://github.com/remittor/zapret-openwrt/issues)
+        - Read [documentation](https://github.com/remittor/zapret-openwrt/wiki/)
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Problem description
+      description: What do you need help with?
+      placeholder: A clear and concise description of the problem
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the problem. If you're following a manual, please include a link to it.
+      placeholder: |
+        1. 
+        2. 
+        3. 
+        4. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected behavior
+      description: A clear and concise description of what was to happen
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 🖥️ System Information
+      description: |
+        Information about your system (fill in all that used)
+      value: |
+        - **OpenWrt version**: 
+        - **Zapret version**: 
+        - **Router model**: 
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: strategy
+    attributes:
+      label: ✅ The NFQWS strategy used
+      description: All parameters of the NFQWS strategy, or its name
+      placeholder: If the problem is caused by the NFQWS strategy
+
+  - type: textarea
+    id: config
+    attributes:
+      label: ⚙️ System Configurations
+      description: |
+        Relevant parts of the configuration (remove sensitive information!)
+      placeholder: |
+        For example:
+        - Contents of /etc/config/zapret
+        - Firewall configuration (Flow offloading, etc.)
+        - Additional configurations required for wireless/network/dhcp, etc.
+      render: shell

@@ -1,0 +1,78 @@
+---
+name: 🆘 Нужна помощь
+description: Нужна помощь
+title: "[HELP] "
+labels: ["help wanted"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Перед отправкой, пожалуйста:
+        - Проверьте [существующие issues](https://github.com/remittor/zapret-openwrt/issues)
+        - Просмотрите [документацию](https://github.com/remittor/zapret-openwrt/wiki/)
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Описание проблемы
+      description: В чём именно нужна помощь?
+      placeholder: Опишите проблему
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Шаги для воспроизведения
+      description: Шаги для воспроизведения проблемы. Если вы настраваете что-то по какому либо мануалу, приложите ссылку на него.
+      placeholder: |
+        1. 
+        2. 
+        3. 
+        4. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Ожидаемое поведение
+      description: Четкое и краткое описание того, что должно было произойти
+      placeholder: Опишите ожидаемое поведение
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 🖥️ Информация о системе
+      description: |
+        Информация о вашей системе (заполните всё применяемое)
+      value: |
+        - **OpenWrt версия**: 
+        - **Zapret версия**: 
+        - **Роутер модель**: 
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: strategy
+    attributes:
+      label: ✅ Используемая стратегия NFQWS
+      description: Все параметры стратегии NFQWS, либо её название
+      placeholder: Если проблема вызвана стратегией NFQWS
+
+  - type: textarea
+    id: config
+    attributes:
+      label: ⚙️ Конфигурация
+      description: |
+        Релевантные части конфигурации (удалите чувствительную информацию!)
+      placeholder: |
+        Например:
+        - Содержимое /etc/config/zapret
+        - Конфигурация файервола (опция Flow offloading и т.п.)
+        - Дополнительные конфиги, которые потребуются wireless/network/dhcp и т.д.
+      render: shell
