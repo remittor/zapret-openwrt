@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-26T06:46:39Z",
+  "generated_at": "2025-12-27T08:20:10Z",
   "releases": [
     {
       "tag": "v0.7.20251226",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 457757,
           "digest": "sha256:d9291b303b48563d8a39e29fbc997a4273ecea19357a7045f15ddc48c857c3f5",
-          "download_count": 0,
+          "download_count": 112,
           "created_at": "2025-12-26T06:46:25Z",
           "updated_at": "2025-12-26T06:46:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251226/zapret2_v0.7.20251226_mipsel_24kc.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 457379,
           "digest": "sha256:b316d1a8bd96f4cc1f14f03c58586715a53757aff7fe414f34367655620c29c4",
-          "download_count": 15,
+          "download_count": 16,
           "created_at": "2025-12-25T16:28:35Z",
           "updated_at": "2025-12-25T16:28:36Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225-r2/zapret2_v0.7.20251225-r2_mipsel_24kc.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 457314,
           "digest": "sha256:453937d38b9d8039ee60814215367c6af5ba57f52b818e2a81b064d3a4707df2",
-          "download_count": 15,
+          "download_count": 16,
           "created_at": "2025-12-25T07:22:45Z",
           "updated_at": "2025-12-25T07:22:45Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225/zapret2_v0.7.20251225_mipsel_24kc.zip"
@@ -182,7 +182,7 @@
           "state": "uploaded",
           "size": 456177,
           "digest": "sha256:03e8de80d01038b79838197f9d74ed04404421e072498a3794883d43646b6b3a",
-          "download_count": 72,
+          "download_count": 73,
           "created_at": "2025-12-24T08:13:17Z",
           "updated_at": "2025-12-24T08:13:17Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251224/zapret2_v0.7.20251224_mipsel_24kc.zip"
