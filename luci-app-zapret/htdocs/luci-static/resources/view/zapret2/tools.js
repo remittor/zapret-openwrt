@@ -543,17 +543,30 @@ return baseclass.extend({
             }
             value = value.replace(/˂/g, '<');
             value = value.replace(/˃/g, '>');
-            let elem = document.getElementById("cbi-zapret2-" + this.cfgsec + "-_" + this.cfgparam);
-            if (elem) {
-                let val = value.trim();
-                if (this.multiline) {
-                    val = val.replace(/</g, '˂');
-                    val = val.replace(/>/g, '˃');
-                    val = val.replace(/\n/g, '<br/>');
-                    elem.querySelector('div').innerHTML = val;
-                } else {
-                    elem.querySelector('div').textContent = val;
+            try {
+                let elem2 = null;
+                let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
+                if (elem) {
+                    if (!elem2) {
+                        elem2 = elem.querySelector('div');
+                    }
+                    if (!elem2) {
+                        elem2 = elem.querySelector('output');
+                    }
                 }
+                if (elem2) {
+                    let val = value.trim();
+                    if (this.multiline) {
+                        val = val.replace(/</g, '˂');
+                        val = val.replace(/>/g, '˃');
+                        val = val.replace(/\n/g, '<br/>');
+                        elem2.innerHTML = val;
+                    } else {
+                        elem2.textContent = val;
+                    }
+                }
+            } catch(e) {
+                console.error('ERROR: cannot found elem for ' + this.cfgparam);
             }
             uci.set('zapret2', this.cfgsec, this.cfgparam, value);
             uci.save().then(ui.hideModal);
