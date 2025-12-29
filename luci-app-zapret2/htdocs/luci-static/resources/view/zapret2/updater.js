@@ -171,9 +171,13 @@ return baseclass.extend({
                     this.setStage(999);
                 }
             } catch (e) {
+                if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
+                    console.warn('WARN: installUpdates: ' + e.message);
+                    return;  // goto next timer iteration
+                }
                 clearInterval(timer);
                 this.appendLog('ERROR: installUpdates: ' + e.message);
-                this.appendLog('ERROR: installUpdates: ' + e.stack?.trim().split('\n').pop());
+                this.appendLog('ERROR: installUpdates: ' + e.stack?.trim().split('\n')[0]);
                 this.setStage(999);
             } finally {
                 timerBusy = false;
