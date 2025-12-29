@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-27T14:25:15Z",
+  "generated_at": "2025-12-29T17:05:39Z",
   "releases": [
     {
       "tag": "v72.20251227",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 508191,
           "digest": "sha256:1f2c68f617e3a4599603ab03b9758376a00410ed8b416eb46910512d8365e11e",
-          "download_count": 8,
+          "download_count": 14,
           "created_at": "2025-12-27T09:13:24Z",
           "updated_at": "2025-12-27T09:13:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_mips64_octeonplus.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 507218,
           "digest": "sha256:24c98dafb42b4cad8b5101d8246b9e8857dd314896ab8bb76211d3365198ed54",
-          "download_count": 4,
+          "download_count": 5,
           "created_at": "2025-12-25T16:14:58Z",
           "updated_at": "2025-12-25T16:14:58Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225-r2/zapret_v72.20251225-r2_mips64_octeonplus.zip"
@@ -323,7 +323,7 @@
           "state": "uploaded",
           "size": 488144,
           "digest": "sha256:ca296eed27b29bebed7fb6fca182ac3dcd68a0cb5c1e0bce4332ebcbacc1e69a",
-          "download_count": 49,
+          "download_count": 50,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_mips64_octeonplus.zip"

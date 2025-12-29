@@ -1,6 +1,53 @@
 {
-  "generated_at": "2025-12-27T14:25:15Z",
+  "generated_at": "2025-12-29T17:05:39Z",
   "releases": [
+    {
+      "tag": "v0.8.20251229",
+      "name": "zapret2 v0.8.20251229",
+      "prerelease": true,
+      "created_at": "2025-12-29T15:16:24Z",
+      "updated_at": "2025-12-29T17:05:23Z",
+      "published_at": "2025-12-29T17:05:23Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.8.20251229",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/334154714",
+          "id": 334154714,
+          "node_id": "RA_kwDOM-Npcs4T6sva",
+          "name": "zapret2_v0.8.20251229_mips64_octeonplus.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 491571,
+          "digest": "sha256:c3d47e8677c7d0eb35ebc7407d9cbaf984cf315882713adf3e3b1d42d50b1d3e",
+          "download_count": 0,
+          "created_at": "2025-12-29T17:05:19Z",
+          "updated_at": "2025-12-29T17:05:20Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20251229/zapret2_v0.8.20251229_mips64_octeonplus.zip"
+        }
+      ]
+    },
     {
       "tag": "v0.7.20251227",
       "name": "zapret2 v0.7.20251227",
@@ -41,7 +88,7 @@
           "state": "uploaded",
           "size": 470815,
           "digest": "sha256:83329b19309720528a07505c823ab74947531bdf8904a8bdf0b78d6f296a9321",
-          "download_count": 0,
+          "download_count": 9,
           "created_at": "2025-12-27T14:25:01Z",
           "updated_at": "2025-12-27T14:25:01Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251227/zapret2_v0.7.20251227_mips64_octeonplus.zip"
@@ -88,7 +135,7 @@
           "state": "uploaded",
           "size": 467770,
           "digest": "sha256:22fe6f7c171af011ffb76cef9c88610d349557e35691e02af68420fb3b9b5979",
-          "download_count": 5,
+          "download_count": 6,
           "created_at": "2025-12-26T06:46:25Z",
           "updated_at": "2025-12-26T06:46:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251226/zapret2_v0.7.20251226_mips64_octeonplus.zip"
@@ -135,7 +182,7 @@
           "state": "uploaded",
           "size": 467347,
           "digest": "sha256:4f22be53b813354ff3c229f1d4a9a4c28ea67cac18717b8a65db94f4ba5b0414",
-          "download_count": 4,
+          "download_count": 5,
           "created_at": "2025-12-25T16:28:35Z",
           "updated_at": "2025-12-25T16:28:36Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225-r2/zapret2_v0.7.20251225-r2_mips64_octeonplus.zip"
