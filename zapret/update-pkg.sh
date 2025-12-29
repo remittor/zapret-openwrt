@@ -81,7 +81,7 @@ function get_pkg_version
 		fi
 	fi
 	if [ "$PKG_MGR" = apk ]; then
-		line=$( apk info -e "$pkg_name" 2>/dev/null || true )
+		line=$( apk info -s "$pkg_name" 2>/dev/null | head -n 1 | awk '{print $1}' || true )
 		if [ -n "$line" ]; then
 			base=${line%-r[0-9]*}
 			ver=${base##*-}
