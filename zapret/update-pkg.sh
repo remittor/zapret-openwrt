@@ -1,7 +1,9 @@
 #!/bin/sh
 # Copyright (c) 2025 remittor
 
-. /opt/zapret/comfunc.sh
+EXE_DIR=$(cd "$(dirname "$0")" 2>/dev/null || exit 1; pwd)
+
+. $EXE_DIR/comfunc.sh
 . /usr/share/libubox/jshn.sh
 . /etc/openwrt_release
 
@@ -21,7 +23,7 @@ while getopts "cu:pft:" opt; do
 	esac
 done
 
-ZAP_PKG_DIR=/tmp/zapret_pkg
+ZAP_PKG_DIR=/tmp/$ZAPRET_CFG_NAME-pkg
 
 if [ "$opt_test" != "" ]; then
 	echo 1; sleep 2;
@@ -34,8 +36,13 @@ if [ "$opt_test" != "" ]; then
 fi
 
 ZAP_CPU_ARCH=$(get_cpu_arch)
-ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap1_$ZAP_CPU_ARCH.json"
 
+if [ $ZAPRET_CFG_NAME = "zapret" ]; then
+	ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap1_$ZAP_CPU_ARCH.json"
+fi
+if [ $ZAPRET_CFG_NAME = "zapret2" ]; then
+	ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap2_$ZAP_CPU_ARCH.json"
+fi
 CURL_TIMEOUT=5
 CURL_HEADER1="Accept: application/json"
 CURL_HEADER2="Cache-Control: no-cache"
@@ -104,7 +111,8 @@ function normalize_version
 {
 	local ver="$1"
 	local base
-	local major minor rel
+	local major minor build rel
+	local old_ifs
 	case "$ver" in
 		*-r[0-9]*)
 			rel="${ver##*-r}"
@@ -115,11 +123,17 @@ function normalize_version
 			base="$ver"
 			;;
 	esac
-	major="${base%%.*}"
-	minor="${base#*.}"
-	[ -z "$minor" ] && minor=0
-	[ -z "$rel" ] && rel=1
-	echo "$major.$minor.$rel"
+	old_ifs="$IFS" ; IFS='.' ; set -- $base ; IFS="$old_ifs"
+	rel=${rel:-1}
+	major=${1:-0}
+	minor=${2:-0}
+	if [ $ZAPRET_CFG_NAME = "zapret" ]; then
+		echo "$major.$minor.$rel"
+	fi
+	if [ $ZAPRET_CFG_NAME = "zapret2" ]; then
+		build=${3:-0}
+		echo "$major.$minor.$build.$rel"
+	fi
 }
 
 function pkg_version_cmp
@@ -137,9 +151,22 @@ function pkg_version_cmp
 	x2=$( echo "$ver2" | cut -d. -f2 )
 	[ "$x1" -gt "$x2" ] && { echo -n "G"; return 0; }
 	[ "$x1" -lt "$x2" ] && { echo -n "L"; return 0; }
+	if [ $ZAPRET_CFG_NAME = "zapret2" ]; then
+		# build
+		x1=$( echo "$ver1" | cut -d. -f3 )
+		x2=$( echo "$ver2" | cut -d. -f3 )
+		[ "$x1" -gt "$x2" ] && { echo -n "G"; return 0; }
+		[ "$x1" -lt "$x2" ] && { echo -n "L"; return 0; }
+	fi
 	# release
-	x1=$( echo "$ver1" | cut -d. -f3 )
-	x2=$( echo "$ver2" | cut -d. -f3 )
+	if [ $ZAPRET_CFG_NAME = "zapret" ]; then
+		x1=$( echo "$ver1" | cut -d. -f3 )
+		x2=$( echo "$ver2" | cut -d. -f3 )
+	fi
+	if [ $ZAPRET_CFG_NAME = "zapret2" ]; then
+		x1=$( echo "$ver1" | cut -d. -f4 )
+		x2=$( echo "$ver2" | cut -d. -f4 )
+	fi
 	[ "$x1" -gt "$x2" ] && { echo -n "G"; return 0; }
 	[ "$x1" -lt "$x2" ] && { echo -n "L"; return 0; }
 	echo -n "E"
@@ -289,7 +316,7 @@ ZAP_PKG_FN=
 ZAP_PKG_BASE_FN=
 ZAP_PKG_LUCI_FN=
 
-ZAP_CUR_PKG_VER=$( get_pkg_version zapret )
+ZAP_CUR_PKG_VER=$( get_pkg_version $ZAPRET_CFG_NAME )
 echo "Current installed version: $ZAP_CUR_PKG_VER"
 
 if [ "$opt_update" = "" ]; then
@@ -344,7 +371,7 @@ if [ "$opt_update" != "" ]; then
 			return 0
 		fi
 	fi
-	ZAP_PKG_DIR=/tmp/zapret_pkg
+	ZAP_PKG_DIR=/tmp/$ZAPRET_CFG_NAME-pkg
 	rm -rf $ZAP_PKG_DIR 2>/dev/null
 	ZAP_PKG_HDRS=$( curl -s -I -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER2" "$ZAP_PKG_URL" )
 	ZAP_PKG_SIZE=$( echo "$ZAP_PKG_HDRS" | grep -i 'content-length: ' | tail -n1 | awk '{print $2}' | tr -d '\r' )
@@ -387,18 +414,18 @@ if [ "$opt_update" != "" ]; then
 	echo "$ZAP_PKG_LIST"
 	echo "------"
 	if [ "$PKG_MGR" != "apk" ]; then
-		ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret_*.${ZAP_PKG_EXT}" | head -n 1 )
+		ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "${ZAPRET_CFG_NAME}_*.${ZAP_PKG_EXT}" | head -n 1 )
 	else
-		ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "zapret-[0-9]*.?*.${ZAP_PKG_EXT}" | head -n 1 )
+		ZAP_PKG_BASE_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "${ZAPRET_CFG_NAME}-[0-9]*.?*.${ZAP_PKG_EXT}" | head -n 1 )
 	fi
-	ZAP_PKG_LUCI_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "luci-app-zapret*.${ZAP_PKG_EXT}" | head -n 1 )
+	ZAP_PKG_LUCI_FN=$( find "$ZAP_PKG_DIR" -maxdepth 1 -type f -name "luci-app-${ZAPRET_CFG_NAME}*.${ZAP_PKG_EXT}" | head -n 1 )
 	if [ ! -f "$ZAP_PKG_BASE_FN" ]; then
-		echo "ERROR: File \"zapret*.${ZAP_PKG_EXT}\" not found!"
+		echo "ERROR: File \"${ZAPRET_CFG_NAME}*.${ZAP_PKG_EXT}\" not found!"
 		return 231
 	fi
 	echo "ZAP_PKG_BASE_FN = $ZAP_PKG_BASE_FN"
 	if [ ! -f "$ZAP_PKG_LUCI_FN" ]; then
-		echo "ERROR: File \"luci-app-zapret*.${ZAP_PKG_EXT}\" not found!"
+		echo "ERROR: File \"luci-app-${ZAPRET_CFG_NAME}*.${ZAP_PKG_EXT}\" not found!"
 		return 232
 	fi
 	echo "ZAP_PKG_LUCI_FN = $ZAP_PKG_LUCI_FN"

@@ -7,13 +7,16 @@ ZAPRET_BASE=/opt/zapret
 ZAPRET_INITD=/etc/init.d/zapret
 ZAPRET_ORIG_INITD="$ZAPRET_BASE/init.d/openwrt/zapret"
 
+ZAP_LOG_TAG=ZAPRET
+
 ZAPRET_CONFIG="$ZAPRET_BASE/config"
 ZAPRET_CONFIG_NEW="$ZAPRET_BASE/config.new"
 ZAPRET_CONFIG_DEF="$ZAPRET_BASE/config.default"
 
 ZAPRET_CFG=/etc/config/zapret
 ZAPRET_CFG_NAME=zapret
-ZAPRET_CFG_SEC_NAME="$( uci -q get $ZAPRET_CFG_NAME.config )"
+ZAPRET_CFG_SEC=$ZAPRET_CFG_NAME.config
+ZAPRET_CFG_SEC_NAME="$( uci -q get $ZAPRET_CFG_SEC )"
 
 . $ZAPRET_BASE/def-cfg.sh
 
@@ -148,7 +151,7 @@ function merge_cfg_with_def_values
 	local cfgname=${1:-$ZAPRET_CFG_NAME}
 	local force=$2
 	local cfgfile=/etc/config/$cfgname
-	local NEWCFGNAME="zapret-default"
+	local NEWCFGNAME="$ZAPRET_CFG_NAME-default"
 	local NEWCFGFILE="/etc/config/$NEWCFGNAME"
 
 	local cfg_sec_name="$( uci -q get $ZAPRET_CFG_NAME.config )"
@@ -168,7 +171,7 @@ function merge_cfg_with_def_values
 function remove_cron_task_logs
 {
 	if [ -f "$CRONTAB_FILE" ]; then
-		sed -i "/-name 'zapret+\*.log' -size +/d" "$CRONTAB_FILE"
+		sed -i "/-name '$ZAPRET_CFG_NAME+\*.log' -size +/d" "$CRONTAB_FILE"
 	fi
 }
 
@@ -176,8 +179,8 @@ function insert_cron_task_logs
 {
 	[ ! -f "$CRONTAB_FILE" ] && touch "$CRONTAB_FILE"
 	[ ! -f "$CRONTAB_FILE" ] && return 1
-	if ! grep -q -e "-name 'zapret\*\.log' -size \+" "$CRONTAB_FILE"; then
-		echo "*/2 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name 'zapret+*.log' -size +2600k -exec rm -f {} \;" >> "$CRONTAB_FILE"
+	if ! grep -q -e "-name '$ZAPRET_CFG_NAME\*\.log' -size \+" "$CRONTAB_FILE"; then
+		echo "*/2 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name '$ZAPRET_CFG_NAME+*.log' -size +2600k -exec rm -f {} \;" >> "$CRONTAB_FILE"
 		/etc/init.d/cron restart 2> /dev/null
 	fi
 	return 0
@@ -190,7 +193,7 @@ function init_before_start
 	[ ! -f "$HOSTLIST_FN" ] && touch "$HOSTLIST_FN"
 	chmod 644 $ZAPRET_BASE/ipset/*.txt
 	chmod 666 $ZAPRET_BASE/ipset/*.log
-	rm -f /tmp/zapret+*.log
+	rm -f /tmp/$ZAPRET_CFG_NAME+*.log
 	#*/
 	if [ "$DAEMON_LOG_ENABLE" = "1" ]; then
 		insert_cron_task_logs
