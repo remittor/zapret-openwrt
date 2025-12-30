@@ -259,7 +259,7 @@ function get_actual_release
 	done
 	json_cleanup
 	echo "ERROR: latest release for arch \"$ZAP_CPU_ARCH\" not founded!"
-	return 1  # release not founded
+	return 150  # release not founded
 }
 
 # -------------------------------------------------------------------------------------------------------
