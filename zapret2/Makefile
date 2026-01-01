@@ -58,6 +58,8 @@ endef
 define Build/Prepare
 	$(Build/Prepare/Default)
 	rm -f $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2
+	rm -f $(PKG_BUILD_DIR)/ip2net/ip2net
+	rm -f $(PKG_BUILD_DIR)/mdig/mdig
 endef
 
 #define Build/Configure
@@ -65,6 +67,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS) LUA_JIT=$(LUA_JIT) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
+	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(TARGET_CONFIGURE_OPTS)
+	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
 endef
 
 define Package/$(PKG_NAME)/conffiles
@@ -78,6 +82,10 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/opt/zapret2
 	$(INSTALL_DIR) $(1)/opt/zapret2/$(MAKE_PATH)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2 $(1)/opt/zapret2/$(MAKE_PATH)/	
+	$(INSTALL_DIR) $(1)/opt/zapret2/ip2net
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)/opt/zapret2/ip2net/
+	$(INSTALL_DIR) $(1)/opt/zapret2/mdig
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdig/mdig $(1)/opt/zapret2/mdig/
 	$(INSTALL_DIR) $(1)/opt/zapret2/common
 	$(CP) $(PKG_BUILD_DIR)/common/* $(1)/opt/zapret2/common/
 	$(INSTALL_DIR) $(1)/opt/zapret2/lua
@@ -130,6 +138,9 @@ define Package/$(PKG_NAME)/install
 	chmod 644 $(1)/opt/zapret2/init.d/openwrt/custom.d/*.sh
 	chmod 644 $(1)/opt/zapret2/config.default
 	chmod 755 $(1)/opt/zapret2/*.sh
+	chmod 755 $(1)/opt/zapret2/$(MAKE_PATH)/*
+	chmod 755 $(1)/opt/zapret2/ip2net/*
+	chmod 755 $(1)/opt/zapret2/mdig/*
 endef
 
 define Package/$(PKG_NAME)/preinst
