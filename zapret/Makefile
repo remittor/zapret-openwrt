@@ -43,13 +43,18 @@ endef
 define Build/Prepare
 	$(Build/Prepare/Default)
 	rm -f $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws
+	rm -f $(PKG_BUILD_DIR)/ip2net/ip2net
+	rm -f $(PKG_BUILD_DIR)/mdig/mdig
 endef
 
 #define Build/Configure
 #endef
 
-#define Build/Compile
-#endef
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS)
+	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(TARGET_CONFIGURE_OPTS)
+	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
+endef
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/zapret
@@ -61,7 +66,11 @@ endef
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/opt/zapret
 	$(INSTALL_DIR) $(1)/opt/zapret/$(MAKE_PATH)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws $(1)/opt/zapret/$(MAKE_PATH)/	
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws $(1)/opt/zapret/$(MAKE_PATH)/
+	$(INSTALL_DIR) $(1)/opt/zapret/ip2net
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)/opt/zapret/ip2net/
+	$(INSTALL_DIR) $(1)/opt/zapret/mdig
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdig/mdig $(1)/opt/zapret/mdig/
 	$(INSTALL_DIR) $(1)/opt/zapret/common
 	$(CP) $(PKG_BUILD_DIR)/common/* $(1)/opt/zapret/common/
 	#$(INSTALL_DIR) $(1)/opt/zapret/docs
@@ -110,6 +119,9 @@ define Package/$(PKG_NAME)/install
 	chmod 644 $(1)/opt/zapret/init.d/openwrt/custom.d/*.sh
 	chmod 644 $(1)/opt/zapret/config.default
 	chmod 755 $(1)/opt/zapret/*.sh
+	chmod 755 $(1)/opt/zapret/$(MAKE_PATH)/*
+	chmod 755 $(1)/opt/zapret/ip2net/*
+	chmod 755 $(1)/opt/zapret/mdig/*
 endef
 
 define Package/$(PKG_NAME)/preinst

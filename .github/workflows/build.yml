@@ -252,9 +252,9 @@ jobs:
               cat .config
               echo "------------- .config END -------------------"
               if [ "$ARCH" = "$LUCI_ARCH" ]; then
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net,luci-app-zapret}/compile`
+                  PKGLIST=`echo package/zapret-openwrt/{zapret,luci-app-zapret}/compile`
               else
-                  PKGLIST=`echo package/zapret-openwrt/{zapret,zapret-tpws,zapret-mdig,zapret-ip2net}/compile`
+                  PKGLIST=`echo package/zapret-openwrt/zapret/compile`
               fi
               if [ "$MAX_SPEED" = "false" ]; then
                   make $PKGLIST V=s CONFIG_CCACHE=1 BUILD_LOG=1
