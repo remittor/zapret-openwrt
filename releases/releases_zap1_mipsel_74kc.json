@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-29T17:05:39Z",
+  "generated_at": "2026-01-07T21:12:12Z",
   "releases": [
     {
       "tag": "v72.20251227",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 466972,
           "digest": "sha256:d599e8dac79b9aab43fecb278aea74cbb49d5cde20e3cb5d756baa7b7d8c4e5a",
-          "download_count": 45,
+          "download_count": 101,
           "created_at": "2025-12-27T09:13:24Z",
           "updated_at": "2025-12-27T09:13:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_mipsel_74kc.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 466087,
           "digest": "sha256:228dc651a6929d597c33f00d54d877ee4cad9d62aab13c2275cb9c7bdd4136ac",
-          "download_count": 9,
+          "download_count": 10,
           "created_at": "2025-12-25T06:59:54Z",
           "updated_at": "2025-12-25T06:59:55Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225/zapret_v72.20251225_mipsel_74kc.zip"
@@ -323,7 +323,7 @@
           "state": "uploaded",
           "size": 447442,
           "digest": "sha256:47dd08be08498866a3a24af261e0bf63dfc268a7850baf4ef62c8a1df56dacf3",
-          "download_count": 126,
+          "download_count": 130,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_mipsel_74kc.zip"
@@ -370,7 +370,7 @@
           "state": "uploaded",
           "size": 444807,
           "digest": "sha256:5fe2813d9d884734380fade47a6b2968107da664cc16004c894bba443045ffe9",
-          "download_count": 100,
+          "download_count": 101,
           "created_at": "2025-10-22T13:41:14Z",
           "updated_at": "2025-10-22T13:41:14Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251022/zapret_v72.20251022_mipsel_74kc.zip"

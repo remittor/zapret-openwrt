@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-29T17:05:39Z",
+  "generated_at": "2026-01-07T21:12:12Z",
   "releases": [
     {
       "tag": "v72.20251227",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 488326,
           "digest": "sha256:188165f281ed1de4a35ad05c413aef3948b5ae2f76dbe9b1cd84a19c5db4da41",
-          "download_count": 15,
+          "download_count": 21,
           "created_at": "2025-12-27T09:13:24Z",
           "updated_at": "2025-12-27T09:13:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_arm_xscale.zip"

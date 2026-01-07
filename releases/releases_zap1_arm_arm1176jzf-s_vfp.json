@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-29T17:05:38Z",
+  "generated_at": "2026-01-07T21:12:11Z",
   "releases": [
     {
       "tag": "v72.20251227",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 486928,
           "digest": "sha256:8adc5ea25c3fad93f57028a67d71fcf5cf344eec9b08a5f9b4c36299e3c94a2d",
-          "download_count": 19,
+          "download_count": 35,
           "created_at": "2025-12-27T09:13:24Z",
           "updated_at": "2025-12-27T09:13:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_arm_arm1176jzf-s_vfp.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 486036,
           "digest": "sha256:c5ce378227981929358e78c3a9c87ceaf88f999206afc22a3d86822c709ab56c",
-          "download_count": 6,
+          "download_count": 7,
           "created_at": "2025-12-25T06:59:55Z",
           "updated_at": "2025-12-25T06:59:55Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225/zapret_v72.20251225_arm_arm1176jzf-s_vfp.zip"
@@ -323,7 +323,7 @@
           "state": "uploaded",
           "size": 467319,
           "digest": "sha256:633812293e1f3c90b0b1f889d7c9b4d24ce5e5f5e7dc30b4003fd2fe102bc3c4",
-          "download_count": 73,
+          "download_count": 74,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_arm_arm1176jzf-s_vfp.zip"
@@ -370,7 +370,7 @@
           "state": "uploaded",
           "size": 464465,
           "digest": "sha256:da028af7848c4d103a2fb276849fca8be254b35dfd2654acbe7ff2a8317a9ffc",
-          "download_count": 64,
+          "download_count": 65,
           "created_at": "2025-10-22T13:41:14Z",
           "updated_at": "2025-10-22T13:41:14Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251022/zapret_v72.20251022_arm_arm1176jzf-s_vfp.zip"

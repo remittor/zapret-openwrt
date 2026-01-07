@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-29T17:05:38Z",
+  "generated_at": "2026-01-07T21:12:11Z",
   "releases": [
     {
       "tag": "v72.20251227",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 499548,
           "digest": "sha256:ee304d0a7c9aab19b276714b100e11f3546e8851b22f4c0050661ad3bfeb5bba",
-          "download_count": 70,
+          "download_count": 121,
           "created_at": "2025-12-27T09:13:24Z",
           "updated_at": "2025-12-27T09:13:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_aarch64_cortex-a72.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 498688,
           "digest": "sha256:49cfe6d5595b05392de67d0eb58b506476c78256e55c94ee5e7e57cfdd28eab8",
-          "download_count": 8,
+          "download_count": 9,
           "created_at": "2025-12-25T06:59:54Z",
           "updated_at": "2025-12-25T06:59:55Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251225/zapret_v72.20251225_aarch64_cortex-a72.zip"
@@ -229,7 +229,7 @@
           "state": "uploaded",
           "size": 498089,
           "digest": "sha256:83f23b21fb59e8faa2febd39ad070633ba3a0b619f781837295e3a9c0b828046",
-          "download_count": 55,
+          "download_count": 56,
           "created_at": "2025-12-17T09:30:11Z",
           "updated_at": "2025-12-17T09:30:11Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251217/zapret_v72.20251217_aarch64_cortex-a72.zip"
@@ -323,7 +323,7 @@
           "state": "uploaded",
           "size": 479754,
           "digest": "sha256:17c7b987b69b6581dbae4b36601c0268d9cf4bfed985e4d1c8e7a31942dddc8a",
-          "download_count": 266,
+          "download_count": 267,
           "created_at": "2025-11-22T09:48:34Z",
           "updated_at": "2025-11-22T09:48:34Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_aarch64_cortex-a72.zip"
