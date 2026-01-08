@@ -90,21 +90,21 @@ return view.extend({
                 logdate_len = (Array.isArray(logdata)) ? logdata.length : -1;
             }
             let elem_name = elem.getAttribute("name");
-            let founded = false;
+            let found = false;
             if (logdate_len > 0) {
                 for (let log_num = 0; log_num < logdate_len; log_num++) {
                     if (logdata[log_num].filename == elem_name) {
                         if (logdata[log_num].data) {
                             elem.value = logdata[log_num].data;
                             elem.rows  = logdata[log_num].rows;
-                            founded = true;
+                            found = true;
                             //console.log('POLL: updated ' + elem_name);
                         }
                         break;
                     }
                 }
             }
-            if (!founded) {
+            if (!found) {
                 elem.value = '';
                 elem.rows  = 0;
             }
