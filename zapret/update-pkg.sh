@@ -3,10 +3,6 @@
 
 EXE_DIR=$(cd "$(dirname "$0")" 2>/dev/null || exit 1; pwd)
 
-. $EXE_DIR/comfunc.sh
-. /usr/share/libubox/jshn.sh
-. /etc/openwrt_release
-
 opt_check=
 opt_prerelease=
 opt_update=
@@ -16,12 +12,32 @@ opt_test=
 while getopts "cu:pft:" opt; do
 	case $opt in
 		c) opt_check=true;;
-		p) opt_prerelease=true;;
+		p) opt_prerelease="true";;
 		u) opt_update="$OPTARG";;
-		f) opt_forced=true;;
+		f) opt_forced="true";;
 		t) opt_test="$OPTARG";;
 	esac
 done
+
+if [ "$EXE_DIR" = "/tmp" ]; then
+	ZAPRET_CFG_NAME="zapret"
+	if [ "$opt_update" = "1" ]; then
+		ZAPRET_CFG_NAME="zapret"
+		opt_update="@"
+		opt_forced="true"
+	fi
+	if [ "$opt_update" = "2" ]; then
+		ZAPRET_CFG_NAME="zapret2"
+		opt_update="@"
+		opt_forced="true"
+	fi
+else
+	[ -f "$EXE_DIR/comfunc.sh" ] || { echo "ERROR: file $EXE_DIR/comfunc.sh not founded!"; exit 1; }
+	. $EXE_DIR/comfunc.sh
+fi
+
+. /usr/share/libubox/jshn.sh
+. /etc/openwrt_release
 
 ZAP_PKG_DIR=/tmp/$ZAPRET_CFG_NAME-pkg
 
@@ -35,7 +51,7 @@ if [ "$opt_test" != "" ]; then
 	return "$opt_test"
 fi
 
-ZAP_CPU_ARCH=$(get_cpu_arch)
+ZAP_CPU_ARCH="$DISTRIB_ARCH"
 
 if [ $ZAPRET_CFG_NAME = "zapret" ]; then
 	ZAP_REL_URL="https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/releases_zap1_$ZAP_CPU_ARCH.json"
@@ -69,11 +85,73 @@ fi
 
 # -------------------------------------------------------------------------------------------------------
 
-function download_json
+function get_distrib_param
 {
-	local url="$1"
-	curl -s -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER1" -H "$CURL_HEADER2" "$url" 2>/dev/null
-	return $?
+	local parname=$1
+	local value="__unknown__"
+	if [ -f /etc/openwrt_release ]; then
+		while IFS='=' read -r key val; do
+			val="${val#\'}"
+			val="${val%\'}"
+			val="${val#\"}"
+			val="${val%\"}"
+			if [ "$key" = "$parname" ]; then
+				value="$val"
+				break
+			fi
+		done < /etc/openwrt_release
+	fi
+	printf '%s' "$value"
+}
+
+function pkg_mgr_update
+{
+	local forced=$1
+	if [ "$PKG_MGR" = "opkg" ]; then
+		PKG_TOTAL=$( opkg list | wc -l )
+		PKG_INSTALLED=$( opkg list-installed | wc -l )
+		if [ "$PKG_TOTAL" = "$PKG_INSTALLED" ]; then
+			echo ">>> OPKG update..."
+			opkg update
+			return $?
+		fi
+	else
+		PKG_AVAIL=$( apk list --available 2>/dev/null | wc -l )
+		if [ "$PKG_AVAIL" -lt 100 ]; then
+			echo ">>> APK update..."
+			apk update
+			return $?
+		fi
+	fi
+	return 0
+}
+
+function curl_install
+{
+	if command -v curl >/dev/null 2>&1; then
+		return 0
+	fi
+	pkg_mgr_update || { echo "ERROR: cannot update packages list"; return 1; }
+	echo ">>> Package curl not found, installing..."
+	if [ "$PKG_MGR" = "opkg" ]; then
+		opkg install curl
+	else
+		apk add curl
+	fi
+}
+
+function unzip_install
+{
+	if command -v unzip >/dev/null 2>&1; then
+		return 0
+	fi
+	pkg_mgr_update || { echo "ERROR: cannot update packages list"; return 1; }
+	echo ">>> Package unzip not found, installing..."
+	if [ "$PKG_MGR" = "opkg" ]; then
+		opkg install unzip
+	else
+		apk add unzip
+	fi
 }
 
 function get_pkg_version
@@ -185,7 +263,7 @@ function download_releases_info
 		echo "ERROR: Cannot download file \"$ZAP_REL_URL\" (status = $status)"
 		return 103
 	fi
-	txtlen=$( printf '%s\n' "$hdr" | awk -F': ' 'BEGIN{IGNORECASE=1} $1=="Content-Length"{print $2}' | tr -d '\r')
+	txtlen=$( printf '%s\n' "$hdr" | awk -F': ' 'BEGIN{IGNORECASE=1} $1=="Content-Length"{print $2}' | tr -d '\r' )
 	echo "Content-Length: $txtlen bytes"
 	txt="${resp#*$'\r\n\r\n'}"
 	txtlen=${#txt}
@@ -195,7 +273,7 @@ function download_releases_info
 		return 104
 	fi
 	echo "Releases info downloaded! Size = $txtlen, Lines = $txtlines"
-	generated_at=$(printf '%s\n' "$txt" | grep -m1 -o '"generated_at"[[:space:]]*:[[:space:]]*".*"' | cut -d'"' -f4)
+	generated_at=$( printf '%s\n' "$txt" | grep -m1 -o '"generated_at"[[:space:]]*:[[:space:]]*".*"' | cut -d'"' -f4 )
 	if [[ "$generated_at" = "" ]]; then
 		echo "ERROR: Cannot download releases info! (incorrect generated_at)"
 		return 105
@@ -275,11 +353,16 @@ fi
 
 #echo "DISTRIB_ID: $DISTRIB_ID"
 echo "DISTRIB_RELEASE: $DISTRIB_RELEASE"
-echo "DISTRIB_DESCRIPTION:" $(get_distrib_param DISTRIB_DESCRIPTION)
-echo "DISTRIB_ARCH:" $(get_distrib_param DISTRIB_ARCH)
+echo "DISTRIB_DESCRIPTION:" $( get_distrib_param DISTRIB_DESCRIPTION )
+echo "DISTRIB_ARCH:" $( get_distrib_param DISTRIB_ARCH )
 
 if ! command -v curl >/dev/null 2>&1; then
-	echo "ERROR: package \"curl\" not installed!"
+	if [ "$opt_forced" = true ]; then
+		curl_install
+	fi
+fi
+if ! command -v curl >/dev/null 2>&1; then
+	echo "ERROR: Required package \"curl\" not installed!"
 	return 10
 fi
 CURL_INFO=$( curl -V )
@@ -301,6 +384,11 @@ if [ "$opt_check" = "true" ]; then
 	fi
 	get_actual_release
 	ZAP_ERR=$?
+	if [ $ZAP_ERR = 150 ] && [ "$opt_prerelease" != true ] && [ "$opt_forced" = true ]; then
+		opt_prerelease="true"
+		get_actual_release
+		ZAP_ERR=$?
+	fi
 	if [ $ZAP_ERR -ne 0 ]; then
 		echo "ERROR: Func get_actual_release return error code: $ZAP_ERR"
 		return $ZAP_ERR
@@ -394,6 +482,11 @@ if [ "$opt_update" != "" ]; then
 		return 216
 	fi
 	if ! command -v unzip >/dev/null 2>&1; then
+		if [ "$opt_forced" = true ]; then
+			unzip_install
+		fi
+	fi
+	if ! command -v unzip >/dev/null 2>&1; then
 		echo "ERROR: package \"upzip\" not installed!"
 		return 218
 	fi
@@ -429,6 +522,9 @@ if [ "$opt_update" != "" ]; then
 		return 232
 	fi
 	echo "ZAP_PKG_LUCI_FN = $ZAP_PKG_LUCI_FN"
+	if [ "$opt_forced" = true ]; then
+		pkg_mgr_update
+	fi
 	echo "Install downloaded packages..."
 	if [ "$PKG_MGR" != "apk" ]; then
 		opkg install --force-reinstall "$ZAP_PKG_BASE_FN"
