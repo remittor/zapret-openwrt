@@ -44,6 +44,10 @@ AUTOHOSTLIST_DEBUGLOG=0
 
 # number of parallel threads for domain list resolves
 MDIG_THREADS=30
+# EAI_AGAIN retries
+MDIG_EAGAIN=10
+# delay between EAI_AGAIN retries (ms)
+MDIG_EAGAIN_DELAY=500
 
 # ipset/*.sh can compress large lists
 GZIP_LISTS=0
@@ -77,11 +81,10 @@ NFQWS2_PORTS_UDP="443"
 
 # PKT_OUT means connbytes dir original
 # PKT_IN means connbytes dir reply
-# this is --dpi-desync-cutoff=nX kernel mode implementation for linux. it saves a lot of CPU.
-NFQWS2_TCP_PKT_OUT="9"
-NFQWS2_TCP_PKT_IN="3"
-NFQWS2_UDP_PKT_OUT="9"
-NFQWS2_UDP_PKT_IN="0"
+NFQWS2_TCP_PKT_OUT="20"
+NFQWS2_TCP_PKT_IN="10"
+NFQWS2_UDP_PKT_OUT="5"
+NFQWS2_UDP_PKT_IN="3"
 
 # redirect outgoing traffic without connbytes limiter and incoming with connbytes limiter
 # normally it's needed only for stateless DPI that matches every packet in a single TCP session
