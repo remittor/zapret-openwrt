@@ -32,7 +32,7 @@ if [ "$EXE_DIR" = "/tmp" ]; then
 		opt_forced="true"
 	fi
 else
-	[ -f "$EXE_DIR/comfunc.sh" ] || { echo "ERROR: file $EXE_DIR/comfunc.sh not founded!"; exit 1; }
+	[ -f "$EXE_DIR/comfunc.sh" ] || { echo "ERROR: file $EXE_DIR/comfunc.sh not found!"; exit 1; }
 	. $EXE_DIR/comfunc.sh
 fi
 
@@ -336,8 +336,8 @@ function get_actual_release
 		return 0
 	done
 	json_cleanup
-	echo "ERROR: latest release for arch \"$ZAP_CPU_ARCH\" not founded!"
-	return 150  # release not founded
+	echo "ERROR: latest release for arch \"$ZAP_CPU_ARCH\" not found!"
+	return 150  # release not found
 }
 
 # -------------------------------------------------------------------------------------------------------
@@ -410,7 +410,7 @@ echo "Current installed version: $ZAP_CUR_PKG_VER"
 if [ "$opt_update" = "" ]; then
 	ZAP_PKG_URL="$REL_ACTUAL_URL"
 	if [ "$ZAP_PKG_URL" = "" ]; then
-		echo "ERROR: actual release not founded!"
+		echo "ERROR: actual release not found!"
 		return 199
 	fi
 else
@@ -419,7 +419,7 @@ else
 		ZAP_PKG_URL="$REL_ACTUAL_URL"
 	fi
 	if [ "$opt_update" = "@" -a "$ZAP_PKG_URL" = "" ]; then
-		echo "ERROR: actual release not founded!"
+		echo "ERROR: actual release not found!"
 		return 199
 	fi
 fi
@@ -494,7 +494,7 @@ if [ "$opt_update" != "" ]; then
 	rm -f "$ZAP_PKG_FN" 2>/dev/null
 	if [ "$PKG_MGR" = "apk" ]; then
 		if [ ! -d "$ZAP_PKG_DIR/apk" ]; then
-			echo "ERROR: APK-files not founded"
+			echo "ERROR: APK-files not found"
 			return 221
 		fi
 		rm -f $ZAP_PKG_DIR/*.ipk 2>/dev/null
