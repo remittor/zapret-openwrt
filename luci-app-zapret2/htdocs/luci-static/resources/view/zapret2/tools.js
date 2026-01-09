@@ -4,6 +4,7 @@
 'require rpc';
 'require ui';
 'require uci';
+'require view.zapret2.env as env_tools';
 
 document.head.append(E('style', {'type': 'text/css'},
 `
@@ -35,32 +36,11 @@ document.head.append(E('style', {'type': 'text/css'},
 `));
 
 return baseclass.extend({
-    packager          : null,
-    appName           : 'zapret2',
-    execPath          : '/etc/init.d/zapret2',
-    syncCfgPath       : '/opt/zapret2/sync_config.sh',
-    defCfgPath        : '/opt/zapret2/def-cfg.sh',
-    defaultCfgPath    : '/opt/zapret2/restore-def-cfg.sh',
-
-    hostsGoogleFN     : '/opt/zapret2/ipset/zapret-hosts-google.txt',
-    hostsUserFN       : '/opt/zapret2/ipset/zapret-hosts-user.txt',
-    hostsUserExcludeFN: '/opt/zapret2/ipset/zapret-hosts-user-exclude.txt',
-    iplstExcludeFN    : '/opt/zapret2/ipset/zapret-ip-exclude.txt',
-    iplstUserFN       : '/opt/zapret2/ipset/zapret-ip-user.txt',
-    iplstUserExcludeFN: '/opt/zapret2/ipset/zapret-ip-user-exclude.txt',
-    custFileMax       : 4,
-    custFileTemplate  : '/opt/zapret2/ipset/cust%s.txt',
-    customdPrefixList : [ 10, 20, 50, 60, 90 ] ,
-    customdFileFormat : '/opt/zapret2/init.d/openwrt/custom.d/%s-script.sh',
-    discord_num       : 50,
-    discord_url       : [ 'https://github.com/bol-van/zapret2/blob/master/init.d/custom.d.examples.linux/50-discord-media',
-                          'https://github.com/bol-van/zapret2/blob/master/init.d/custom.d.examples.linux/50-stun4all',
-                          'https://github.com/bol-van/zapret2/tree/master/init.d/custom.d.examples.linux'
-                        ],
-    nfqws_opt_url     : 'https://github.com/remittor/zapret-openwrt/discussions/',
-
-    autoHostListFN    : '/opt/zapret2/ipset/zapret-hosts-auto.txt',
-    autoHostListDbgFN : '/opt/zapret2/ipset/zapret-hosts-auto-debug.log',
+    __init__() {
+        env_tools.load_env(this);
+        //console.log('appName: ' + this.appName);
+        //console.log('PACKAGER: ' + this.packager.name);
+    }, 
 
     infoLabelRunning  : '<span class="label-status running">'  + _('Running')  + '</span>',
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
@@ -99,24 +79,7 @@ return baseclass.extend({
         expect: { result: false }
     }),
 
-    init_consts: function() {
-        if (!this.packager) {
-            this.packager = { };
-            if (L.hasSystemFeature('apk')) {
-                this.packager.name = 'apk';
-                this.packager.path = '/usr/bin/apk';
-                this.packager.args = [ 'list', '-I', '*zapret2*' ];
-            } else {
-                this.packager.name = 'opkg';
-                this.packager.path = '/bin/opkg';
-                this.packager.args = [ 'list-installed', '*zapret2*' ];
-            }
-            //console.log('PACKAGER: ' + this.packager.name);
-        }
-    },
-
     getSvcInfo: function(svc_name = null) {
-        this.init_consts();
         let name = (svc_name) ? svc_name : this.appName;
         let verbose = 1;
         return this.callServiceList(name, verbose).then(res => {
@@ -127,7 +90,6 @@ return baseclass.extend({
     },
 
     getInitState: function(name) {
-        this.init_consts();
         return this.callInitState(name).then(res => {
             if (res) {
                 return res[name].enabled ? true : false;
@@ -140,7 +102,6 @@ return baseclass.extend({
     },
 
     getStratList: function() {
-        this.init_consts();
         let exec_cmd = '/bin/busybox';
         let exec_arg = [ 'awk', '-F', '"', '/if \\[ "\\$strat" = "/ {print $4}', this.defCfgPath ];
         return fs.exec(exec_cmd, exec_arg).then(res => {
