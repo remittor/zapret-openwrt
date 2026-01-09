@@ -14,7 +14,7 @@ const btn_style_negative = 'btn cbi-button-reset important';
 const btn_style_warning  = 'btn cbi-button-negative';
 const btn_style_success  = 'btn cbi-button-success important';
 
-const fn_update_pkg_sh   = '/opt/zapret2/update-pkg.sh';
+const fn_update_pkg_sh   = '/opt/'+tools.appName+'/update-pkg.sh';
 
 return baseclass.extend({
     releasesUrlPrefix : 'https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/',
@@ -104,7 +104,7 @@ return baseclass.extend({
         }
         let rpc_opt = { timeout: 5*1000 }
         //rpc_opt.uid = 0;  // run under root
-        const logFile = '/tmp/zapret2_pkg_install.log';
+        const logFile = '/tmp/'+tools.appName+'_pkg_install.log';
         const rcFile = logFile + '.rc';
         try {
             await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null, rpc_opt);
@@ -118,7 +118,7 @@ return baseclass.extend({
             let opt = [ logFile, fn_update_pkg_sh ];
             //opt.push('-t'); opt.push('0');  // only for testing
             opt.push(...opt_list);
-            let res = await fs.exec('/opt/zapret2/script-exec.sh', opt, null, rpc_opt);
+            let res = await fs.exec('/opt/'+tools.appName+'/script-exec.sh', opt, null, rpc_opt);
             if (res.code == 0) {
                 this.appendLog('Process started...');
             } else {

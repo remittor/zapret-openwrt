@@ -231,9 +231,9 @@ return baseclass.extend({
             return -4;
         }
         let jdata = svc_info;
-        if (typeof(jdata.zapret2) == 'object') {
+        if (typeof(jdata[this.appName]) == 'object') {
             result.dmn.inited = true;
-            let dmn_list = jdata.zapret2.instances;
+            let dmn_list = jdata[this.appName].instances;
             if (typeof(dmn_list) == 'object') {
                 for (const [dmn_name, daemon] of Object.entries(dmn_list)) {
                     result.dmn.total += 1;
@@ -427,10 +427,11 @@ return baseclass.extend({
             this.desc        = desc;
             this.rows        = rows;
             this.multiline   = multiline;
+            env_tools.load_env(this);
         },
 
         load: function() {
-            let value = uci.get('zapret2', this.cfgsec, this.cfgparam);
+            let value = uci.get(this.appName, this.cfgsec, this.cfgparam);
             if (typeof(value) === 'string') {
                 value = value.trim();
                 if (this.multiline == 2) {
@@ -529,7 +530,7 @@ return baseclass.extend({
             } catch(e) {
                 console.error('ERROR: cannot found elem for ' + this.cfgparam);
             }
-            uci.set('zapret2', this.cfgsec, this.cfgparam, value);
+            uci.set(this.appName, this.cfgsec, this.cfgparam, value);
             uci.save().then(ui.hideModal);
         },
 
