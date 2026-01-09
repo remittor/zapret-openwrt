@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-01-09T11:34:21Z",
+  "generated_at": "2026-01-09T12:51:08Z",
   "releases": [
     {
       "tag": "v0.8.20260107",
       "name": "zapret2 v0.8.20260107",
       "prerelease": true,
       "created_at": "2026-01-07T20:08:59Z",
-      "updated_at": "2026-01-07T21:12:00Z",
+      "updated_at": "2026-01-09T12:50:55Z",
       "published_at": "2026-01-07T21:12:00Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.8.20260107",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/337568403",
-          "id": 337568403,
-          "node_id": "RA_kwDOM-Npcs4UHuKT",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/338342876",
+          "id": 338342876,
+          "node_id": "RA_kwDOM-Npcs4UKrPc",
           "name": "zapret2_v0.8.20260107_x86_64.zip",
           "label": "",
           "uploader": {
@@ -39,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 493061,
-          "digest": "sha256:9a634b235e909c5febf5cf019b48c37cc63cb527efa0eba701511c86a3466fcd",
-          "download_count": 14,
-          "created_at": "2026-01-07T21:12:00Z",
-          "updated_at": "2026-01-07T21:12:00Z",
+          "size": 493914,
+          "digest": "sha256:30aacb7845c3dd6df7ba18508c74f26aa22ce748b7f7f502daff9fcbb87d8a44",
+          "download_count": 0,
+          "created_at": "2026-01-09T12:50:54Z",
+          "updated_at": "2026-01-09T12:50:54Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_x86_64.zip"
         }
       ]

@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-01-09T11:34:20Z",
+  "generated_at": "2026-01-09T12:51:07Z",
   "releases": [
     {
       "tag": "v0.8.20260107",
       "name": "zapret2 v0.8.20260107",
       "prerelease": true,
       "created_at": "2026-01-07T20:08:59Z",
-      "updated_at": "2026-01-07T21:12:00Z",
+      "updated_at": "2026-01-09T12:50:55Z",
       "published_at": "2026-01-07T21:12:00Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.8.20260107",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/337568415",
-          "id": 337568415,
-          "node_id": "RA_kwDOM-Npcs4UHuKf",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/338342892",
+          "id": 338342892,
+          "node_id": "RA_kwDOM-Npcs4UKrPs",
           "name": "zapret2_v0.8.20260107_arm_arm926ej-s.zip",
           "label": "",
           "uploader": {
@@ -39,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 482404,
-          "digest": "sha256:cea94825158fe7c211e28d20804fdc71b34632e8f62344af55ee7a31cf26789f",
-          "download_count": 4,
-          "created_at": "2026-01-07T21:12:00Z",
-          "updated_at": "2026-01-07T21:12:00Z",
+          "size": 483369,
+          "digest": "sha256:267912c1a28e4fdc2434b0c3591e57227f30dedecfce1fbc6e55a3142c7e0dd3",
+          "download_count": 0,
+          "created_at": "2026-01-09T12:50:54Z",
+          "updated_at": "2026-01-09T12:50:54Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_arm_arm926ej-s.zip"
         }
       ]
