@@ -55,7 +55,7 @@ return view.extend({
         ]).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
                 + ': %s [ %s | %s | %s ]'.format(
-                    e.message, tools.execPath, 'tools.getInitState', 'uci.zapret'
+                    e.message, tools.execPath, 'tools.getInitState', 'uci.'+tools.appName
             )));
         });
     },
@@ -248,8 +248,9 @@ return view.extend({
             let strat = '' + this.nfqws_strat_list[id];
             strat_list.push( E('option', { value: 'strat_' + id }, [ strat ] ) );
         }
+        let label_nfqws = (tools.appName == 'zapret2') ? _('NFQWS2_OPT strategy: ') : _('NFQWS_OPT strategy: ');
         let nfqws_strat = E('label', [
-            _('NFQWS_OPT strategy: '),
+            label_nfqws,
             E('select', { id: 'cfg_nfqws_strat' }, strat_list)
         ]);
 
@@ -399,23 +400,23 @@ return view.extend({
 
         poll.add(L.bind(this.statusPoll, this));
 
-        let page_title = _('Zapret');
+        let page_title = tools.AppName;
         let pkgdict = tools.decode_pkg_list(pkg_list.stdout, false);
         page_title += ' &nbsp ';
-        if (pkgdict['zapret'] === undefined || pkgdict['zapret'] == '') {
+        if (pkgdict[tools.appName] === undefined || pkgdict[tools.appName] == '') {
             page_title += 'unknown version';
         } else {
-            page_title += 'v' + pkgdict['zapret'];
+            page_title += 'v' + pkgdict[tools.appName];
         }
         let aux1 = E('em');
         let aux2 = E('em');
-        if (pkgdict['zapret'] != pkgdict['luci-app-zapret']) {
-            let errtxt = 'LuCI APP v' + pkgdict['luci-app-zapret'] + ' [ incorrect version! ]';
+        if (pkgdict[tools.appName] != pkgdict['luci-app-'+tools.appName]) {
+            let errtxt = 'LuCI APP v' + pkgdict['luci-app-'+tools.appName] + ' [ incorrect version! ]';
             aux1 = E('div', { 'class': 'label-status error' }, errtxt);
             aux2 = E('div', { }, '&nbsp');
         }
         
-        let url1 = 'https://github.com/bol-van/zapret';
+        let url1 = 'https://github.com/bol-van/'+tools.appName;
         let url2 = 'https://github.com/remittor/zapret-openwrt';
 
         return E([

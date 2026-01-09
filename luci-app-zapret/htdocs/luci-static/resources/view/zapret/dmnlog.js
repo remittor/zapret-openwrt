@@ -11,7 +11,7 @@ return view.extend({
     retrieveLog: async function() {
         return Promise.all([
             L.resolveDefault(fs.stat('/bin/cat'), null),
-            fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', 'zapret+*.log' ]),
+            fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', tools.appName+'+*.log' ]),
             uci.load(tools.appName),
         ]).then(function(status_array) {
             var filereader = status_array[0] ? status_array[0].path : null;
@@ -64,7 +64,7 @@ return view.extend({
             }).catch(function(e) {
                 ui.addNotification(null, E('p', _('Unable to execute or read contents')
                     + ': %s [ %s | %s | %s ]'.format(
-                        e.message, 'retrieveLogData', 'uci.zapret'
+                        e.message, 'retrieveLogData', 'uci.'+tools.appName
                 )));
                 return null;
             });
@@ -72,7 +72,7 @@ return view.extend({
             const [, lineno, colno] = e.stack.match(/(\d+):(\d+)/);
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
                 + ': %s [ lineno: %s | %s | %s | %s ]'.format(
-                    e.message, lineno, 'retrieveLog', 'uci.zapret'
+                    e.message, lineno, 'retrieveLog', 'uci.'+tools.appName
             )));
             return null;
         });
@@ -130,7 +130,7 @@ return view.extend({
             return;
         }
         var h2 = E('div', {'class' : 'cbi-title-section'}, [
-            E('h2', {'class': 'cbi-title-field'}, [ _('Zapret') + ' - ' + _('Log Viewer') ]),
+            E('h2', {'class': 'cbi-title-field'}, [ tools.AppName + ' - ' + _('Log Viewer') ]),
         ]);
 
         var tabs = E('div', {}, E('div'));
@@ -140,7 +140,11 @@ return view.extend({
             var logfn = logdata[log_num].filename;
             let filename = logfn.replace(/.*\//, '');
             let fname = filename.split('.')[0];
-            fname = fname.replace(/^(zapret\+)/, '');
+            if (tools.appName == 'zapret2') {
+                fname = fname.replace(/^(zapret2\+)/, '');
+            } else {
+                fname = fname.replace(/^(zapret\+)/, '');
+            }
             let fn = fname.split('+');
             
             let tabNameText = fname.replace(/\+/g, ' ');
