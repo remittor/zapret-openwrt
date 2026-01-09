@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-08T18:43:56Z",
+  "generated_at": "2026-01-09T11:22:27Z",
   "releases": [
     {
       "tag": "v0.8.20260107",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 479955,
           "digest": "sha256:f55f41802a58ec99018ab45a7f1889b19538b0010cfc69f232cb4574db2ecbec",
-          "download_count": 3,
+          "download_count": 4,
           "created_at": "2026-01-07T21:12:00Z",
           "updated_at": "2026-01-07T21:12:00Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_arm_arm1176jzf-s_vfp.zip"
