@@ -261,7 +261,7 @@ function set_cfg_nfqws_strat
 				--dpi-desync-split-seqovl=1
 
 				--new
-				--filter-tcp=443 ˂HOSTLIST˃
+				--filter-tcp=443 <HOSTLIST>
 				--dpi-desync=hostfakesplit
 				--dpi-desync-hostfakesplit-mod=host=rzd.ru
 				--dpi-desync-hostfakesplit-midhost=host-2
