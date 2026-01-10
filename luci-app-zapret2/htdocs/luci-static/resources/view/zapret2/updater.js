@@ -19,17 +19,20 @@ const fn_update_pkg_sh   = '/opt/'+tools.appName+'/update-pkg.sh';
 return baseclass.extend({
     releasesUrlPrefix : 'https://raw.githubusercontent.com/remittor/zapret-openwrt/gh-pages/releases/',
     
-    appendLog: function(msg, end = '\n') {
+    appendLog: function(msg, end = '\n')
+    {
         this.logArea.value += msg + end;
         this.logArea.scrollTop = this.logArea.scrollHeight;
     },
 
-    setBtnMode: function(enable) {
+    setBtnMode: function(enable)
+    {
         this.btn_cancel.disabled = enable ? false : true;
         this.btn_action.disabled = (enable == 2) ? false : true;
     },
     
-    setStage: function(stage, btn_flag = true) {
+    setStage: function(stage, btn_flag = true)
+    {
         if (stage == 0) {
             this.btn_action.textContent = _('Check for updates');
             this.btn_action.classList.remove('hidden');
@@ -46,146 +49,94 @@ return baseclass.extend({
         this.stage = stage;
     },
     
-    checkUpdates: function() {
+    checkUpdates: async function()
+    {
+        this._action = 'checkUpdates';
         this.setStage(0);
         this.setBtnMode(0);
         this.pkg_url = null;
         this.appendLog(_('Checking for updates...'));
-        let opt_list = [ '-c' ];  // check for updates
+        let cmd = [ fn_update_pkg_sh, '-c' ];  // check for updates
         if (document.getElementById('cfg_exclude_prereleases').checked == false) {
-            opt_list.push('-p');  // include prereleases ZIP-files 
+            cmd.push('-p');  // include prereleases ZIP-files
         }
-        let forced_reinstall = document.getElementById('cfg_forced_reinstall').checked;
-        let rpc_opt = { timeout: 20*1000 }
-        //rpc_opt.uid = 0;  // run under root
-        let res = fs.exec(fn_update_pkg_sh, opt_list, null, rpc_opt).then(res => {
-            let log = res.stdout.trim();
-            this.appendLog(log);
-            let code = log.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
-            let pkg_url = log.match(/^ZAP_PKG_URL\s*=\s*(.+)$/m);
-            if (res.code == 0 && code && pkg_url) {
-                this.pkg_url = pkg_url[1];
-                code = code[1];
-                if (code == 'E' && !forced_reinstall) {
-                    this.setStage(999);
-                    return 0;
-                }
-                this.setStage(1);
-                this.setBtnMode(2);  // enable all buttons
-            } else {
-                if (res.code != 0) {
-                    this.appendLog('ERROR: Check for updates failed with error ' + res.code);
-                }
-                this.setStage(999);
-            }
-            return res.code;
-        }).catch(e => {
-            this.appendLog('ERROR: ' + _('Updates checking failed'));
-            this.appendLog('ERROR: ' + e);
-            this.setStage(999);
-            return 1;
-        }).finally(() => {
-            this.appendLog('=========================================================');
-        });
+        this.forced_reinstall = document.getElementById('cfg_forced_reinstall').checked;
+        let log = '/tmp/'+tools.appName+'_pkg_check.log';
+        let callback = this.execAndReadCallback;
+        let wnd = this;
+        return tools.execAndRead({ cmd: cmd, log: log, logArea: this.logArea, callback: callback, cbarg: wnd });
     },
 
-    installUpdates: async function() {
+    installUpdates: async function()
+    {
+        this._action = 'installUpdates';
         this.setStage(1);
         this.setBtnMode(0);
         if (!this.pkg_url || this.pkg_url.length < 10) {
             this.appendLog('ERROR: pkg_url = null');
             this.setStage(999);
-            return 1;
+            return;
         }
         this.appendLog(_('Install updates...'));
-        let opt_list = [ '-u', this.pkg_url ];  // update packages
+        let cmd = [ fn_update_pkg_sh, '-u', this.pkg_url ];  // update packages
         if (document.getElementById('cfg_forced_reinstall').checked == true) {
-            opt_list.push('-f');  // forced reinstall if same version
+            cmd.push('-f');  // forced reinstall if same version
         }
-        let rpc_opt = { timeout: 5*1000 }
-        //rpc_opt.uid = 0;  // run under root
-        const logFile = '/tmp/'+tools.appName+'_pkg_install.log';
-        const rcFile = logFile + '.rc';
-        try {
-            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null, rpc_opt);
-            this.appendLog('Install log cleared.');
-        } catch (e) {
-            this.appendLog('ERROR: Failed to clear log file');
-            this.setStage(999);
-            return 1;
-        }
-        try {
-            let opt = [ logFile, fn_update_pkg_sh ];
-            //opt.push('-t'); opt.push('0');  // only for testing
-            opt.push(...opt_list);
-            let res = await fs.exec('/opt/'+tools.appName+'/script-exec.sh', opt, null, rpc_opt);
-            if (res.code == 0) {
-                this.appendLog('Process started...');
-            } else {
-                this.appendLog('ERROR: cannot run ' + fn_update_pkg_sh + ' script! (error = ' + res.code + ')');
-                throw new Error('cannot run script');
-            }
-        } catch (e) {
-            this.appendLog('ERROR: Failed to start process: ' + e.message);
-            this.setStage(999);
-            return 1;
-        }
-        let lastLen = 0;
-        let retCode = -1;
-        let timerBusy = false;
-        let timer = setInterval(async () => {
-            if (timerBusy)
-                return;  // skip iteration
-            timerBusy = true;
-            try {
-                let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
-                if (res.stdout && res.stdout.length > lastLen) {
-                    let log = res.stdout.slice(lastLen);
-                    log = log.replace(/^ \* resolve_conffiles.*(?:\r?\n|$)/gm, '');
-                    this.appendLog(log, '');
-                    lastLen = res.stdout.length;
-                }
-                if (retCode < 0) {
-                    let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
-                    if (rc.code != 0) {
-                        throw new Error('cannot read file "' + rcFile + '"');
-                    }
-                    if (rc.stdout) {
-                        retCode = parseInt(rc.stdout.trim(), 10);
-                    }
-                }
-                if (retCode >= 0) {
-                    clearInterval(timer);
-                    this.appendLog('\n' + 'Process finished.');
-                    if (res.stdout) {
-                        let code = res.stdout.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
-                        if (retCode == 0 && code && code[1] == '+') {
-                            this.stage = 999;
-                            this.btn_action.textContent = _('OK');
-                            this.btn_action.disabled = false;
-                            this.btn_cancel.disabled = true;
-                            return 0;
-                        }
-                    }
-                    this.appendLog('ERROR: Install updates failed with error ' + retCode);
-                    this.setStage(999);
-                }
-            } catch (e) {
-                if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
-                    console.warn('WARN: installUpdates: ' + e.message);
-                    return;  // goto next timer iteration
-                }
-                clearInterval(timer);
-                this.appendLog('ERROR: installUpdates: ' + e.message);
-                this.appendLog('ERROR: installUpdates: ' + e.stack?.trim().split('\n')[0]);
-                this.setStage(999);
-            } finally {
-                timerBusy = false;
-            }
-        }, 500);
+        //this._test = 1; cmd.push('-t'); cmd.push('45');  // only for testing
+        let log = '/tmp/'+tools.appName+'_pkg_install.log';
+        let hiderow = /^ \* resolve_conffiles.*(?:\r?\n|$)/gm;
+        let callback = this.execAndReadCallback;
+        let wnd = this;
+        return tools.execAndRead({ cmd: cmd, log: log, logArea: this.logArea, hiderow: hiderow, callback: callback, cbarg: wnd });
     },
-    
-    openUpdateDialog: function(pkg_arch) {
+
+    execAndReadCallback: function(wnd, rc, txt = '')
+    {
+        //console.log('execAndReadCallback = ' + rc + '; _action = ' + wnd._action);
+        if (rc == 0 && txt) {
+            let code = txt.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
+            if (wnd._action == 'checkUpdates') {
+                let pkg_url = txt.match(/^ZAP_PKG_URL\s*=\s*(.+)$/m);
+                if (code && pkg_url) {
+                    wnd.appendLog('=========================================================');
+                    wnd.pkg_url = pkg_url[1];
+                    code = code[1];
+                    if (code == 'E' && !wnd.forced_reinstall) {
+                        wnd.setStage(999);  // install not needed
+                        return;
+                    }
+                    wnd.setStage(1);
+                    wnd.setBtnMode(2);  // enable all buttons
+                    return;  // install allowed
+                }
+            }
+            if (wnd._action == 'installUpdates') {
+                if (wnd._test || (code && code[1] == '+')) {
+                    wnd.stage = 999;
+                    wnd.btn_action.textContent = _('OK');
+                    wnd.btn_action.disabled = false;
+                    wnd.btn_cancel.disabled = true;
+                    return;
+                }
+            }
+        }
+        if (rc >= 500) {
+            if (txt) {
+                wnd.appendLog(txt.startsWith('ERROR') ? txt : 'ERROR: ' + txt);
+            } else {
+                wnd.appendLog('ERROR: ' + wnd._action + ': Terminated with error code = ' + rc);
+            }
+        } else {
+            wnd.appendLog('ERROR: Process finished with retcode = ' + rc);
+        }
+        wnd.setStage(999);
+        if (wnd._action == 'checkUpdates') {
+            wnd.appendLog('=========================================================');
+        }
+    },
+
+    openUpdateDialog: function(pkg_arch)
+    {
         this.stage = 0;
         this.pkg_arch = pkg_arch;
         this.pkg_url = null;
@@ -201,8 +152,11 @@ return baseclass.extend({
         ]);
 
         this.logArea = E('textarea', {
+            'id': 'widget.modal_content',
             'readonly': true,
-            'style': 'width:100%; height:400px; font-family: monospace;'
+            'style': 'width:100% !important; font-family: monospace;',
+            'rows': 20,
+            'wrap': 'off',
         });
 
         this.btn_cancel = E('button', {

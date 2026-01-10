@@ -6,6 +6,7 @@ return baseclass.extend({
     appName           : 'zapret2',
     AppName           : 'Zapret2',
     execPath          : '/etc/init.d/zapret2',
+    appDir            : '/opt/zapret2',
     syncCfgPath       : '/opt/zapret2/sync_config.sh',
     defCfgPath        : '/opt/zapret2/def-cfg.sh',
     defaultCfgPath    : '/opt/zapret2/restore-def-cfg.sh',

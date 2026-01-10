@@ -562,4 +562,93 @@ return baseclass.extend({
         },
     }),
 
+    execAndRead: async function({ cmd = [ ], log = '', logArea = null, callback = null, cbarg = null, hiderow = [ ], rpc_timeout = 5, rpc_root = false } = {})
+    {
+        function appendLog(msg, end = '\n')
+        {
+            logArea.value += msg + end;
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+        function fixLogEnd()
+        {
+            if (logArea.value && logArea.value.slice(-1) != '\n') {
+                appendLog('');
+            }
+        }
+        let hide_rows = Array.isArray(hiderow) ? hiderow : [ hiderow ];
+        let rpc_opt = { "timeout": rpc_timeout*1000 };
+        if (rpc_root) {
+            rpc_opt.uid = 0;  // run under root
+        }
+        const logFile = log;  // file for reading: '/tmp/zapret_pkg_install.log'
+        const rcFile = logFile + '.rc';
+        try {
+            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null, rpc_opt);
+            appendLog('Output file cleared!');
+        } catch (e) {
+            return callback(cbarg, 500, 'ERROR: Failed to clear output file');
+        }
+        try {
+            let opt_list = [ logFile ];
+            opt_list.push(...cmd);
+            let res = await fs.exec(this.appDir+'/script-exec.sh', opt_list, null, rpc_opt);
+            if (res.code != 0) {
+                return callback(cbarg, 525, 'ERROR: cannot run "' + cmd[0] + '" script! (error = ' + res.code + ')');
+            }
+            appendLog('Process started...');
+        } catch (e) {
+            return callback(cbarg, 520, 'ERROR: Failed on execute process: ' + e.message);
+        }
+        let lastLen = 0;
+        let retCode = -1;
+        let timerBusy = false;
+        let timer = setInterval(async () => {
+            if (timerBusy)
+                return;  // skip iteration
+            timerBusy = true;
+            try {
+                let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
+                if (res.stdout && res.stdout.length > lastLen) {
+                    let log = res.stdout.slice(lastLen);
+                    hide_rows.forEach(re => {
+                        log = log.replace(re, '');
+                    });                    
+                    appendLog(log, '');
+                    lastLen = res.stdout.length;
+                }
+                if (retCode < 0) {
+                    let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
+                    if (rc.code != 0) {
+                        clearInterval(timer);
+                        fixLogEnd();
+                        return callback(cbarg, 545, 'ERROR: cannot read file "' + rcFile + '"');
+                    }
+                    if (rc.stdout) {
+                        retCode = parseInt(rc.stdout.trim(), 10);
+                    }
+                }
+                if (retCode >= 0) {
+                    clearInterval(timer);
+                    fixLogEnd();
+                    if (retCode == 0 && res.stdout) {
+                        return callback(cbarg, 0, res.stdout);
+                    }
+                    return callback(cbarg, retCode, 'ERROR: Process failed with error ' + retCode);
+                }
+            } catch (e) {
+                if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
+                    console.warn('WARN: execAndRead: ' + e.message);
+                    return;  // goto next timer iteration
+                }
+                clearInterval(timer);
+                fixLogEnd();
+                let errtxt = 'ERROR: execAndRead: ' + e.message;
+                errtxt    += 'ERROR: execAndRead: ' + e.stack?.trim().split('\n')[0];
+                return callback(cbarg, 540, errtxt);
+            } finally {
+                timerBusy = false;
+            }
+        }, 500);
+    },
+
 });
