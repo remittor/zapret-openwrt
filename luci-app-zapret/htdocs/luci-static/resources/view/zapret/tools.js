@@ -460,7 +460,7 @@ return baseclass.extend({
                                 'class': 'cbi-input-textarea',
                                 'style': 'width:100% !important',
                                 'rows': this.rows,
-                                'wrap': 'on',
+                                'wrap': 'off',
                                 'spellcheck': 'false',
                             },
                             content)
@@ -506,29 +506,27 @@ return baseclass.extend({
             value = value.replace(/˂/g, '<');
             value = value.replace(/˃/g, '>');
             try {
-                let elem2 = null;
-                let elem = document.getElementById("cbi-zapret-" + this.cfgsec + "-_" + this.cfgparam);
+                let elem = document.getElementById("cbi-" + this.appName + "-" + this.cfgsec + "-_" + this.cfgparam);
                 if (elem) {
-                    if (!elem2) {
-                        elem2 = elem.querySelector('div');
-                    }
-                    if (!elem2) {
-                        elem2 = elem.querySelector('output');
+                    if (elem.querySelector('div')) {
+                        elem = elem.querySelector('div');
+                    } else {
+                        elem = elem.querySelector('output');
                     }
                 }
-                if (elem2) {
+                if (elem) {
                     let val = value.trim();
                     if (this.multiline) {
                         val = val.replace(/</g, '˂');
                         val = val.replace(/>/g, '˃');
                         val = val.replace(/\n/g, '<br/>');
-                        elem2.innerHTML = val;
+                        elem.innerHTML = val;
                     } else {
-                        elem2.textContent = val;
+                        elem.textContent = val;
                     }
                 }
             } catch(e) {
-                console.error('ERROR: cannot found elem for ' + this.cfgparam);
+                console.error('ERROR: cannot found elem for ' + this.cfgsec + '.' + this.cfgparam);
             }
             uci.set(this.appName, this.cfgsec, this.cfgparam, value);
             uci.save().then(ui.hideModal);
