@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-11T13:05:47Z",
+  "generated_at": "2026-01-11T13:25:11Z",
   "releases": [
     {
       "tag": "v72.20260111",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 404230,
           "digest": "sha256:dd9bf0f7ecea7fd3f3e7076354c9fd26fedce8cfe9663416408878d90a70023a",
-          "download_count": 0,
+          "download_count": 1,
           "created_at": "2026-01-11T13:04:25Z",
           "updated_at": "2026-01-11T13:04:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_mipsel_24kc.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 393882,
           "digest": "sha256:6ac62a40d46fc2c0631ddb2eec3e36f4676f42b323c46db4fa416df38832fe15",
-          "download_count": 757,
+          "download_count": 759,
           "created_at": "2026-01-08T18:43:44Z",
           "updated_at": "2026-01-08T18:43:45Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260108/zapret_v72.20260108_mipsel_24kc.zip"
@@ -464,7 +464,7 @@
           "state": "uploaded",
           "size": 443620,
           "digest": "sha256:3690ae873aae8a59a26cb3898cd0b21edad6c47c175362ca557c3be72a760cfe",
-          "download_count": 2738,
+          "download_count": 2739,
           "created_at": "2025-10-22T13:41:14Z",
           "updated_at": "2025-10-22T13:41:14Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251022/zapret_v72.20251022_mipsel_24kc.zip"
