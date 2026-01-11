@@ -81,7 +81,7 @@ while IFS='|' read -r TAG PROVIDER TIMES URL; do
 			DST_IP="$( ping -c1 "$DOMAIN" 2>/dev/null | sed -n '1s/.*(\([0-9.]*\)).*/\1/p')"
 		fi
 		curl -k $URL --resolve $DOMAIN:443:$DST_IP -o /dev/null -s -w '%{size_download}\n' --max-time $CURL_TIMEOUT --range 0-$CURL_RANGETO
-	) >"$ZAP_TMP_DIR/$ID3.$TAG.txt" 2>&1 &
+	) >"$ZAP_TMP_DIR/$ID3=$TAG=$PROVIDER.txt" 2>&1 &
 done <<EOF
 $(printf '%s\n' "$TEST_SUITE" | sed -n '
 s/.*id:[[:space:]]*"\([^"]*\)".*provider:[[:space:]]*"\([^"]*\)".*times:[[:space:]]*\([0-9]\+\).*url:[[:space:]]*"\([^"]*\)".*/\1|\2|\3|\4/p
@@ -90,11 +90,12 @@ EOF
 
 wait
 
-for file in $(ls "$ZAP_TMP_DIR"/*.txt | sort); do
+printf '%s\n' "$ZAP_TMP_DIR"/*.txt | sort | while IFS= read -r file; do
 	[ -f "$file" ] || continue
-	tag="${file##*/}"
-	tag="${tag%.txt}"
-	tag="${tag#*.}"
+	FNAME="${file##*/}"
+	ID=$( echo "$FNAME" | cut -d= -f1)
+	TAG=$( echo "$FNAME" | cut -d= -f2)
+	PROVIDER=$(echo "$FNAME" | cut -d= -f3 | sed 's/\.txt$//' )
 	res=$( cat "$file" )
 	res=$( trim "$res" )
 	status=
@@ -112,7 +113,7 @@ for file in $(ls "$ZAP_TMP_DIR"/*.txt | sort); do
 			status="[ OK ]"
 		fi
 	fi
-	printf '%12s: %s \n' "$tag" "$status"
+	printf '%12s / %-13s: %s \n' "$TAG" "$PROVIDER" "$status"
 done
 
 return 0 
