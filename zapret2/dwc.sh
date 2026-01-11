@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2026 remittor
 
-. /opt/zapret/comfunc.sh
+. /opt/zapret2/comfunc.sh
 
 ZAP_TMP_DIR=/tmp/zapret_dwc
 
