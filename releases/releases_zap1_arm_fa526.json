@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-01-11T11:11:25Z",
+  "generated_at": "2026-01-11T13:05:47Z",
   "releases": [
     {
       "tag": "v72.20260111",
       "name": "zapret v72.20260111",
       "prerelease": true,
-      "created_at": "2026-01-11T10:39:18Z",
-      "updated_at": "2026-01-11T11:11:13Z",
-      "published_at": "2026-01-11T11:11:13Z",
+      "created_at": "2026-01-11T12:28:00Z",
+      "updated_at": "2026-01-11T13:04:26Z",
+      "published_at": "2026-01-11T13:04:26Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260111",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/339050718",
-          "id": 339050718,
-          "node_id": "RA_kwDOM-Npcs4UNYDe",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/339070886",
+          "id": 339070886,
+          "node_id": "RA_kwDOM-Npcs4UNc-m",
           "name": "zapret_v72.20260111_arm_fa526.zip",
           "label": "",
           "uploader": {
@@ -39,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 391671,
-          "digest": "sha256:7fe833376af37b3d96eeedf8e490034116eca5a42ae82c4805ce82227a6ad1a2",
+          "size": 397126,
+          "digest": "sha256:a6bcf38683ee1cfaa396a803727b49f636a92f940fb32b635137ed44b4fa3a98",
           "download_count": 0,
-          "created_at": "2026-01-11T11:11:12Z",
-          "updated_at": "2026-01-11T11:11:13Z",
+          "created_at": "2026-01-11T13:04:25Z",
+          "updated_at": "2026-01-11T13:04:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_arm_fa526.zip"
         }
       ]
