@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-09T14:32:15Z",
+  "generated_at": "2026-01-11T11:11:26Z",
   "releases": [
     {
       "tag": "v0.8.20260109",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 494837,
           "digest": "sha256:9b281130fddb0bbbbe03e36392e8c532601efd4d66ff69fe8e1b3676b7e1319b",
-          "download_count": 0,
+          "download_count": 33,
           "created_at": "2026-01-09T14:24:39Z",
           "updated_at": "2026-01-09T14:24:39Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260109/zapret2_v0.8.20260109_x86_64.zip"
