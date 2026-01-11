@@ -125,6 +125,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret2-uci-def-cfg.sh
 	$(CP) ./*.sh $(1)/opt/zapret2/
+	rm -f $(1)/opt/zapret/init.d.sh
 	# Fix permisions
 	chmod 644 $(1)/opt/zapret2/ipset/*.txt
 	chmod 644 $(1)/opt/zapret2/ipset_def/*.txt
