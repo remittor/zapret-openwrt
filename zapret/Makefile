@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret
-PKG_VERSION:=72.20260108
+PKG_VERSION:=72.20260111
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=bol-van
@@ -14,8 +14,8 @@ PKG_LICENSE_FILES:=docs/LICENSE.txt
 
 PKG_SOURCE_URL:=https://github.com/bol-van/zapret.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=16ac0587a4c7d823be4d947d2bbebdbf445d770c
-PKG_SOURCE_DATE:=2026-01-08
+PKG_SOURCE_VERSION:=a775aa7aaa4903a8c0870f9c16918e9d19d83772
+PKG_SOURCE_DATE:=2026-01-11
 
 #PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 #PKG_SOURCE_URL:=https://github.com/bol-van/zapret/archive/refs/tags/v$(PKG_VERSION).tar.gz?
@@ -105,14 +105,7 @@ define Package/$(PKG_NAME)/install
 	$(CP) ./custom.d/* $(1)/opt/zapret/init.d/openwrt/custom.d/
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
-	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret/uci-def-cfg.sh
-	$(INSTALL_BIN) ./comfunc.sh         $(1)/opt/zapret/comfunc.sh
-	$(INSTALL_BIN) ./def-cfg.sh         $(1)/opt/zapret/def-cfg.sh
-	$(INSTALL_BIN) ./renew-cfg.sh       $(1)/opt/zapret/renew-cfg.sh
-	$(INSTALL_BIN) ./restore-def-cfg.sh $(1)/opt/zapret/restore-def-cfg.sh
-	$(INSTALL_BIN) ./sync_config.sh     $(1)/opt/zapret/sync_config.sh
-	$(INSTALL_BIN) ./script-exec.sh     $(1)/opt/zapret/script-exec.sh
-	$(INSTALL_BIN) ./update-pkg.sh      $(1)/opt/zapret/update-pkg.sh
+	$(CP) ./*.sh $(1)/opt/zapret/
 	# Fix permisions
 	chmod 644 $(1)/opt/zapret/ipset/*.txt
 	chmod 644 $(1)/opt/zapret/ipset_def/*.txt
