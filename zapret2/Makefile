@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zapret2
-PKG_VERSION:=0.8.20260109
+PKG_VERSION:=0.8.20260111
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=bol-van
@@ -14,8 +14,8 @@ PKG_LICENSE_FILES:=docs/LICENSE.txt
 
 PKG_SOURCE_URL:=https://github.com/bol-van/zapret2.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=8e6387a6dfdaa227b50a34f4beb1d5ec2a770d54
-PKG_SOURCE_DATE:=2026-01-09
+PKG_SOURCE_VERSION:=3aad1f9ed9ada87877da683ebec08dfa98807948
+PKG_SOURCE_DATE:=2026-01-11
 
 #PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 #PKG_SOURCE_URL:=https://github.com/bol-van/zapret2/archive/refs/tags/v$(PKG_VERSION).tar.gz?
@@ -81,7 +81,7 @@ endef
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/opt/zapret2
 	$(INSTALL_DIR) $(1)/opt/zapret2/$(MAKE_PATH)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2 $(1)/opt/zapret2/$(MAKE_PATH)/	
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2 $(1)/opt/zapret2/$(MAKE_PATH)/
 	$(INSTALL_DIR) $(1)/opt/zapret2/ip2net
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)/opt/zapret2/ip2net/
 	$(INSTALL_DIR) $(1)/opt/zapret2/mdig
@@ -124,14 +124,7 @@ define Package/$(PKG_NAME)/install
 	$(CP) ./custom.d/* $(1)/opt/zapret2/init.d/openwrt/custom.d/
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret2-uci-def-cfg.sh
-	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/opt/zapret2/uci-def-cfg.sh
-	$(INSTALL_BIN) ./comfunc.sh         $(1)/opt/zapret2/comfunc.sh
-	$(INSTALL_BIN) ./def-cfg.sh         $(1)/opt/zapret2/def-cfg.sh
-	$(INSTALL_BIN) ./renew-cfg.sh       $(1)/opt/zapret2/renew-cfg.sh
-	$(INSTALL_BIN) ./restore-def-cfg.sh $(1)/opt/zapret2/restore-def-cfg.sh
-	$(INSTALL_BIN) ./sync_config.sh     $(1)/opt/zapret2/sync_config.sh
-	$(INSTALL_BIN) ./script-exec.sh     $(1)/opt/zapret2/script-exec.sh
-	$(INSTALL_BIN) ./update-pkg.sh      $(1)/opt/zapret2/update-pkg.sh
+	$(CP) ./*.sh $(1)/opt/zapret2/
 	# Fix permisions
 	chmod 644 $(1)/opt/zapret2/ipset/*.txt
 	chmod 644 $(1)/opt/zapret2/ipset_def/*.txt
