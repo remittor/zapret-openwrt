@@ -23,6 +23,7 @@ function set_cfg_reset_values
 		# autohostlist options
 		set $cfgname.config.AUTOHOSTLIST_INCOMING_MAXSEQ='4096'
 		set $cfgname.config.AUTOHOSTLIST_RETRANS_MAXSEQ='32768'
+		set $cfgname.config.AUTOHOSTLIST_RETRANS_RESET='1'
 		set $cfgname.config.AUTOHOSTLIST_RETRANS_THRESHOLD='3'
 		set $cfgname.config.AUTOHOSTLIST_FAIL_THRESHOLD='3'
 		set $cfgname.config.AUTOHOSTLIST_FAIL_TIME='60'

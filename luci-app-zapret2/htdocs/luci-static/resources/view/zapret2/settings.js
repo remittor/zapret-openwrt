@@ -279,6 +279,10 @@ return view.extend({
             o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_MAXSEQ', _('RETRANS_MAXSEQ'));
             o.rmempty     = false;
             o.datatype    = 'uinteger';
+
+            o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_RESET', _('RETRANS_RESET'));
+            o.rmempty     = false;
+            o.datatype    = 'uinteger';
         }
         
         o = s.taboption(tabname, form.Value, 'AUTOHOSTLIST_RETRANS_THRESHOLD', _('RETRANS_THRESHOLD'));
