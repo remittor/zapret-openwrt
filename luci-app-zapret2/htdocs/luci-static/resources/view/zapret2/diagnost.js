@@ -53,7 +53,6 @@ return baseclass.extend({
         } else {
             wnd.appendLog('ERROR: Process finished with retcode = ' + rc);
         }
-        wnd.setStage(999);
         wnd.appendLog('=========================================================');
     },
 
