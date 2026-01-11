@@ -261,7 +261,7 @@ function set_cfg_nfqws_strat
 				--dpi-desync-split-seqovl=1
 
 				--new
-				--filter-tcp=443 ˂HOSTLIST˃
+				--filter-tcp=443 <HOSTLIST>
 				--dpi-desync=hostfakesplit
 				--dpi-desync-hostfakesplit-mod=host=rzd.ru
 				--dpi-desync-hostfakesplit-midhost=host-2
@@ -270,7 +270,7 @@ function set_cfg_nfqws_strat
 				--dpi-desync-badseq-increment=0
 
 				--new
-				--filter-udp=443 ˂HOSTLIST_NOAUTO˃
+				--filter-udp=443 <HOSTLIST_NOAUTO>
 				--dpi-desync=fake
 				--dpi-desync-repeats=6
 				--dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin
