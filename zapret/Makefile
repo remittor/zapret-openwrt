@@ -135,6 +135,21 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 			/etc/init.d/zapret running && /etc/init.d/zapret stop >/dev/null 2>&1
 		fi
 	fi
+	if command -v apk >/dev/null; then
+		if apk info -e zapret-mdig >/dev/null 2>&1; then
+			apk del --force zapret-mdig
+		fi
+		if apk info -e zapret-ip2net >/dev/null 2>&1; then
+			apk del --force zapret-ip2net
+		fi
+	else
+		if opkg status zapret-mdig >/dev/null 2>&1; then
+			opkg remove zapret-mdig --force-remove
+		fi
+		if opkg status zapret-ip2net >/dev/null 2>&1; then
+			opkg remove zapret-ip2net --force-remove
+		fi
+	fi
 	if [ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ]; then
 		if [ -f "/opt/zapret/ipset/zapret-hosts-user.txt" ]; then
 			CFGLISTHASH=$$( md5sum "/opt/zapret/ipset/zapret-hosts-user.txt" | awk '{print $$1;}' )
