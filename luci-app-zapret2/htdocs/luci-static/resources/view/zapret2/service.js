@@ -5,6 +5,7 @@
 'require ui';
 'require view';
 'require view.zapret2.tools as tools';
+'require view.zapret2.diagnost as diagnost';
 'require view.zapret2.updater as updater';
 
 const btn_style_neutral  = 'btn';
@@ -23,6 +24,7 @@ return view.extend({
             restart : elems.btn_restart || document.getElementById('btn_restart'),
             stop    : elems.btn_stop    || document.getElementById('btn_stop'),
             reset   : elems.btn_reset   || document.getElementById('btn_reset'),
+            diag    : elems.btn_diag    || document.getElementById('btn_diag'),
             update  : elems.btn_update  || document.getElementById('btn_update'),
         };
     },
@@ -382,6 +384,10 @@ return view.extend({
         btn_reset.onclick   = L.bind(this.dialogResetCfg, this);
         layout_append(_('Reset settings to default'), null, [ btn_reset ] );
 
+        let btn_diag        = create_btn('btn_diag',  btn_style_action, _('Diagnostics'));
+        btn_diag.onclick    = ui.createHandlerFn(this, () => { diagnost.openDiagnostDialog(this.pkg_arch) });
+        layout_append('', null, [ btn_diag ] );
+
         let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
         btn_update.onclick  = ui.createHandlerFn(this, () => { updater.openUpdateDialog(this.pkg_arch) });
         layout_append(_('Update package'), null, [ btn_update ] );
@@ -394,6 +400,7 @@ return view.extend({
             "btn_restart": btn_restart,
             "btn_stop": btn_stop,
             "btn_reset": btn_reset,
+            "btn_diag": btn_diag,
             "btn_update": btn_update,
         };
         this.setAppStatus(status_array, elems);
