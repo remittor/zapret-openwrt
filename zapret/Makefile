@@ -124,33 +124,61 @@ define Package/$(PKG_NAME)/preinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
-	if [ -f "/etc/init.d/zapret" ]; then
-		SCRIPT=$$( readlink /etc/init.d/zapret )
+	ZAPRET_INITD=/etc/init.d/zapret
+	ZAPRET_CFG=/etc/config/zapret
+	if [ -f "$${ZAPRET_INITD}" ]; then
+		SCRIPT=$$( readlink "$${ZAPRET_INITD}" )
 		if [ -n "$${SCRIPT}" ]; then
-			echo "Please uninstall original zapret utility!"
+			echo "Please uninstall incompatible \"zapret\" service!"
 			exit 44
 		fi
 	fi
+	if command -v apk >/dev/null; then
+		PKG_MGR="apk"
+		PKG_CHECK="apk info -e "
+		PKG_REMOVE="apk del --force "
+	else
+		PKG_MGR="opkg"
+		PKG_CHECK="opkg status "
+		PKG_REMOVE="opkg remove --force-remove "
+	fi
 	if [ "$${PKG_UPGRADE}" = "1" ]; then
 		# stop service if PKG_UPGRADE
-		if [ -x "/etc/init.d/zapret" ]; then
-			/etc/init.d/zapret running && /etc/init.d/zapret stop >/dev/null 2>&1
+		if [ -x "$${ZAPRET_INITD}" ]; then
+			$${ZAPRET_INITD} running && $${ZAPRET_INITD} stop >/dev/null 2>&1
 		fi
 	fi
-	if command -v apk >/dev/null; then
-		if apk info -e zapret-mdig >/dev/null 2>&1; then
-			apk del --force zapret-mdig
+	if $${PKG_CHECK} zapret >/dev/null 2>&1; then
+		if [ ! -f "/opt/zapret/sync_config.sh" ]; then
+			echo "Please uninstall incompatible \"zapret\" package!"
+			exit 47
 		fi
-		if apk info -e zapret-ip2net >/dev/null 2>&1; then
-			apk del --force zapret-ip2net
+		if [ -f "$${ZAPRET_CFG}" ] && ! grep -q "run_on_boot" "$${ZAPRET_CFG}"; then
+			echo "Please uninstall incompatible \"zapret\" package!"
+			exit 48
 		fi
-	else
-		if opkg status zapret-mdig >/dev/null 2>&1; then
-			opkg remove zapret-mdig --force-remove
+	fi
+	if $${PKG_CHECK} luci-app-zapret >/dev/null 2>&1; then
+		SVC_FILE=/www/luci-static/resources/view/zapret/service.js
+		if [ ! -f "$${SVC_FILE}" ] || ! grep -Fq "/remittor/zapret-openwrt" "$${SVC_FILE}"; then
+			echo "Please uninstall incompatible \"luci-app-zapret\" package!"
+			exit 55
 		fi
-		if opkg status zapret-ip2net >/dev/null 2>&1; then
-			opkg remove zapret-ip2net --force-remove
+	fi
+	if [ -f "$${ZAPRET_CFG}" ] && ! grep -q "run_on_boot" "$${ZAPRET_CFG}"; then
+		if [ -x "$${ZAPRET_INITD}" ]; then
+			$${ZAPRET_INITD} running && $${ZAPRET_INITD} stop >/dev/null 2>&1
 		fi
+		rm -f $${ZAPRET_CFG}
+		rm -f $${ZAPRET_INITD}
+		rm -rf /opt/zapret
+		echo "All files of the previously installed package have been removed!"
+	fi
+	if $${PKG_CHECK} zapret-mdig >/dev/null 2>&1; then
+		$${PKG_REMOVE} zapret-mdig
+	fi
+	if $${PKG_CHECK} zapret-ip2net >/dev/null 2>&1; then
+		$${PKG_REMOVE} zapret-ip2net
 	fi
 	if [ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ]; then
 		if [ -f "/opt/zapret/ipset/zapret-hosts-user.txt" ]; then
@@ -168,6 +196,8 @@ define Package/$(PKG_NAME)/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
+	ZAPRET_INITD=/etc/init.d/zapret
+	ZAPRET_CFG=/etc/config/zapret
 	ZAPRET_CONFIG=/opt/zapret/config
 	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
 	# creating main config if its not exists
@@ -183,7 +213,7 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	fi
 	# check existing uci-config
-	[ -f "/etc/config/zapret" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
+	[ -f "$${ZAPRET_CFG}" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
 	# create or merge uci-config
 	/opt/zapret/uci-def-cfg.sh
 	[ "$${ZAPRET_CFG_EXISTS}" = "1" ] && echo "Config /etc/config/zapret merged with default uci-config"
@@ -195,13 +225,13 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	sh -n "$${ZAPRET_CONFIG}" 2>/dev/null || exit 58
 	# enable main service
-	/etc/init.d/zapret enable
+	$${ZAPRET_INITD} enable
 	# stop all
-	/etc/init.d/zapret stop_fw
-	/etc/init.d/zapret stop_daemons
+	$${ZAPRET_INITD} stop_fw >/dev/null 2>&1
+	$${ZAPRET_INITD} stop_daemons >/dev/null 2>&1
 	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
 	# start main service
-	/etc/init.d/zapret start
+	$${ZAPRET_INITD} start
 	# restart firewall
 	[ -x /sbin/fw4 ] && fw4 -q restart || fw3 -q restart
 fi
@@ -214,6 +244,8 @@ define Package/$(PKG_NAME)/prerm
 if [ -z "$${IPKG_INSTROOT}" ]; then
 	EXEDIR=/opt/zapret
 	ZAPRET_BASE=/opt/zapret
+	ZAPRET_INITD=/etc/init.d/zapret
+	ZAPRET_CFG=/etc/config/zapret
 	ZAPRET_CONFIG=/opt/zapret/config
 	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
 	OPENWRT_FW_INCLUDE=/etc/firewall.zapret
@@ -228,8 +260,8 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	. "$${ZAPRET_BASE}/common/fwtype.sh"
 	. "$${ZAPRET_BASE}/common/nft.sh"
 	. "$${ZAPRET_BASE}/common/installer.sh"
-	/etc/init.d/zapret running && /etc/init.d/zapret stop
-	/etc/init.d/zapret disable
+	$${ZAPRET_INITD} running && $${ZAPRET_INITD} stop >/dev/null 2>&1
+	$${ZAPRET_INITD} disable >/dev/null 2>&1
 	ps w | grep '/opt/zapret/nfq/nfqws' | grep -v grep | awk '{print $$1}' | xargs -r kill -9
 	remove_openwrt_firewall
 	nft_del_table
