@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-01-12T12:48:05Z",
+  "generated_at": "2026-01-12T18:37:28Z",
   "releases": [
     {
       "tag": "v72.20260112",
       "name": "zapret v72.20260112",
       "prerelease": true,
-      "created_at": "2026-01-12T12:19:35Z",
-      "updated_at": "2026-01-12T12:47:52Z",
-      "published_at": "2026-01-12T12:47:52Z",
+      "created_at": "2026-01-12T18:08:55Z",
+      "updated_at": "2026-01-12T18:37:15Z",
+      "published_at": "2026-01-12T18:37:15Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260112",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/339461723",
-          "id": 339461723,
-          "node_id": "RA_kwDOM-Npcs4UO8Zb",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/339578854",
+          "id": 339578854,
+          "node_id": "RA_kwDOM-Npcs4UPY_m",
           "name": "zapret_v72.20260112_aarch64_cortex-a76.zip",
           "label": "",
           "uploader": {
@@ -39,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 407081,
-          "digest": "sha256:2e38c4729801a6839d8daec1c1d2f9cc9f437a89ec588b9e2d1a20c07a91be6c",
+          "size": 407755,
+          "digest": "sha256:bc15fc8e998eb90592c9c043d9a00b9985551b160a0e2f212462a58e743faf30",
           "download_count": 0,
-          "created_at": "2026-01-12T12:47:51Z",
-          "updated_at": "2026-01-12T12:47:52Z",
+          "created_at": "2026-01-12T18:37:14Z",
+          "updated_at": "2026-01-12T18:37:15Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260112/zapret_v72.20260112_aarch64_cortex-a76.zip"
         }
       ]
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 407129,
           "digest": "sha256:56fec444e4a46e2b0c6d101f89255a0a212351b49be6eec560bd6fcaab39082d",
-          "download_count": 7,
+          "download_count": 9,
           "created_at": "2026-01-11T13:04:25Z",
           "updated_at": "2026-01-11T13:04:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_aarch64_cortex-a76.zip"

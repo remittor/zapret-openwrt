@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-01-12T12:48:06Z",
+  "generated_at": "2026-01-12T18:37:28Z",
   "releases": [
     {
       "tag": "v72.20260112",
       "name": "zapret v72.20260112",
       "prerelease": true,
-      "created_at": "2026-01-12T12:19:35Z",
-      "updated_at": "2026-01-12T12:47:52Z",
-      "published_at": "2026-01-12T12:47:52Z",
+      "created_at": "2026-01-12T18:08:55Z",
+      "updated_at": "2026-01-12T18:37:15Z",
+      "published_at": "2026-01-12T18:37:15Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260112",
       "assets": [
         {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/339461712",
-          "id": 339461712,
-          "node_id": "RA_kwDOM-Npcs4UO8ZQ",
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/339578851",
+          "id": 339578851,
+          "node_id": "RA_kwDOM-Npcs4UPY_j",
           "name": "zapret_v72.20260112_arm_cortex-a9.zip",
           "label": "",
           "uploader": {
@@ -39,11 +39,11 @@
           },
           "content_type": "application/zip",
           "state": "uploaded",
-          "size": 395367,
-          "digest": "sha256:edbacb8f918acfe8312292f85533ae4e2c9f34008c33c588a44fdec68ed5aa15",
+          "size": 396226,
+          "digest": "sha256:b39259c07c1ee1a44b8289ed85a71214f9ce44002d99d63d760057a9d201fec8",
           "download_count": 0,
-          "created_at": "2026-01-12T12:47:51Z",
-          "updated_at": "2026-01-12T12:47:51Z",
+          "created_at": "2026-01-12T18:37:14Z",
+          "updated_at": "2026-01-12T18:37:15Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260112/zapret_v72.20260112_arm_cortex-a9.zip"
         }
       ]
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 395398,
           "digest": "sha256:1a9de994924616d65d8eda541668f0638f1872cd452391820d0694fc609857bb",
-          "download_count": 6,
+          "download_count": 7,
           "created_at": "2026-01-11T13:04:25Z",
           "updated_at": "2026-01-11T13:04:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_arm_cortex-a9.zip"
