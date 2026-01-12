@@ -116,6 +116,8 @@ define Package/$(PKG_NAME)/install
 	chmod 755 $(1)/opt/zapret/$(MAKE_PATH)/*
 	chmod 755 $(1)/opt/zapret/ip2net/*
 	chmod 755 $(1)/opt/zapret/mdig/*
+	# Disable TPWS in blockcheck
+	grep -q '^SKIP_TPWS=' $(1)/opt/zapret/blockcheck.sh || sed -i '/^NFT_TABLE=blockcheck$$$$/a SKIP_TPWS=$$$${SKIP_TPWS:-1}' $(1)/opt/zapret/blockcheck.sh
 endef
 
 define Package/$(PKG_NAME)/preinst
