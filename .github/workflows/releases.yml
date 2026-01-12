@@ -5,7 +5,7 @@ on:
     workflows: ["build"]
     types: [completed]
   release:
-    types: [published, created, edited]
+    types: [published, unpublished, created, edited, deleted, prereleased]
 
 permissions:
   contents: write
@@ -25,6 +25,62 @@ jobs:
           ref: gh-pages
         continue-on-error: true
 
+      - name: Wait for GitHub API consistency (release events)
+        if: github.event_name == 'release'
+        env:
+          REPO: ${{ github.repository }}
+          ACTION: ${{ github.event.action }}
+          TARGET_ID: ${{ github.event.release.id }}
+          TARGET_NAME: ${{ github.event.release.name }}
+        run: |
+          set -e
+          echo "Release action: $ACTION"
+          echo "Target release id: $TARGET_ID"
+          max=10
+          delay=6
+          check() {
+            curl -s https://api.github.com/repos/$REPO/releases
+          }
+          for iter in $(seq 1 $max); do
+            case "$ACTION" in
+              created)
+                echo "Release created (draft). No API wait needed."
+                exit 0
+                ;;
+              published|prereleased)
+                if check | jq "any(.[]; .id == $TARGET_ID)"; then
+                  echo "Release appeared in API"
+                  exit 0
+                fi
+                ;;
+              deleted)
+                if ! check | jq "any(.[]; .id == $TARGET_ID)"; then
+                  echo "Release disappeared from API"
+                  exit 0
+                fi
+                ;;
+              unpublished)
+                if check | jq "any(.[]; .id == $TARGET_ID and .draft == true)"; then
+                  echo "Release is now draft"
+                  exit 0
+                fi
+                ;;
+              edited)
+                if check | jq "any(.[]; .id == $TARGET_ID and .name == \"$TARGET_NAME\")"; then
+                  echo "Release updated"
+                  exit 0
+                fi
+                ;;
+              *)
+                echo "No consistency wait needed for action: $ACTION"
+                exit 0
+                ;;
+            esac
+            echo "Retry $iter/$max..."
+            sleep "$delay"
+          done
+          echo "WARNING: API consistency timeout for action $ACTION"
+    
       - name: Save FULL releases.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
