@@ -386,7 +386,7 @@ return view.extend({
 
         let btn_diag        = create_btn('btn_diag',  btn_style_action, _('Diagnostics'));
         btn_diag.onclick    = ui.createHandlerFn(this, () => { diagnost.openDiagnostDialog(this.pkg_arch) });
-        layout_append('', null, [ btn_diag ] );
+        layout_append('Diagnostic tools', null, [ btn_diag ] );
 
         let btn_update      = create_btn('btn_update',  btn_style_action, _('Update'));
         btn_update.onclick  = ui.createHandlerFn(this, () => { updater.openUpdateDialog(this.pkg_arch) });
