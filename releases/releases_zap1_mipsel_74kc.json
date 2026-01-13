@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-13T12:54:16Z",
+  "generated_at": "2026-01-13T18:43:50Z",
   "releases": [
     {
       "tag": "v72.20260113",
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 393915,
           "digest": "sha256:6f32eab5a7fc59d6f087361812d6b3c0443044ef8ebc8cecf658a2c564b7bb9d",
-          "download_count": 36,
+          "download_count": 37,
           "created_at": "2026-01-08T18:43:44Z",
           "updated_at": "2026-01-08T18:43:45Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260108/zapret_v72.20260108_mipsel_74kc.zip"
