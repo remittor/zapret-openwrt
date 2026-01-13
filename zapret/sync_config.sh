@@ -46,7 +46,7 @@ function sync_param
 	local value="$( uci -q get $ZAPRET_CFG_SEC.$param )"
 	uncomment_param $param
 	append_param $param
-	local TAB="$( echo -n -e '\t' )"
+	local TAB="$( printf '\t' )"
 	if [ "$value" = "$TAB" ]; then
 		value=""
 	fi
