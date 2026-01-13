@@ -130,7 +130,7 @@ function restore_all_ipset_cfg
 	restore_ipset_txt zapret-hosts-google.txt
 	restore_ipset_txt zapret-hosts-user.txt
 	restore_ipset_txt zapret-hosts-user-exclude.txt
-	restore_ipset_txt zapret-ip-exclude.txt.txt
+	restore_ipset_txt zapret-ip-exclude.txt
 }
 
 function create_default_cfg
