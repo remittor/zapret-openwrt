@@ -4,7 +4,7 @@
 function set_cfg_reset_values
 {
 	local cfgname=${1:-$ZAPRET_CFG_NAME}
-	local TAB="$( echo -n -e '\t' )"
+	local TAB="$( printf '\t' )"
 	uci batch <<-EOF
 		set $cfgname.config.run_on_boot='0'
 		# settings for zapret service
@@ -52,7 +52,7 @@ function set_cfg_reset_values
 function clear_nfqws_strat
 {
 	local cfgname=${1:-$ZAPRET_CFG_NAME}
-	local TAB="$( echo -n -e '\t' )"
+	local TAB="$( printf '\t' )"
 	uci batch <<-EOF
 		set $cfgname.config.MODE_FILTER='hostlist'
 		set $cfgname.config.NFQWS2_PORTS_TCP='80,443'
@@ -66,7 +66,7 @@ function set_cfg_nfqws_strat
 {
 	local strat=${1:--}
 	local cfgname=${2:-$ZAPRET_CFG_NAME}
-	local TAB="$( echo -n -e '\t' )"
+	local TAB="$( printf '\t' )"
     
 	uci batch <<-EOF
 		set $cfgname.config.MODE_FILTER='hostlist'
