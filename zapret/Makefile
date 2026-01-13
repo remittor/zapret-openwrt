@@ -225,11 +225,11 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	ZAPRET_CONFIG=/opt/zapret/config
 	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
 	# Fix permissions
-	chmod 644 $${ZAPRET_CFG}
-	chmod 644 $${ZAPRET_DIR}/ipset/*.txt
-	chmod 644 $${ZAPRET_DIR}/ipset_def/*.txt
-	chmod 644 $${ZAPRET_DIR}/init.d/openwrt/custom.d/*.sh
-	chmod 644 $${ZAPRET_DIR}/config*
+	chmod 644 $${ZAPRET_CFG} >/dev/null 2>&1
+	chmod 644 $${ZAPRET_DIR}/ipset/*.txt >/dev/null 2>&1
+	chmod 644 $${ZAPRET_DIR}/ipset_def/*.txt >/dev/null 2>&1
+	chmod 644 $${ZAPRET_DIR}/init.d/openwrt/custom.d/*.sh >/dev/null 2>&1
+	chmod 644 $${ZAPRET_DIR}/config* >/dev/null 2>&1
 	# creating main config if its not exists
 	if [ ! -f "$${ZAPRET_CONFIG}" ]; then
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
