@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-13T11:21:59Z",
+  "generated_at": "2026-01-13T12:15:03Z",
   "releases": [
     {
       "tag": "v72.20260113",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 224922,
           "digest": "sha256:902a790dd1a13bafb2e5ffffb22482703e33bbcf35afa4da8e7b60ad110c1129",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-13T11:21:46Z",
           "updated_at": "2026-01-13T11:21:46Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_riscv64_generic.zip"
@@ -52,8 +52,8 @@
       "tag": "v72.20260111",
       "name": "zapret v72.20260111",
       "prerelease": true,
-      "created_at": "2026-01-11T12:28:00Z",
-      "updated_at": "2026-01-11T13:04:26Z",
+      "created_at": "2026-01-11T10:39:18Z",
+      "updated_at": "2026-01-13T11:37:45Z",
       "published_at": "2026-01-11T13:04:26Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260111",
       "assets": [
@@ -448,16 +448,6 @@
       "updated_at": "2025-03-23T10:58:36Z",
       "published_at": "2025-03-23T10:58:35Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v70.20250323",
-      "assets": []
-    },
-    {
-      "tag": "v70.20250213",
-      "name": "zapret v70.20250213",
-      "prerelease": false,
-      "created_at": "2025-02-13T05:49:40Z",
-      "updated_at": "2025-02-13T07:11:08Z",
-      "published_at": "2025-02-13T07:11:07Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v70.20250213",
       "assets": []
     }
   ]
