@@ -7,6 +7,11 @@
 'require view';
 'require view.zapret2.tools as tools';
 
+document.head.appendChild(E('link', {
+    rel: 'stylesheet',
+    href: L.resource('view/zapret2/styles.css')
+}));
+
 return view.extend({
     parsers: { },
 
@@ -128,8 +133,10 @@ return view.extend({
             let btn = sec.taboption(tabname, form.Button, '_' + param + '_btn', locname);
             btn.inputtitle = _('Edit');
             btn.inputstyle = 'edit btn';
-            let val = sec.taboption(tabname, form.DummyValue, '_' + param);
-            val.rawhtml = multiline ? true : false;
+            let val = sec.taboption(tabname, form.TextValue, '_' + param);
+            val.readonly = true;
+            val.rows = rows + 5;
+            val.wrap = false;
             val.cfgvalue = function(section_id) {
                 let value = uci.get(tools.appName, section_id, param);
                 if (value == null) {
@@ -141,15 +148,10 @@ return view.extend({
                     value = value.replace(/\n --/g, "\n--");
                     value = value.replace(/ --/g, "\n--");
                 }
-                if (val.rawhtml) {
-                    value = value.replace(/</g, '˂');
-                    value = value.replace(/>/g, '˃');
-                    value = value.replace(/\n/g, '<br/>');
-                }
                 return value;
             };
             val.validate = function(section_id, value) {
-                return (value) ? value.trim() : "";
+                return true;
             };
             let desc = locname;
             if (multiline == 2) {

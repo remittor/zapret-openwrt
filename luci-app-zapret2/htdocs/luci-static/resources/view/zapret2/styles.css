@@ -1,0 +1,6 @@
+textarea, .cbi-value textarea
+{
+    white-space: pre;
+    overflow-x: auto;
+    font-family: monospace;
+}

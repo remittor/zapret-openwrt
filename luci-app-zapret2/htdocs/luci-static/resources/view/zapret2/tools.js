@@ -506,24 +506,10 @@ return baseclass.extend({
             value = value.replace(/˂/g, '<');
             value = value.replace(/˃/g, '>');
             try {
-                let elem = document.getElementById("cbi-" + this.appName + "-" + this.cfgsec + "-_" + this.cfgparam);
-                if (elem) {
-                    if (elem.querySelector('div')) {
-                        elem = elem.querySelector('div');
-                    } else {
-                        elem = elem.querySelector('output');
-                    }
-                }
+                let elem = document.getElementById("widget.cbid." + this.appName + ".config._" + this.cfgparam);
                 if (elem) {
                     let val = value.trim();
-                    if (this.multiline) {
-                        val = val.replace(/</g, '˂');
-                        val = val.replace(/>/g, '˃');
-                        val = val.replace(/\n/g, '<br/>');
-                        elem.innerHTML = val;
-                    } else {
-                        elem.textContent = val;
-                    }
+                    elem.textContent = val;
                 }
             } catch(e) {
                 console.error('ERROR: cannot found elem for ' + this.cfgsec + '.' + this.cfgparam);
