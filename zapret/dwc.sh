@@ -43,7 +43,6 @@ TEST_SUITE='[
   { id: "FR.OVH-02", provider: "🇫🇷 OVH", times: 1, url: "https://ovh.sfx.ovh/10M.bin" },
   { id: "SE.OR-01", provider: "🇸🇪 Oracle", times: 1, url: "https://oracle.sfx.ovh/10M.bin" },
   { id: "DE.AWS-01", provider: "🇩🇪 AWS", times: 1, url: "https://www.getscope.com/assets/fonts/fa-solid-900.woff2" },
-  { id: "US.AWS-01", provider: "🇺🇸 AWS", times: 1, url: "https://corp.kaltura.com/wp-content/cache/min/1/wp-content/themes/airfleet/dist/styles/theme.css" },
   { id: "US.GC-01", provider: "🇺🇸 Google Cloud", times: 1, url: "https://api.usercentrics.eu/gvl/v3/en.json" },
   { id: "US.FST-01", provider: "🇺🇸 Fastly", times: 1, url: "https://www.jetblue.com/main.c7b61d59416f714f.js" },
   { id: "CA.FST-01", provider: "🇨🇦 Fastly", times: 1, url: "https://www.cnn10.com/" },
