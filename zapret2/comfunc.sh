@@ -179,7 +179,7 @@ function insert_cron_task_logs
 {
 	[ ! -f "$CRONTAB_FILE" ] && touch "$CRONTAB_FILE"
 	[ ! -f "$CRONTAB_FILE" ] && return 1
-	if ! grep -q -e "-name '$ZAPRET_CFG_NAME\*\.log' -size \+" "$CRONTAB_FILE"; then
+	if ! grep -q -e "-name '$ZAPRET_CFG_NAME+\*\.log' -size \+" "$CRONTAB_FILE"; then
 		echo "*/2 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name '$ZAPRET_CFG_NAME+*.log' -size +2600k -exec rm -f {} \;" >> "$CRONTAB_FILE"
 		/etc/init.d/cron restart 2> /dev/null
 	fi
