@@ -110,7 +110,7 @@ function pkg_mgr_update
 	if [ "$PKG_MGR" = "opkg" ]; then
 		PKG_TOTAL=$( opkg list | wc -l )
 		PKG_INSTALLED=$( opkg list-installed | wc -l )
-		if [ "$PKG_TOTAL" = "$PKG_INSTALLED" ]; then
+		if [ "$PKG_TOTAL" -le "$PKG_INSTALLED" ] || [[ "$PKG_TOTAL" -le $((PKG_INSTALLED + 100)) ]]; then
 			echo ">>> OPKG update..."
 			opkg update
 			return $?
