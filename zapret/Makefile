@@ -57,10 +57,17 @@ define Build/Compile
 endef
 
 define Package/$(PKG_NAME)/conffiles
-/etc/config/zapret
 /opt/zapret/config
-/opt/zapret/ipset/
-/opt/zapret/init.d/openwrt/custom.d/
+/opt/zapret/ipset/zapret-hosts-google.txt
+/opt/zapret/ipset/zapret-hosts-user.txt
+/opt/zapret/ipset/zapret-hosts-user-exclude.txt
+/opt/zapret/ipset/zapret-ip-exclude.txt
+/opt/zapret/ipset/zapret-hosts-auto.txt
+/opt/zapret/init.d/openwrt/custom.d/10-script.sh
+/opt/zapret/init.d/openwrt/custom.d/20-script.sh
+/opt/zapret/init.d/openwrt/custom.d/50-script.sh
+/opt/zapret/init.d/openwrt/custom.d/60-script.sh
+/opt/zapret/init.d/openwrt/custom.d/90-script.sh
 endef
 
 define Package/$(PKG_NAME)/install
@@ -90,6 +97,7 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./init.d.sh $(1)/etc/init.d/zapret
 	$(INSTALL_DATA) ./config.default $(1)/opt/zapret/config.default
+	$(INSTALL_DATA) ./config.default $(1)/opt/zapret/config
 	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
 	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
 	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
@@ -105,13 +113,24 @@ define Package/$(PKG_NAME)/install
 	$(CP) ./custom.d/* $(1)/opt/zapret/init.d/openwrt/custom.d/
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
+	# install all sh-scripts
 	$(CP) ./*.sh $(1)/opt/zapret/
 	rm -f $(1)/opt/zapret/init.d.sh
-	# Fix permisions
+	# Create empty conf files
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/zapret-hosts-auto.txt
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust1.txt
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust2.txt
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust3.txt
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust4.txt
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/10-script.sh
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/20-script.sh
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/60-script.sh
+	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/90-script.sh
+	# Fix permissions
 	chmod 644 $(1)/opt/zapret/ipset/*.txt
 	chmod 644 $(1)/opt/zapret/ipset_def/*.txt
 	chmod 644 $(1)/opt/zapret/init.d/openwrt/custom.d/*.sh
-	chmod 644 $(1)/opt/zapret/config.default
+	chmod 644 $(1)/opt/zapret/config*
 	chmod 755 $(1)/opt/zapret/*.sh
 	chmod 755 $(1)/opt/zapret/$(MAKE_PATH)/*
 	chmod 755 $(1)/opt/zapret/ip2net/*
@@ -124,6 +143,7 @@ define Package/$(PKG_NAME)/preinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
+	ZAPRET_DIR=/opt/zapret
 	ZAPRET_INITD=/etc/init.d/zapret
 	ZAPRET_CFG=/etc/config/zapret
 	if [ -f "$${ZAPRET_INITD}" ]; then
@@ -171,7 +191,7 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		fi
 		rm -f $${ZAPRET_CFG}
 		rm -f $${ZAPRET_INITD}
-		rm -rf /opt/zapret
+		[ -d "$${ZAPRET_DIR}" ] && rm -rf $${ZAPRET_DIR}
 		echo "All files of the previously installed package have been removed!"
 	fi
 	if $${PKG_CHECK} zapret-mdig >/dev/null 2>&1; then
@@ -179,6 +199,9 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	fi
 	if $${PKG_CHECK} zapret-ip2net >/dev/null 2>&1; then
 		$${PKG_REMOVE} zapret-ip2net
+	fi
+	if [ ! -d "$${ZAPRET_DIR}" ]; then
+		mkdir -p $${ZAPRET_DIR}
 	fi
 	if [ ! -f "/opt/zapret/ipset/zapret-hosts-google.txt" ]; then
 		if [ -f "/opt/zapret/ipset/zapret-hosts-user.txt" ]; then
@@ -196,10 +219,17 @@ define Package/$(PKG_NAME)/postinst
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
+	ZAPRET_DIR=/opt/zapret
 	ZAPRET_INITD=/etc/init.d/zapret
 	ZAPRET_CFG=/etc/config/zapret
 	ZAPRET_CONFIG=/opt/zapret/config
 	ZAPRET_CONFIG_DEF="/opt/zapret/config.default"
+	# Fix permissions
+	chmod 644 $${ZAPRET_CFG}
+	chmod 644 $${ZAPRET_DIR}/ipset/*.txt
+	chmod 644 $${ZAPRET_DIR}/ipset_def/*.txt
+	chmod 644 $${ZAPRET_DIR}/init.d/openwrt/custom.d/*.sh
+	chmod 644 $${ZAPRET_DIR}/config*
 	# creating main config if its not exists
 	if [ ! -f "$${ZAPRET_CONFIG}" ]; then
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
@@ -212,6 +242,8 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		echo "Current file $${ZAPRET_CONFIG} backuped to $${ZAPRET_CONFIG_BACKUP}"
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
 	fi
+	# remove fake uci-config
+	[ -f "$${ZAPRET_CFG}" ] && [ ! -s "$${ZAPRET_CFG}" ] && rm -f "$${ZAPRET_CFG}"
 	# check existing uci-config
 	[ -f "$${ZAPRET_CFG}" ] && ZAPRET_CFG_EXISTS=1 || ZAPRET_CFG_EXISTS=0
 	# create or merge uci-config
@@ -242,7 +274,7 @@ define Package/$(PKG_NAME)/prerm
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
-	EXEDIR=/opt/zapret
+	ZAPRET_DIR=/opt/zapret
 	ZAPRET_BASE=/opt/zapret
 	ZAPRET_INITD=/etc/init.d/zapret
 	ZAPRET_CFG=/etc/config/zapret
@@ -274,7 +306,9 @@ define Package/$(PKG_NAME)/postrm
 #!/bin/sh
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
-	[ -f "/etc/config/zapret-opkg" ] && rm -f "/etc/config/zapret-opkg"
+	rm -f /etc/config/zapret-opkg*
+	rm -f /etc/config/zapret.opkg*
+	rm -f /etc/config/zapret.apk*
 	[ -f "/opt/zapret/config" ] && cp -f /opt/zapret/config "/opt/zapret/config.backup"
 	#rm -rf /opt/zapret
 	#echo "Directory /opt/zapret removed!"
