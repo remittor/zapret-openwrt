@@ -9,6 +9,9 @@ rm -rf $ZAP_TMP_DIR
 
 CURL_TIMEOUT=5
 CURL_RANGETO=65535
+CURL_NOCACHE='cache-control: no-cache'
+CURL_NOCACHE2='pragma: no-cache'
+CURL_USERAGENT='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36'
 
 if ! command -v curl >/dev/null 2>&1; then
 	echo "ERROR: package \"curl\" not installed!"
@@ -43,8 +46,9 @@ TEST_SUITE='[
   { id: "FR.OVH-02", provider: "🇫🇷 OVH", times: 1, url: "https://ovh.sfx.ovh/10M.bin" },
   { id: "SE.OR-01", provider: "🇸🇪 Oracle", times: 1, url: "https://oracle.sfx.ovh/10M.bin" },
   { id: "DE.AWS-01", provider: "🇩🇪 AWS", times: 1, url: "https://www.getscope.com/assets/fonts/fa-solid-900.woff2" },
+  { id: "US.AWS-01", provider: "🇺🇸 AWS", times: 1, url: "https://corp.kaltura.com/wp-content/cache/min/1/wp-content/themes/airfleet/dist/styles/theme.css" },
   { id: "US.GC-01", provider: "🇺🇸 Google Cloud", times: 1, url: "https://api.usercentrics.eu/gvl/v3/en.json" },
-  { id: "US.FST-01", provider: "🇺🇸 Fastly", times: 1, url: "https://www.jetblue.com/main.c7b61d59416f714f.js" },
+  { id: "US.FST-01", provider: "🇺🇸 Fastly", times: 1, url: "https://www.jetblue.com/footer/footer-element-es2015.js" },
   { id: "CA.FST-01", provider: "🇨🇦 Fastly", times: 1, url: "https://www.cnn10.com/" },
   { id: "US.AKM-01", provider: "🇺🇸 Akamai", times: 1, url: "https://www.roxio.com/static/roxio/images/products/creator/nxt9/call-action-footer-bg.jpg" },
   { id: "PL.AKM-01", provider: "🇵🇱 Akamai", times: 1, url: "https://media-assets.stryker.com/is/image/stryker/gateway_1?$max_width_1410$" },
@@ -59,60 +63,107 @@ function trim
 	echo "$1" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
 }
 
-mkdir -p $ZAP_TMP_DIR
+mkdir -p "$ZAP_TMP_DIR"
 
-ID=0
-while IFS='|' read -r TAG PROVIDER TIMES URL; do
+TARGET_LIST_FILE="$ZAP_TMP_DIR/targets"
+: > "$TARGET_LIST_FILE"
+IDX=0
+while IFS= read -r line; do
+	case "$line" in
+		*id:*provider:*url:*)
+			IDX=$((IDX + 1))
+			TAG=$( printf '%s\n' "$line" | cut -d'"' -f2 )
+			COUNTRY="${TAG%%.*}"
+			PROVIDER_RAW=$( printf '%s\n' "$line" | cut -d'"' -f4 )
+			PROVIDER="${PROVIDER_RAW#* }"
+			TIMES=$( printf '%s\n' "$line" | cut -d':' -f4 | cut -d',' -f1 | tr -d ' ')
+			URL=$( printf '%s\n' "$line" | cut -d'"' -f6 )
+			echo "${IDX}|${TAG}|${COUNTRY}|${PROVIDER}|${TIMES}|${URL}" >> "$TARGET_LIST_FILE"
+		;;
+	esac
+done <<EOF
+$TEST_SUITE
+EOF
+
+CURL_CON_TIMEOUT=$((CURL_TIMEOUT-2))
+CURL_SPEED_TIME=$((CURL_TIMEOUT-2))
+CURL_SPEED_LIMIT=1
+
+while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 	[ -z "$TAG" ] && continue
 	ID=$((ID+1))
-	ID3=$(printf '%03d' "$ID")
-	COUNTRY="$(echo "$TAG" | cut -d. -f1)"
-	CNTFLAG="$(echo "$PROVIDER" | awk '{print $1}')"
-	PROVIDER="$(echo "$PROVIDER" | cut -d' ' -f2-)"
+	ID3=$( printf '%03d' "$ID" )
+	COUNTRY=$( echo "$TAG" | cut -d. -f1 )
+	CNTFLAG=$( echo "$PROVIDER" | awk '{print $1}' )
 	URL_NO_PROTO="${URL#*://}"
 	DOMAIN="${URL_NO_PROTO%%/*}"
 	URLPATH="/${URL_NO_PROTO#*/}"
 	[ "$URLPATH" = "/$URL_NO_PROTO" ] && URLPATH="/"
-	#echo "TAG=$TAG , COUNTRY=$COUNTRY , PROVIDER=$PROVIDER , TIMES=$TIMES , URL=$URL"
+	#echo "TAG=$TAG , COUNTRY=$COUNTRY , PROVIDER=$PROVIDER , DOMAIN=$DOMAIN , URL=$URL"
+	FNAME="$ZAP_TMP_DIR/$ID3=$TAG=$PROVIDER"
 	(
-		DST_IP=$( curl -4 -s -o /dev/null -w '%{remote_ip}\n' $DOMAIN )
-		if [ -z "$DST_IP" ]; then
-			DST_IP="$( ping -c1 "$DOMAIN" 2>/dev/null | sed -n '1s/.*(\([0-9.]*\)).*/\1/p')"
+		DST_IP="???"
+		if [ "$DST_IP" = "" ]; then
+			CURL_TIMEOUTS="--connect-timeout 5 --max-time 6 --speed-time 5 --speed-limit 1"
+			#DST_IP=$( curl -4 -I -s $CURL_TIMEOUTS -o /dev/null -w '%{remote_ip}\n' "$URL" )
+			if [ -z "$DST_IP" ]; then
+				DST_IP=$( curl -4 -s $CURL_TIMEOUTS -o /dev/null -r 0-0 -w '%{remote_ip}\n' "$URL" )
+			fi
+			if [ -z "$DST_IP" ]; then
+				DST_IP="$( ping -c1 "$DOMAIN" 2>/dev/null | sed -n '1s/.*(\([0-9.]*\)).*/\1/p')"
+			fi
 		fi
-		curl -k $URL --resolve $DOMAIN:443:$DST_IP -o /dev/null -s -w '%{size_download}\n' --max-time $CURL_TIMEOUT --range 0-$CURL_RANGETO
-	) >"$ZAP_TMP_DIR/$ID3=$TAG=$PROVIDER.txt" 2>&1 &
-done <<EOF
-$(printf '%s\n' "$TEST_SUITE" | sed -n '
-s/.*id:[[:space:]]*"\([^"]*\)".*provider:[[:space:]]*"\([^"]*\)".*times:[[:space:]]*\([0-9]\+\).*url:[[:space:]]*"\([^"]*\)".*/\1|\2|\3|\4/p
-')
-EOF
+		echo "$URL" > "$FNAME.url"
+		echo "$DST_IP" > "$FNAME.ip"
+		RESOLVE_OPT="--resolve $DOMAIN:443:$DST_IP"
+		curl "$URL" \
+			--connect-timeout $CURL_CON_TIMEOUT \
+			--max-time $CURL_TIMEOUT \
+			--speed-time $CURL_SPEED_TIME \
+			--speed-limit $CURL_SPEED_LIMIT	\
+			--range 0-$CURL_RANGETO \
+			-A "$CURL_USERAGENT" \
+			-D "$FNAME.hdr" \
+			-o "$FNAME.body"
+	) > "$FNAME.txt" 2>&1 &
+done < "$TARGET_LIST_FILE"
 
 wait
 
 printf '%s\n' "$ZAP_TMP_DIR"/*.txt | sort | while IFS= read -r file; do
 	[ -f "$file" ] || continue
 	FNAME="${file##*/}"
+	FNAME="${FNAME%.txt}" 
 	ID=$( echo "$FNAME" | cut -d= -f1)
 	TAG=$( echo "$FNAME" | cut -d= -f2)
-	PROVIDER=$(echo "$FNAME" | cut -d= -f3 | sed 's/\.txt$//' )
-	res=$( cat "$file" )
-	res=$( trim "$res" )
+	PROVIDER=$(echo "$FNAME" | cut -d= -f3 )
+	FNAME="$ZAP_TMP_DIR/$FNAME"
+	BODY_SIZE=0
+	[ -f "$FNAME.body" ] && BODY_SIZE=$( wc -c < "$FNAME.body" )
 	status=
-	case "$res" in
-		''|*[!0-9]*)
-			status="Error (incorrect value)"
-			;;
-	esac
-	if [ -z "$status" ]; then
-		if [ "$res" = 0 ]; then
-			status="Possibly detected"
-		elif [ "$res" -lt $CURL_RANGETO ]; then
-			status="Failed to complete detection"
+	if [ ! -f "$FNAME.ip" ]; then
+		status="ERROR: cannot get IP-Addr"
+	elif [ ! -s "$FNAME.ip" ]; then
+		status="ERROR: cannot get ip-addr"
+	elif [ ! -f "$FNAME.hdr" ]; then
+		status="ERROR: cannot Get Headers"
+	elif [ ! -s "$FNAME.hdr" ]; then
+		status="ERROR: cannot get headers"
+	elif [ ! -f "$FNAME.body" ]; then
+		status="ERROR: cannot get body"
+	elif [ ! -s "$FNAME.body" ]; then
+		status="Possibly detected"
+	else
+		if [ "$BODY_SIZE" -le $CURL_RANGETO ]; then
+			status="Failed to complete detection (recv $BODY_SIZE bytes)"
 		else
 			status="[ OK ]"
 		fi
 	fi
 	printf '%12s / %-13s: %s \n' "$TAG" "$PROVIDER" "$status"
+	echo "$BODY_SIZE" > "$FNAME.size"
 done
+
+rm -f "$ZAP_TMP_DIR"/*.body >/dev/null 2>&1
 
 return 0 
