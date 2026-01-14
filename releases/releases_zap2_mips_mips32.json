@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-13T18:43:50Z",
+  "generated_at": "2026-01-14T19:34:22Z",
   "releases": [
     {
       "tag": "v0.8.20260113",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 500251,
           "digest": "sha256:a4f41097716b71798108af465e78c232d985fa1ff69142adf3aa6af77ea5f217",
-          "download_count": 1,
+          "download_count": 4,
           "created_at": "2026-01-13T12:14:50Z",
           "updated_at": "2026-01-13T12:14:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_mips_mips32.zip"

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-13T18:43:49Z",
+  "generated_at": "2026-01-14T19:34:21Z",
   "releases": [
     {
       "tag": "v0.8.20260113",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 509367,
           "digest": "sha256:1528e9ed460baf18d2e3ec9001894ad50dd5980ed7b0f98b0fa8941edb39c60c",
-          "download_count": 3,
+          "download_count": 10,
           "created_at": "2026-01-13T12:14:50Z",
           "updated_at": "2026-01-13T12:14:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_aarch64_generic.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 497785,
           "digest": "sha256:91bffdf1fc88017519187a5906065f985f6f7183810e58f1d2faa7ed8abc7e71",
-          "download_count": 28,
+          "download_count": 29,
           "created_at": "2026-01-09T14:24:39Z",
           "updated_at": "2026-01-09T14:24:39Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260109/zapret2_v0.8.20260109_aarch64_generic.zip"
@@ -229,7 +229,7 @@
           "state": "uploaded",
           "size": 492472,
           "digest": "sha256:c2080ac3324f0f08154b77cd4e39a9cce9c9217b254ffdc31fbff6c965122231",
-          "download_count": 71,
+          "download_count": 72,
           "created_at": "2025-12-29T17:05:19Z",
           "updated_at": "2025-12-29T17:05:20Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20251229/zapret2_v0.8.20251229_aarch64_generic.zip"
@@ -511,7 +511,7 @@
           "state": "uploaded",
           "size": 464858,
           "digest": "sha256:7d2784a9ec26cb59851dd5cf9d5d749ed06a40447b3f3436718af6000d18bace",
-          "download_count": 36,
+          "download_count": 37,
           "created_at": "2025-12-20T08:28:51Z",
           "updated_at": "2025-12-20T08:28:51Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251220/zapret2_v0.7.20251220_aarch64_generic.zip"

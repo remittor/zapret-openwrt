@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-13T18:43:49Z",
+  "generated_at": "2026-01-14T19:34:22Z",
   "releases": [
     {
       "tag": "v0.8.20260113",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 493615,
           "digest": "sha256:c61b921c90515323e7bea6d03bd3ff17a39aea6c4d0f54fbae22f6964f90eee5",
-          "download_count": 1,
+          "download_count": 3,
           "created_at": "2026-01-13T12:14:50Z",
           "updated_at": "2026-01-13T12:14:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_arm_cortex-a9_neon.zip"
