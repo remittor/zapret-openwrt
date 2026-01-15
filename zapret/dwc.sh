@@ -1,9 +1,17 @@
 #!/bin/sh
 # Copyright (c) 2026 remittor
 
-. /opt/zapret/comfunc.sh
-
 ZAP_TMP_DIR=/tmp/zapret_dwc
+
+opt_dig=
+opt_test=
+
+while getopts "d:t" opt; do
+	case $opt in
+		d) opt_dig="$OPTARG";;
+		t) opt_test="true";;
+	esac
+done 
 
 rm -rf $ZAP_TMP_DIR
 
@@ -25,6 +33,16 @@ if ! echo "$CURL_INFO" | grep -q 'https'; then
 	echo "ERROR: package \"curl\" not supported HTTPS protocol!"
 	echo "NOTE: Please install package \"curl-ssl\""
 	return 11
+fi
+
+if [ "$opt_dig" != "" ]; then
+	if ! command -v dig >/dev/null 2>&1; then
+		echo "ERROR: package \"bind-dig\" not installed!"
+		return 12
+	fi
+	[ "$opt_dig" = "@" ] && opt_dig='8.8.8.8'
+	[ "$opt_dig" = "8" ] && opt_dig='8.8.8.8'
+	[ "$opt_dig" = "1" ] && opt_dig='1.1.1.1'
 fi
 
 #echo 'Original sources: https://github.com/hyperion-cs/dpi-checkers'
@@ -102,21 +120,25 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 	#echo "TAG=$TAG , COUNTRY=$COUNTRY , PROVIDER=$PROVIDER , DOMAIN=$DOMAIN , URL=$URL"
 	FNAME="$ZAP_TMP_DIR/$ID3=$TAG=$PROVIDER"
 	(
-		DST_IP="???"
-		if [ "$DST_IP" = "" ]; then
+		DST_IP=
+		RESOLVE_OPT=
+		if [ "$opt_dig" != "" ]; then
+			DST_IP=$( dig +time=2 +retry=1 @$opt_dig +short "$DOMAIN" 2>/dev/null | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
+		else
 			CURL_TIMEOUTS="--connect-timeout 5 --max-time 6 --speed-time 5 --speed-limit 1"
-			#DST_IP=$( curl -4 -I -s $CURL_TIMEOUTS -o /dev/null -w '%{remote_ip}\n' "$URL" )
+			DST_IP=$( curl -4 -I -s $CURL_TIMEOUTS -o /dev/null -w '%{remote_ip}\n' "$URL" )
 			if [ -z "$DST_IP" ]; then
 				DST_IP=$( curl -4 -s $CURL_TIMEOUTS -o /dev/null -r 0-0 -w '%{remote_ip}\n' "$URL" )
 			fi
-			if [ -z "$DST_IP" ]; then
-				DST_IP="$( ping -c1 "$DOMAIN" 2>/dev/null | sed -n '1s/.*(\([0-9.]*\)).*/\1/p')"
-			fi
 		fi
-		echo "$URL" > "$FNAME.url"
+		if [ "$DST_IP" = "" ]; then
+			DST_IP=$( ping -c1 "$DOMAIN" 2>/dev/null | sed -n '1s/.*(\([0-9.]*\)).*/\1/p' )
+		fi
+		[ "$DST_IP" != "" ] && RESOLVE_OPT="--resolve $DOMAIN:443:$DST_IP"
 		echo "$DST_IP" > "$FNAME.ip"
-		RESOLVE_OPT="--resolve $DOMAIN:443:$DST_IP"
+		echo "$URL" > "$FNAME.url"
 		curl "$URL" \
+			$RESOLVE_OPT \
 			--connect-timeout $CURL_CON_TIMEOUT \
 			--max-time $CURL_TIMEOUT \
 			--speed-time $CURL_SPEED_TIME \
@@ -140,12 +162,10 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.txt | sort | while IFS= read -r file; do
 	FNAME="$ZAP_TMP_DIR/$FNAME"
 	BODY_SIZE=0
 	[ -f "$FNAME.body" ] && BODY_SIZE=$( wc -c < "$FNAME.body" )
+	IPADDR="x.x.x.x"
+	[ -s "$FNAME.ip" ] && IPADDR=$( cat "$FNAME.ip" )
 	status=
-	if [ ! -f "$FNAME.ip" ]; then
-		status="ERROR: cannot get IP-Addr"
-	elif [ ! -s "$FNAME.ip" ]; then
-		status="ERROR: cannot get ip-addr"
-	elif [ ! -f "$FNAME.hdr" ]; then
+	if [ ! -f "$FNAME.hdr" ]; then
 		status="ERROR: cannot Get Headers"
 	elif [ ! -s "$FNAME.hdr" ]; then
 		status="ERROR: cannot get headers"
@@ -160,7 +180,7 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.txt | sort | while IFS= read -r file; do
 			status="[ OK ]"
 		fi
 	fi
-	printf '%12s / %-13s: %s \n' "$TAG" "$PROVIDER" "$status"
+	printf '%12s / %-15s / %-13s: %s \n' "$TAG" "$IPADDR" "$PROVIDER" "$status"
 	echo "$BODY_SIZE" > "$FNAME.size"
 done
 

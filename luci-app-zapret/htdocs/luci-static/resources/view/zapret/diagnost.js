@@ -30,6 +30,11 @@ return baseclass.extend({
         this.appendLog('Original sources: https://github.com/hyperion-cs/dpi-checkers');
         this.appendLog('WEB-version: https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/');
         let cmd = [ fn_dwc_sh ];
+        let resolve_dns = document.getElementById('cfg_resolve_dns');
+        let dns_ip = resolve_dns.options[resolve_dns.selectedIndex].text;
+        if (dns_ip && dns_ip != 'default') {
+            cmd.push(...[ '-d', dns_ip.trim() ]);
+        }
         let log = '/tmp/'+tools.appName+'_dwc.log';
         let callback = this.execAndReadCallback;
         let wnd = this;
@@ -60,6 +65,19 @@ return baseclass.extend({
     {
         this.pkg_arch = pkg_arch;
 
+        let DNS_LIST = [ '8.8.8.8', '1.1.1.1' ];
+        let dns_list = [ ];
+        dns_list.push( E('option', { value: 'dns_default' }, [ 'default' ] ) );
+        for (let id = 0; id < DNS_LIST.length; id++) {
+            let dns_ipaddr = '' + DNS_LIST[id];
+            let val = 'dns_' + dns_ipaddr.replace(/\./g, "_");
+            dns_list.push( E('option', { value: val }, [ dns_ipaddr ] ));
+        } 
+        let resolve_dns = E('label', [
+            _('Resolve IP-Addr via') + ': ',
+            E('select', { id: 'cfg_resolve_dns' }, dns_list)
+        ]);
+ 
         this.logArea = E('textarea', {
             'id': 'widget.modal_content',
             'readonly': true,
@@ -84,6 +102,8 @@ return baseclass.extend({
         
         ui.showModal(_('Diagnostics'), [
             E('div', { 'class': 'cbi-section' }, [
+                resolve_dns,
+                E('br'), E('br'),
                 this.logArea,
             ]),
             E('div', { 'class': 'right' }, [
