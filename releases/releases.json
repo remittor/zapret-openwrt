@@ -32,9 +32,9 @@
     "name": "zapret v72.20260114",
     "draft": false,
     "immutable": false,
-    "prerelease": true,
+    "prerelease": false,
     "created_at": "2026-01-14T19:02:51Z",
-    "updated_at": "2026-01-14T19:34:08Z",
+    "updated_at": "2026-01-15T16:20:41Z",
     "published_at": "2026-01-14T19:34:08Z",
     "assets": [
       {
@@ -68,7 +68,7 @@
         "state": "uploaded",
         "size": 409158,
         "digest": "sha256:2a7550a8cc99aecac8bc084182d90af11b6723180b1e9da3df1100e03948d414",
-        "download_count": 0,
+        "download_count": 73,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_aarch64_cortex-a53.zip"
@@ -104,7 +104,7 @@
         "state": "uploaded",
         "size": 409152,
         "digest": "sha256:8d529cbcf556ec5b94ad69dff0caa1259525fe020788092e19d7566ebdd966ce",
-        "download_count": 0,
+        "download_count": 3,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_aarch64_cortex-a72.zip"
@@ -140,7 +140,7 @@
         "state": "uploaded",
         "size": 409151,
         "digest": "sha256:923506fc229fff4ca07ce5c2073ca09312556073c0991916bf9ba84bd062c030",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_aarch64_cortex-a76.zip"
@@ -176,7 +176,7 @@
         "state": "uploaded",
         "size": 409243,
         "digest": "sha256:933c63c11556601aedf3b45d941b641a07acb190a247050ec88197785a9c03f8",
-        "download_count": 0,
+        "download_count": 2,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_aarch64_generic.zip"
@@ -212,7 +212,7 @@
         "state": "uploaded",
         "size": 398268,
         "digest": "sha256:ff546d556d1248957ade32102dd4e554c0f74b9b321eafe045612ee687de0eae",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_arm1176jzf-s_vfp.zip"
@@ -248,7 +248,7 @@
         "state": "uploaded",
         "size": 399532,
         "digest": "sha256:cef8d4485edbb0cb678871c72499257383c48dc90543eac035887fe8ec510a25",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_arm926ej-s.zip"
@@ -284,7 +284,7 @@
         "state": "uploaded",
         "size": 397112,
         "digest": "sha256:dfae779bfddb031355986c9b380872287cc8d5fe6712e1129538c81a80ff3bd9",
-        "download_count": 0,
+        "download_count": 2,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a15_neon-vfpv4.zip"
@@ -320,7 +320,7 @@
         "state": "uploaded",
         "size": 397971,
         "digest": "sha256:64700f98aae0edabe39857dcaa21c9fccc4f6e4d06a5eb928d8249d41210f0df",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a5_vfpv4.zip"
@@ -356,7 +356,7 @@
         "state": "uploaded",
         "size": 397049,
         "digest": "sha256:95058bbfbaa24220389fd1c135bf314d573b083339dc9419f37e6a6f92f21243",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a7.zip"
@@ -392,7 +392,7 @@
         "state": "uploaded",
         "size": 397373,
         "digest": "sha256:73f5dc9e1a1828e7467eb54dec3c953b28a4f3cf1bc0e8e5e13c27da7d624a18",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a7_neon-vfpv4.zip"
@@ -428,7 +428,7 @@
         "state": "uploaded",
         "size": 397113,
         "digest": "sha256:e1ec1bc93cb4a2a8750bd76ae7064a6b061305796b91e3bb69d146820685882e",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a7_vfpv4.zip"
@@ -464,7 +464,7 @@
         "state": "uploaded",
         "size": 397886,
         "digest": "sha256:698b0afcc2fa4170ee4d2d20ac24e39bb936a3f1f4d71c5d5afcabb427642bdc",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a8_vfpv3.zip"
@@ -500,7 +500,7 @@
         "state": "uploaded",
         "size": 397598,
         "digest": "sha256:cef9693e3eef3ff6005ec6dcf995b47b1aa62c63ad2d659760eec2064678c07a",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a9.zip"
@@ -536,7 +536,7 @@
         "state": "uploaded",
         "size": 397612,
         "digest": "sha256:ef2823f95777b08cb04dadc741e565357cdbd3215e853c075e23fa6b72922c24",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a9_neon.zip"
@@ -572,7 +572,7 @@
         "state": "uploaded",
         "size": 197141,
         "digest": "sha256:28eb65985e840efedef5676dc4a59a9c5a2a65a0b6c4712bc43409b3ff1879ef",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_cortex-a9_vfpv3-d16.zip"
@@ -608,7 +608,7 @@
         "state": "uploaded",
         "size": 399593,
         "digest": "sha256:513a8930faa1aebf9011f34ad4f19ccd52100dbdd700ac38dcc880a7f77dded4",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_fa526.zip"
@@ -644,7 +644,7 @@
         "state": "uploaded",
         "size": 399849,
         "digest": "sha256:8c25bd5853130accd963388591ae95b6465d0e4fc098f916e1c2a27ec822a10f",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_arm_xscale.zip"
@@ -680,7 +680,7 @@
         "state": "uploaded",
         "size": 414780,
         "digest": "sha256:164e6aee395c08c7d1aab2e63b30c7d191d420b743eacab4d201165ba6632fa5",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mips64_octeonplus.zip"
@@ -716,7 +716,7 @@
         "state": "uploaded",
         "size": 406044,
         "digest": "sha256:c41b70ee948e80dda6e9e9f9986f2549510a2af16ecbc99861122a835ec1158c",
-        "download_count": 0,
+        "download_count": 46,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mipsel_24kc.zip"
@@ -752,7 +752,7 @@
         "state": "uploaded",
         "size": 406224,
         "digest": "sha256:cf014115fb7f975f2777969711dd163348764e64979db17acbadc0d5a18bb66d",
-        "download_count": 0,
+        "download_count": 4,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mipsel_24kc_24kf.zip"
@@ -788,7 +788,7 @@
         "state": "uploaded",
         "size": 406219,
         "digest": "sha256:ea68f89829304d24cd64e7efddd49444760f1008134db9c529a3c6e032808775",
-        "download_count": 0,
+        "download_count": 2,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mipsel_74kc.zip"
@@ -824,7 +824,7 @@
         "state": "uploaded",
         "size": 406201,
         "digest": "sha256:f62e7f79e2c2c1cffc28c49299519e81b227c80f4e14f1e68110646158a47aec",
-        "download_count": 0,
+        "download_count": 2,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mipsel_mips32.zip"
@@ -860,7 +860,7 @@
         "state": "uploaded",
         "size": 404980,
         "digest": "sha256:58725d1336dae8d3858612172dbba67430f9d30c1edb7bfc8e9a42e76b353031",
-        "download_count": 0,
+        "download_count": 9,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mips_24kc.zip"
@@ -896,7 +896,7 @@
         "state": "uploaded",
         "size": 200659,
         "digest": "sha256:501df90acdb70361292c9e21b46dbc57a21b72ee1159f67ff0a77bda4f6d5208",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mips_4kec.zip"
@@ -932,7 +932,7 @@
         "state": "uploaded",
         "size": 404997,
         "digest": "sha256:a30259a4ee0156266079791976b0a60c1dc801dcb60b28e87cdafd4bd74c9a90",
-        "download_count": 0,
+        "download_count": 2,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mips_mips32.zip"
@@ -968,7 +968,7 @@
         "state": "uploaded",
         "size": 225596,
         "digest": "sha256:a09eaf770c53c63eb51da04f3352dd5739edbd4aa9d33f788ebbe49cab711c5d",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_riscv64_generic.zip"
@@ -1004,7 +1004,7 @@
         "state": "uploaded",
         "size": 207479,
         "digest": "sha256:24b7df0ae6e20ec130f8d892429b952b7d619dd890c44c8da351c105c5c0438e",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_riscv64_riscv64.zip"
@@ -1040,7 +1040,7 @@
         "state": "uploaded",
         "size": 409621,
         "digest": "sha256:2328988007853169dd52ff01b16c61a8240f7b2325227355d4e6611e7e0832b5",
-        "download_count": 0,
+        "download_count": 10,
         "created_at": "2026-01-14T19:34:08Z",
         "updated_at": "2026-01-14T19:34:08Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_x86_64.zip"
@@ -1048,7 +1048,19 @@
     ],
     "tarball_url": "https://api.github.com/repos/remittor/zapret-openwrt/tarball/v72.20260114",
     "zipball_url": "https://api.github.com/repos/remittor/zapret-openwrt/zipball/v72.20260114",
-    "body": "zapret v72.20260114 for OpenWrt\n"
+    "body": "zapret v72.20260114 for OpenWrt\r\n",
+    "reactions": {
+      "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/276841046/reactions",
+      "total_count": 1,
+      "+1": 1,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    }
   },
   {
     "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/276320409",
@@ -1119,7 +1131,7 @@
         "state": "uploaded",
         "size": 408227,
         "digest": "sha256:b20f89f4776e8563525be942d2f405ccc6de89da9271897806816b86575d508f",
-        "download_count": 1059,
+        "download_count": 1842,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_aarch64_cortex-a53.zip"
@@ -1155,7 +1167,7 @@
         "state": "uploaded",
         "size": 408263,
         "digest": "sha256:4891415cc51673b6cca5c8bb99d86d38ca6afda0d99b2643e026d5d72ea5da87",
-        "download_count": 12,
+        "download_count": 17,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_aarch64_cortex-a72.zip"
@@ -1191,7 +1203,7 @@
         "state": "uploaded",
         "size": 408262,
         "digest": "sha256:8e6e630b3a25dcd8c2b99222926e95adbdc775b665beaf0f36a1774ac34dab69",
-        "download_count": 7,
+        "download_count": 12,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_aarch64_cortex-a76.zip"
@@ -1227,7 +1239,7 @@
         "state": "uploaded",
         "size": 408258,
         "digest": "sha256:1c9984bc62348d16453ac9286d3b5fc58888fe994017e894c109e789bf315430",
-        "download_count": 40,
+        "download_count": 67,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_aarch64_generic.zip"
@@ -1299,7 +1311,7 @@
         "state": "uploaded",
         "size": 398446,
         "digest": "sha256:1afddd3a132a46f8475b3e46e8f4f01f3192f854e9abd1aabcda7e974cdb9198",
-        "download_count": 6,
+        "download_count": 7,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_arm_arm926ej-s.zip"
@@ -1335,7 +1347,7 @@
         "state": "uploaded",
         "size": 396184,
         "digest": "sha256:9f884c332f00bfa99bb60382bc6b04864c8800d0f214375004a5eeb1970d5e29",
-        "download_count": 8,
+        "download_count": 13,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_arm_cortex-a15_neon-vfpv4.zip"
@@ -1371,7 +1383,7 @@
         "state": "uploaded",
         "size": 397017,
         "digest": "sha256:d51466b1c0e5a0dfa1c7671acab5b333cd01dcd9bf7d82fe018d725250b68e62",
-        "download_count": 7,
+        "download_count": 9,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_arm_cortex-a5_vfpv4.zip"
@@ -1443,7 +1455,7 @@
         "state": "uploaded",
         "size": 396398,
         "digest": "sha256:4f6ee0a402f07a4234fd5f0a0608f3cdef52a31c2a3bb29ca172f067f6369b63",
-        "download_count": 19,
+        "download_count": 26,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_arm_cortex-a7_neon-vfpv4.zip"
@@ -1551,7 +1563,7 @@
         "state": "uploaded",
         "size": 396669,
         "digest": "sha256:89851d0e10f8e34940ad69de0304c1305b8de7ae0d1cbbb2a5fb15befeca514f",
-        "download_count": 8,
+        "download_count": 9,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_arm_cortex-a9.zip"
@@ -1695,7 +1707,7 @@
         "state": "uploaded",
         "size": 398694,
         "digest": "sha256:1741fd14b251f0732dcea745ac69f6c12b88ec08ab0b24ebdfee0c950ea4acd3",
-        "download_count": 5,
+        "download_count": 7,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_arm_xscale.zip"
@@ -1767,7 +1779,7 @@
         "state": "uploaded",
         "size": 405386,
         "digest": "sha256:563319e3e4e31fd139888c7c0b5e091a8b141985e6598312b1c72cccbbdd7f1c",
-        "download_count": 332,
+        "download_count": 627,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mipsel_24kc.zip"
@@ -1803,7 +1815,7 @@
         "state": "uploaded",
         "size": 405363,
         "digest": "sha256:1436fcf02547dbb7d1c5ab134699ff81459629ed81b12830c6355fafbfd043fa",
-        "download_count": 8,
+        "download_count": 11,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mipsel_24kc_24kf.zip"
@@ -1839,7 +1851,7 @@
         "state": "uploaded",
         "size": 405370,
         "digest": "sha256:a8116e90cf96d187351940abb54be36ee8dd177b0c3b37e42150d3314abe25e9",
-        "download_count": 11,
+        "download_count": 12,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mipsel_74kc.zip"
@@ -1875,7 +1887,7 @@
         "state": "uploaded",
         "size": 405371,
         "digest": "sha256:59e6dc750707358a2de4345427fa1e4efe40c7e14a92998583937bff5ee8f40d",
-        "download_count": 8,
+        "download_count": 11,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mipsel_mips32.zip"
@@ -1911,7 +1923,7 @@
         "state": "uploaded",
         "size": 404126,
         "digest": "sha256:78c9f4a3b830abffc80d2fb7fd654c8c0cfe30370d8023b85182ae39fe7d80a9",
-        "download_count": 64,
+        "download_count": 124,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mips_24kc.zip"
@@ -1947,7 +1959,7 @@
         "state": "uploaded",
         "size": 200371,
         "digest": "sha256:17b519f6ab5226508048b47099672ef407e2e36cabc00be02a5361925ccd9496",
-        "download_count": 7,
+        "download_count": 8,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mips_4kec.zip"
@@ -1983,7 +1995,7 @@
         "state": "uploaded",
         "size": 404138,
         "digest": "sha256:fe657aeac64f8b390bb9e78c89d3704b519ca5ab6d7654af454a03b204b789cd",
-        "download_count": 9,
+        "download_count": 11,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:47Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mips_mips32.zip"
@@ -2055,7 +2067,7 @@
         "state": "uploaded",
         "size": 207127,
         "digest": "sha256:d0d214b9537a13474210171249be1b2dc2023534d21f12aaca00187ed91a7286",
-        "download_count": 6,
+        "download_count": 7,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_riscv64_riscv64.zip"
@@ -2091,7 +2103,7 @@
         "state": "uploaded",
         "size": 408438,
         "digest": "sha256:029b4707237ec3da4db19138cde937a75b07c1c1494f3d88b7bd3e77d31c85c4",
-        "download_count": 67,
+        "download_count": 124,
         "created_at": "2026-01-13T11:21:46Z",
         "updated_at": "2026-01-13T11:21:46Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_x86_64.zip"
@@ -2099,7 +2111,19 @@
     ],
     "tarball_url": "https://api.github.com/repos/remittor/zapret-openwrt/tarball/v72.20260113",
     "zipball_url": "https://api.github.com/repos/remittor/zapret-openwrt/zipball/v72.20260113",
-    "body": "zapret v72.20260113 for OpenWrt\r\n"
+    "body": "zapret v72.20260113 for OpenWrt\r\n",
+    "reactions": {
+      "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/276320409/reactions",
+      "total_count": 1,
+      "+1": 1,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    }
   },
   {
     "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/276334921",
@@ -2170,7 +2194,7 @@
         "state": "uploaded",
         "size": 509301,
         "digest": "sha256:d3e8f6853113b5082285b104ff9400ae96e25cbf3cc0bc61591d9a9c34968c91",
-        "download_count": 162,
+        "download_count": 205,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_aarch64_cortex-a53.zip"
@@ -2278,7 +2302,7 @@
         "state": "uploaded",
         "size": 509367,
         "digest": "sha256:1528e9ed460baf18d2e3ec9001894ad50dd5980ed7b0f98b0fa8941edb39c60c",
-        "download_count": 10,
+        "download_count": 12,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_aarch64_generic.zip"
@@ -2602,7 +2626,7 @@
         "state": "uploaded",
         "size": 493826,
         "digest": "sha256:741aaaf778b2a43d51d6ef7cc702a29798bcb2655e82884c0a262b91d575a2ea",
-        "download_count": 3,
+        "download_count": 4,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_arm_cortex-a9.zip"
@@ -2818,7 +2842,7 @@
         "state": "uploaded",
         "size": 500671,
         "digest": "sha256:49a1a9964e080dc98199bd1ad901633e65bf9fb2f129208f5d44488a85b054c7",
-        "download_count": 59,
+        "download_count": 82,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_mipsel_24kc.zip"
@@ -2962,7 +2986,7 @@
         "state": "uploaded",
         "size": 500286,
         "digest": "sha256:0d89382b056aede88f79f1a719648e23771cec850d4e0808681a1d2de4901668",
-        "download_count": 8,
+        "download_count": 13,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_mips_24kc.zip"
@@ -3034,7 +3058,7 @@
         "state": "uploaded",
         "size": 500251,
         "digest": "sha256:a4f41097716b71798108af465e78c232d985fa1ff69142adf3aa6af77ea5f217",
-        "download_count": 4,
+        "download_count": 5,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_mips_mips32.zip"
@@ -3070,7 +3094,7 @@
         "state": "uploaded",
         "size": 507628,
         "digest": "sha256:b7eacecc072c61917da26f12cdbee0f5bf321622dad4c04b6f1ac3004fdc5eb2",
-        "download_count": 27,
+        "download_count": 33,
         "created_at": "2026-01-13T12:14:50Z",
         "updated_at": "2026-01-13T12:14:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_x86_64.zip"
@@ -3149,7 +3173,7 @@
         "state": "uploaded",
         "size": 407128,
         "digest": "sha256:a40edb7c23d6f72ac5a1a4d3a3e672ee90ad6a0b183ae832b2ca7c616b685687",
-        "download_count": 267,
+        "download_count": 272,
         "created_at": "2026-01-11T13:04:25Z",
         "updated_at": "2026-01-11T13:04:25Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_aarch64_cortex-a53.zip"
@@ -3617,7 +3641,7 @@
         "state": "uploaded",
         "size": 395326,
         "digest": "sha256:45b59034225b5dbbfefee45fd84f2774e8e5fd984da92a7a8eb07c1eeba38896",
-        "download_count": 4,
+        "download_count": 5,
         "created_at": "2026-01-11T13:04:25Z",
         "updated_at": "2026-01-11T13:04:25Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_arm_cortex-a9_neon.zip"
@@ -3797,7 +3821,7 @@
         "state": "uploaded",
         "size": 404230,
         "digest": "sha256:dd9bf0f7ecea7fd3f3e7076354c9fd26fedce8cfe9663416408878d90a70023a",
-        "download_count": 121,
+        "download_count": 123,
         "created_at": "2026-01-11T13:04:25Z",
         "updated_at": "2026-01-11T13:04:25Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_mipsel_24kc.zip"
@@ -4013,7 +4037,7 @@
         "state": "uploaded",
         "size": 402911,
         "digest": "sha256:28cd4ff1b2eef971212d9f0123912e0238d22656560d34bb7a6918d23a3085ac",
-        "download_count": 6,
+        "download_count": 7,
         "created_at": "2026-01-11T13:04:25Z",
         "updated_at": "2026-01-11T13:04:25Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_mips_mips32.zip"
@@ -4049,7 +4073,7 @@
         "state": "uploaded",
         "size": 223825,
         "digest": "sha256:c560f7381c250e1485e6ff6a2329d1bb57487d73c3ae01f0a8de260d950f2024",
-        "download_count": 3,
+        "download_count": 4,
         "created_at": "2026-01-11T13:04:25Z",
         "updated_at": "2026-01-11T13:04:25Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_riscv64_generic.zip"
@@ -4132,8 +4156,8 @@
     "body": "zapret v72.20260111 for OpenWrt\n",
     "reactions": {
       "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/275817424/reactions",
-      "total_count": 3,
-      "+1": 2,
+      "total_count": 2,
+      "+1": 1,
       "-1": 0,
       "laugh": 0,
       "hooray": 0,
@@ -4212,7 +4236,7 @@
         "state": "uploaded",
         "size": 507319,
         "digest": "sha256:7747358cc486416e6ae101856fb60094ce6ed1b900a7f3fd32bc47604411ffd3",
-        "download_count": 96,
+        "download_count": 97,
         "created_at": "2026-01-11T13:24:59Z",
         "updated_at": "2026-01-11T13:24:59Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260111/zapret2_v0.8.20260111_aarch64_cortex-a53.zip"
@@ -5191,7 +5215,7 @@
         "state": "uploaded",
         "size": 497764,
         "digest": "sha256:89dfbcfc7f99851852eabf064889071ab97d47a120c5c78d1ff4b367405ec5d8",
-        "download_count": 443,
+        "download_count": 445,
         "created_at": "2026-01-09T14:24:39Z",
         "updated_at": "2026-01-09T14:24:39Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260109/zapret2_v0.8.20260109_aarch64_cortex-a53.zip"
@@ -6182,7 +6206,7 @@
         "state": "uploaded",
         "size": 397211,
         "digest": "sha256:45497b49f86b7a3900865c1ee2317de5ceeaea8c1e560d78cef2f299ab4c25d7",
-        "download_count": 4125,
+        "download_count": 4132,
         "created_at": "2026-01-08T18:43:45Z",
         "updated_at": "2026-01-08T18:43:45Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260108/zapret_v72.20260108_aarch64_cortex-a53.zip"
@@ -6362,7 +6386,7 @@
         "state": "uploaded",
         "size": 387559,
         "digest": "sha256:84e40335e4bdb1c1b262ef23bdd9db1827edab1bff671fd3e2be155ad3f6db06",
-        "download_count": 14,
+        "download_count": 15,
         "created_at": "2026-01-08T18:43:45Z",
         "updated_at": "2026-01-08T18:43:45Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260108/zapret_v72.20260108_arm_arm926ej-s.zip"
@@ -6722,7 +6746,7 @@
         "state": "uploaded",
         "size": 387542,
         "digest": "sha256:e0286aff1fc86079ac247ebd9a67fac64d49b57e34bf7a85ef92b14e940cba66",
-        "download_count": 13,
+        "download_count": 14,
         "created_at": "2026-01-08T18:43:44Z",
         "updated_at": "2026-01-08T18:43:45Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260108/zapret_v72.20260108_arm_fa526.zip"
@@ -7118,7 +7142,7 @@
         "state": "uploaded",
         "size": 397066,
         "digest": "sha256:611f9af444de03990d095492a75c0dc6ff6564f32fa9c60e03e4f6cc033994f0",
-        "download_count": 261,
+        "download_count": 262,
         "created_at": "2026-01-08T18:43:44Z",
         "updated_at": "2026-01-08T18:43:45Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260108/zapret_v72.20260108_x86_64.zip"
@@ -7209,7 +7233,7 @@
         "state": "uploaded",
         "size": 497043,
         "digest": "sha256:427713e34b6a1f60f683b66f8c8239b6456df7a722d65bdb9a1364fb157b4913",
-        "download_count": 15,
+        "download_count": 16,
         "created_at": "2026-01-09T12:50:54Z",
         "updated_at": "2026-01-09T12:50:55Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_aarch64_cortex-a53.zip"
@@ -7317,7 +7341,7 @@
         "state": "uploaded",
         "size": 497047,
         "digest": "sha256:d193a1c108df77ce4f35f514f24d4b43b5124c14e1db48e7fec466ab228bc1b5",
-        "download_count": 1,
+        "download_count": 2,
         "created_at": "2026-01-09T12:50:54Z",
         "updated_at": "2026-01-09T12:50:54Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_aarch64_generic.zip"
@@ -7353,7 +7377,7 @@
         "state": "uploaded",
         "size": 480852,
         "digest": "sha256:05ed1a54d5d87f1dfeafc7d253feb87b6e180d37caf7e9726adb2348399c92f8",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-09T12:50:54Z",
         "updated_at": "2026-01-09T12:50:55Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_arm_arm1176jzf-s_vfp.zip"
@@ -7677,7 +7701,7 @@
         "state": "uploaded",
         "size": 480299,
         "digest": "sha256:d91a6bf744396e2915c9f8f5aab6824f2ab74b37e7ff4343604e84b8372a1ecd",
-        "download_count": 0,
+        "download_count": 1,
         "created_at": "2026-01-09T12:50:54Z",
         "updated_at": "2026-01-09T12:50:54Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_arm_cortex-a9_neon.zip"
@@ -7893,7 +7917,7 @@
         "state": "uploaded",
         "size": 488418,
         "digest": "sha256:79b38ac1ece3e5a5442350746da0c778290899d15e79fd6f1a7321ef0d293d5c",
-        "download_count": 1,
+        "download_count": 2,
         "created_at": "2026-01-09T12:50:54Z",
         "updated_at": "2026-01-09T12:50:55Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_mipsel_24kc_24kf.zip"
@@ -8200,7 +8224,7 @@
         "state": "uploaded",
         "size": 492438,
         "digest": "sha256:43198ea9a94f8b585f57c1622cdb3a1faa487920e2ec602357476215778262f5",
-        "download_count": 1114,
+        "download_count": 1115,
         "created_at": "2025-12-29T17:05:21Z",
         "updated_at": "2025-12-29T17:05:21Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20251229/zapret2_v0.8.20251229_aarch64_cortex-a53.zip"
@@ -8380,7 +8404,7 @@
         "state": "uploaded",
         "size": 479996,
         "digest": "sha256:737cb946d24f801cccb51685d85802aa505a89b8c75bbb59ef9bef0d04646a82",
-        "download_count": 10,
+        "download_count": 11,
         "created_at": "2025-12-29T17:05:19Z",
         "updated_at": "2025-12-29T17:05:20Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20251229/zapret2_v0.8.20251229_arm_arm926ej-s.zip"
@@ -8812,7 +8836,7 @@
         "state": "uploaded",
         "size": 491571,
         "digest": "sha256:c3d47e8677c7d0eb35ebc7407d9cbaf984cf315882713adf3e3b1d42d50b1d3e",
-        "download_count": 9,
+        "download_count": 10,
         "created_at": "2025-12-29T17:05:19Z",
         "updated_at": "2025-12-29T17:05:20Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20251229/zapret2_v0.8.20251229_mips64_octeonplus.zip"
@@ -9179,7 +9203,7 @@
         "state": "uploaded",
         "size": 498986,
         "digest": "sha256:8c7be6d03db871525f21dd6c7853f60bd9cc62059884ebe44832b8fdb3bdc51e",
-        "download_count": 14258,
+        "download_count": 14268,
         "created_at": "2025-12-27T09:13:24Z",
         "updated_at": "2025-12-27T09:13:24Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_aarch64_cortex-a53.zip"
@@ -9827,7 +9851,7 @@
         "state": "uploaded",
         "size": 465966,
         "digest": "sha256:01e44b7bdc6ddb154edfb39f64863169d51c5c1dd6947b468ecd73b91f8f4b7a",
-        "download_count": 4266,
+        "download_count": 4267,
         "created_at": "2025-12-27T09:13:24Z",
         "updated_at": "2025-12-27T09:13:24Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251227/zapret_v72.20251227_mipsel_24kc.zip"
@@ -17203,7 +17227,7 @@
         "state": "uploaded",
         "size": 464900,
         "digest": "sha256:1b6a489502c1ce468fa235f640ace0f836814e05166247815d8e98f769bfbda2",
-        "download_count": 836,
+        "download_count": 837,
         "created_at": "2025-12-20T08:28:51Z",
         "updated_at": "2025-12-20T08:28:51Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251220/zapret2_v0.7.20251220_aarch64_cortex-a53.zip"
@@ -20248,7 +20272,7 @@
         "state": "uploaded",
         "size": 484376,
         "digest": "sha256:ea953cfc33edc7b0ef4db7ae58b8449f35bba222f723aa75d21dc3581109b9c8",
-        "download_count": 2677,
+        "download_count": 2690,
         "created_at": "2025-12-13T08:23:37Z",
         "updated_at": "2025-12-13T08:23:37Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251213/zapret_v72.20251213_aarch64_cortex-a53.zip"
@@ -21239,7 +21263,7 @@
         "state": "uploaded",
         "size": 479136,
         "digest": "sha256:e31e14e588c2add6940a63a1c3785ec656a2c9d216be7af5b467b6b2d0842c17",
-        "download_count": 13877,
+        "download_count": 13881,
         "created_at": "2025-11-22T09:48:34Z",
         "updated_at": "2025-11-22T09:48:34Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_aarch64_cortex-a53.zip"
@@ -21347,7 +21371,7 @@
         "state": "uploaded",
         "size": 479662,
         "digest": "sha256:7094ec8a32658339fe2e5a6490851dd868a99c6d7b87066d2b7bf48bb7a65638",
-        "download_count": 793,
+        "download_count": 795,
         "created_at": "2025-11-22T09:48:34Z",
         "updated_at": "2025-11-22T09:48:34Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_aarch64_generic.zip"
@@ -21887,7 +21911,7 @@
         "state": "uploaded",
         "size": 446303,
         "digest": "sha256:8b6f9850c0c584be9d999625efd0b3ceb4b8a2ec41558558d97c5280358fd7ad",
-        "download_count": 3794,
+        "download_count": 3797,
         "created_at": "2025-11-22T09:48:34Z",
         "updated_at": "2025-11-22T09:48:34Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_mipsel_24kc.zip"
@@ -22031,7 +22055,7 @@
         "state": "uploaded",
         "size": 445407,
         "digest": "sha256:39f2f661a0f8901b62da59812054e666c78a92c619250355c91277ea6b09fc65",
-        "download_count": 765,
+        "download_count": 766,
         "created_at": "2025-11-22T09:48:34Z",
         "updated_at": "2025-11-22T09:48:34Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20251122/zapret_v72.20251122_mips_24kc.zip"
@@ -24085,7 +24109,7 @@
         "state": "uploaded",
         "size": 463350,
         "digest": "sha256:3dd9eebf19f97cc4570322927b3b7d65cadec59e168910976aede38d4dc0c8aa",
-        "download_count": 60,
+        "download_count": 61,
         "created_at": "2025-09-24T11:49:39Z",
         "updated_at": "2025-09-24T11:49:39Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20250924/zapret_v72.20250924_mips_mips32.zip"
@@ -24212,7 +24236,7 @@
         "state": "uploaded",
         "size": 463367,
         "digest": "sha256:efd1d88dfe9301ff810c7706b45ced7af5361140e2242b0d6f5b141bda202d70",
-        "download_count": 1709,
+        "download_count": 1710,
         "created_at": "2025-09-18T13:41:26Z",
         "updated_at": "2025-09-18T13:41:26Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v71.20250918/zapret_v71.20250918_aarch64_cortex-a53.zip"
@@ -24860,7 +24884,7 @@
         "state": "uploaded",
         "size": 433010,
         "digest": "sha256:323117bbad1268818a45dfdb7c221d2a3d5d3f1960eb490295e9155053ad4006",
-        "download_count": 748,
+        "download_count": 749,
         "created_at": "2025-09-18T13:41:26Z",
         "updated_at": "2025-09-18T13:41:27Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v71.20250918/zapret_v71.20250918_mipsel_24kc.zip"
@@ -25076,7 +25100,7 @@
         "state": "uploaded",
         "size": 455306,
         "digest": "sha256:ea003d8b0978c4ee053ceccefa75ad4d1ea18a18d2ac511dcae1969ae0095130",
-        "download_count": 24,
+        "download_count": 25,
         "created_at": "2025-09-18T13:41:26Z",
         "updated_at": "2025-09-18T13:41:27Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v71.20250918/zapret_v71.20250918_mips_mips32.zip"
@@ -28049,7 +28073,7 @@
         "state": "uploaded",
         "size": 441986,
         "digest": null,
-        "download_count": 58,
+        "download_count": 59,
         "created_at": "2025-05-05T13:47:52Z",
         "updated_at": "2025-05-05T13:47:52Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v70.20250505/zapret_v70.20250505_mips_mips32.zip"

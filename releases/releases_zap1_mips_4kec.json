@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-14T19:34:22Z",
+  "generated_at": "2026-01-15T16:20:55Z",
   "releases": [
     {
       "tag": "v72.20260114",
       "name": "zapret v72.20260114",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-01-14T19:02:51Z",
-      "updated_at": "2026-01-14T19:34:08Z",
+      "updated_at": "2026-01-15T16:20:41Z",
       "published_at": "2026-01-14T19:34:08Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260114",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 200659,
           "digest": "sha256:501df90acdb70361292c9e21b46dbc57a21b72ee1159f67ff0a77bda4f6d5208",
-          "download_count": 0,
+          "download_count": 1,
           "created_at": "2026-01-14T19:34:08Z",
           "updated_at": "2026-01-14T19:34:08Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_mips_4kec.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 200371,
           "digest": "sha256:17b519f6ab5226508048b47099672ef407e2e36cabc00be02a5361925ccd9496",
-          "download_count": 7,
+          "download_count": 8,
           "created_at": "2026-01-13T11:21:46Z",
           "updated_at": "2026-01-13T11:21:46Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_mips_4kec.zip"
