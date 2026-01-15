@@ -370,21 +370,40 @@ return baseclass.extend({
             ]);
         },
 
-        handleSaveAdv: function(ev) {
+        handleSaveAdv: async function(ev) {
             let txt = document.getElementById('widget.modal_content');
-            let value = txt.value.trim().replace(/\r\n/g, '\n') + '\n';
-
-            return fs.write(this.file, value).then(async rc => {
+            let value = txt.value.trim().replace(/\r\n/g, '\n');
+            if (value.length > 0) {
+                value += '\n';
+            }
+            let data = value.replace(/'/g, `'\"'\"'`);
+            let chunkSize = 8000;
+            try {
+                for (let wsize = -1; wsize < data.length; wsize += chunkSize) {
+                    let chunk = '';
+                    if (wsize < 0) {
+                        wsize = 0;
+                    }
+                    if (data.length > 0) {
+                        chunk = data.slice(wsize, wsize + chunkSize);
+                    }
+                    let teeArg = (wsize === 0) ? '' : '-a ';
+                    let cmd = `printf %s '${chunk}' | tee ${teeArg} '${this.file}'`;
+                    let res = await fs.exec('/bin/busybox', [ 'sh', '-c', cmd ]);
+                    if (res.code !== 0) {
+                        throw new Error('tee failed, rc = ' + res.code);
+                    }
+                }
                 txt.value = value;
                 ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
                 if (this.callback) {
                     return this.callback(rc);
                 }
-            }).catch(e => {
+            } catch(e) {
                 ui.addNotification(null, E('p', _('Unable to save the contents') + ': %s'.format(e.message)));
-            }).finally(() => {
+            } finally {
                 ui.hideModal();
-            });
+            }
         },
 
         error: function(e) {
