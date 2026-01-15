@@ -13,6 +13,11 @@ opt_strat=$2
 if echo "$opt_flags" | grep -q "(reset_ipset)"; then
 	restore_all_ipset_cfg
 fi
+
+if echo "$opt_flags" | grep -q "(erase_autohostlist)"; then
+	: > $ZAPRET_BASE/ipset/zapret-hosts-auto.txt
+	: > $ZAPRET_BASE/ipset/zapret-hosts-auto-debug.log
+fi
 	
 create_default_cfg "$opt_flags" "$opt_strat"
 
