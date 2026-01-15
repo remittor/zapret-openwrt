@@ -487,7 +487,7 @@ if [ "$opt_update" != "" ]; then
 		fi
 	fi
 	if ! command -v unzip >/dev/null 2>&1; then
-		echo "ERROR: package \"upzip\" not installed!"
+		echo "ERROR: package \"unzip\" not installed!"
 		return 218
 	fi
 	unzip -q "$ZAP_PKG_FN" -d $ZAP_PKG_DIR
