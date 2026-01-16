@@ -181,5 +181,17 @@ function set_cfg_default_values
 			commit $cfgname
 		EOF
 	fi
+	if echo "$opt_flags" | grep -q "(enable_custom_d)"; then
+		uci batch <<-EOF
+			set $cfgname.config.DISABLE_CUSTOM='0'
+			commit $cfgname
+		EOF
+	fi
+	if echo "$opt_flags" | grep -q "(disable_custom_d)"; then
+		uci batch <<-EOF
+			set $cfgname.config.DISABLE_CUSTOM='1'
+			commit $cfgname
+		EOF
+	fi
 	return 0
 }

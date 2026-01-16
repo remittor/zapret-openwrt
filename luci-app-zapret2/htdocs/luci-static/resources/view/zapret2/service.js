@@ -244,8 +244,18 @@ return view.extend({
             ' ', _('Set AutoHostList mode')
         ]);
 
+        let erase_autohostlist = E('label', [
+            E('input', { type: 'checkbox', id: 'cfg_erase_autohostlist' }),
+            ' ', _('Erase AutoHostList (ipset)')
+        ]);
+
+        let enable_custom_d = E('label', [
+            E('input', { type: 'checkbox', id: 'cfg_enable_custom_d' }),
+            ' ', _('Enable use  custom.d scripts')
+        ]);
+
         let strat_list = [ ];
-        strat_list.push( E('option', { value: 'strat__skip__' }, [ '-' ] ) );
+        strat_list.push( E('option', { value: 'strat__skip__' }, [ 'not change' ] ) );
         for (let id = 0; id < this.nfqws_strat_list.length; id++) {
             let strat = '' + this.nfqws_strat_list[id];
             strat_list.push( E('option', { value: 'strat_' + id }, [ strat ] ) );
@@ -276,10 +286,19 @@ return view.extend({
             if (document.getElementById('cfg_autohostlist').checked) {
                 opt_flags += '(set_mode_autohostlist)';
             };
+            if (document.getElementById('cfg_erase_autohostlist').checked) {
+                opt_flags += '(erase_autohostlist)';
+            };
+            if (document.getElementById('cfg_enable_custom_d').checked) {
+                opt_flags += '(enable_custom_d)';
+            };
             //console.log('RESET: opt_flags = ' + opt_flags);
             let sel_strat = document.getElementById('cfg_nfqws_strat');
             let opt_strat = sel_strat.options[sel_strat.selectedIndex].text;
             //console.log('RESET: strat = ' + opt_strat);
+            if (opt_strat == 'not change') {
+                opt_strat = '-';
+            }
             opt_flags += '(sync)';
             let args = [ opt_flags, opt_strat ];
             return this.serviceActionEx('reset', resetcfg_btn, args, true);
@@ -292,6 +311,10 @@ return view.extend({
                 reset_ipset,
                 E('br'), E('br'),
                 set_autohostlist,
+                E('br'), E('br'),
+                erase_autohostlist,
+                E('br'), E('br'),
+                enable_custom_d,
                 E('br'), E('br'),
                 nfqws_strat,
                 E('br'), E('br')
