@@ -4,16 +4,25 @@
 ZAP_TMP_DIR=/tmp/zapret_dwc
 
 opt_dig=
+opt_recom=
+opt_tmp_dir=
 opt_test=
 
-while getopts "d:t" opt; do
+while getopts "d:RT:t" opt; do
 	case $opt in
 		d) opt_dig="$OPTARG";;
+		R) opt_recom="true";;     # Recommendations
+		T) opt_tmp_dir="$OPTARG";;
 		t) opt_test="true";;
 	esac
 done 
 
-rm -rf $ZAP_TMP_DIR
+[ "$opt_tmp_dir" != "" ] && ZAP_TMP_DIR="$opt_tmp_dir"
+
+TARGET_LIST_FILE="$ZAP_TMP_DIR/targets"
+
+[ -f "$TARGET_LIST_FILE" ] && rm -rf "$ZAP_TMP_DIR"
+[ -f "$TARGET_LIST_FILE" ] && exit 3
 
 CURL_TIMEOUT=5
 CURL_RANGETO=65535
@@ -40,11 +49,21 @@ if [ "$opt_dig" != "" ]; then
 		echo "ERROR: package \"bind-dig\" not installed!"
 		return 12
 	fi
-	[ "$opt_dig" = "@" ] && opt_dig='8.8.8.8'
-	[ "$opt_dig" = "8" ] && opt_dig='8.8.8.8'
-	[ "$opt_dig" = "1" ] && opt_dig='1.1.1.1'
+	OPT_DIG_DNS="@$opt_dig"
+	[ "$opt_dig" = "@"  ] && OPT_DIG_DNS=''
+	[ "$opt_dig" = "8"  ] && OPT_DIG_DNS='@8.8.8.8'
+	[ "$opt_dig" = "1"  ] && OPT_DIG_DNS='@1.1.1.1'
+	[ "$opt_dig" = "9"  ] && OPT_DIG_DNS='@9.9.9.9'
 fi
 
+if [ -f /etc/openwrt_release ]; then
+	CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+	if [ ! -f $CA_CERTS ]; then
+		echo "ERROR: package \"ca-bundle\" not installed!"
+		return 15
+	fi
+fi
+ 
 #echo 'Original sources: https://github.com/hyperion-cs/dpi-checkers'
 #echo 'WEB-version: https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/'
 
@@ -83,7 +102,6 @@ function trim
 
 mkdir -p "$ZAP_TMP_DIR"
 
-TARGET_LIST_FILE="$ZAP_TMP_DIR/targets"
 : > "$TARGET_LIST_FILE"
 IDX=0
 while IFS= read -r line; do
@@ -123,9 +141,9 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 		DST_IP=
 		RESOLVE_OPT=
 		if [ "$opt_dig" != "" ]; then
-			DST_IP=$( dig +time=2 +retry=1 @$opt_dig +short "$DOMAIN" 2>/dev/null | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
+			DST_IP=$( dig +time=2 +retry=1 $OPT_DIG_DNS +short "$DOMAIN" 2>/dev/null | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
 		else
-			CURL_TIMEOUTS="--connect-timeout 5 --max-time 6 --speed-time 5 --speed-limit 1"
+			CURL_TIMEOUTS="--connect-timeout 2 --max-time 3 --speed-time 3 --speed-limit 1"
 			DST_IP=$( curl -4 -I -s $CURL_TIMEOUTS -o /dev/null -w '%{remote_ip}\n' "$URL" )
 			if [ -z "$DST_IP" ]; then
 				DST_IP=$( curl -4 -s $CURL_TIMEOUTS -o /dev/null -r 0-0 -w '%{remote_ip}\n' "$URL" )
@@ -147,43 +165,70 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 			-A "$CURL_USERAGENT" \
 			-D "$FNAME.hdr" \
 			-o "$FNAME.body"
-	) > "$FNAME.txt" 2>&1 &
+	) > "$FNAME.log" 2>&1 &
 done < "$TARGET_LIST_FILE"
 
 wait
 
-printf '%s\n' "$ZAP_TMP_DIR"/*.txt | sort | while IFS= read -r file; do
+FAIL_URL_LIST="$ZAP_TMP_DIR/FAIL_URL_LIST.txt"
+rm -f "$FAIL_URL_LIST"
+
+printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 	[ -f "$file" ] || continue
-	FNAME="${file##*/}"
-	FNAME="${FNAME%.txt}" 
-	ID=$( echo "$FNAME" | cut -d= -f1)
-	TAG=$( echo "$FNAME" | cut -d= -f2)
-	PROVIDER=$(echo "$FNAME" | cut -d= -f3 )
-	FNAME="$ZAP_TMP_DIR/$FNAME"
+	FILENAME="${file##*/}"
+	FILENAME="${FILENAME%.log}"
+	ID=$( echo "$FILENAME" | cut -d= -f1)
+	TAG=$( echo "$FILENAME" | cut -d= -f2)
+	PROVIDER=$(echo "$FILENAME" | cut -d= -f3 )
+	FNAME="$ZAP_TMP_DIR/$FILENAME"
 	BODY_SIZE=0
 	[ -f "$FNAME.body" ] && BODY_SIZE=$( wc -c < "$FNAME.body" )
 	IPADDR="x.x.x.x"
 	[ -s "$FNAME.ip" ] && IPADDR=$( cat "$FNAME.ip" )
+	res=0
 	status=
 	if [ ! -f "$FNAME.hdr" ]; then
 		status="ERROR: cannot Get Headers"
 	elif [ ! -s "$FNAME.hdr" ]; then
 		status="ERROR: cannot get headers"
 	elif [ ! -f "$FNAME.body" ]; then
-		status="ERROR: cannot get body"
+		status="Possibly detected*"
 	elif [ ! -s "$FNAME.body" ]; then
 		status="Possibly detected"
 	else
 		if [ "$BODY_SIZE" -le $CURL_RANGETO ]; then
-			status="Failed to complete detection (recv $BODY_SIZE bytes)"
+			status="Failed (recv $BODY_SIZE bytes)"
+			res=5
 		else
 			status="[ OK ]"
+			res=100
 		fi
 	fi
 	printf '%12s / %-15s / %-13s: %s \n' "$TAG" "$IPADDR" "$PROVIDER" "$status"
 	echo "$BODY_SIZE" > "$FNAME.size"
+	if [ $res != 100 ]; then
+		URL=$( cat "$FNAME.url" )
+		echo "$FILENAME : $URL" >> "$FAIL_URL_LIST"
+	fi
 done
 
 rm -f "$ZAP_TMP_DIR"/*.body >/dev/null 2>&1
+
+[ "$opt_recom" != "true" ] && return 0
+
+[ ! -f "$FAIL_URL_LIST" ] && return 0
+
+echo "==================================================="
+echo "Recommendations:"
+echo "Try adding the specified domains to the \"zapret-hosts-user.txt\" file:"
+
+while IFS=' : ' read -r FILENAME URL; do
+	[ -z "$FILENAME" ] && continue
+	URL_NO_PROTO="${URL#*://}"
+	DOMAIN="${URL_NO_PROTO%%/*}"
+	URLPATH="/${URL_NO_PROTO#*/}"
+	[ "$URLPATH" = "/$URL_NO_PROTO" ] && URLPATH="/"
+	echo "$DOMAIN"
+done < "$FAIL_URL_LIST"
 
 return 0 

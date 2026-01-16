@@ -35,6 +35,7 @@ return baseclass.extend({
         if (dns_ip && dns_ip != 'default') {
             cmd.push(...[ '-d', dns_ip.trim() ]);
         }
+        cmd.push('-R');  // show recommendations
         let log = '/tmp/'+tools.appName+'_dwc.log';
         let callback = this.execAndReadCallback;
         let wnd = this;
@@ -65,7 +66,20 @@ return baseclass.extend({
     {
         this.pkg_arch = pkg_arch;
 
-        let DNS_LIST = [ '8.8.8.8', '1.1.1.1' ];
+        let DNS_LIST = [
+            '8.8.8.8',          // Google
+            '8.8.4.4',          // Google
+            '1.1.1.1',          // Cloudflare
+            '1.0.0.1',          // Cloudflare
+            '9.9.9.9',          // Quad9
+            '149.112.112.112',  // Quad9
+            '208.67.222.222',   // OpenDNS
+            '208.67.220.220',   // OpenDNS
+            '8.26.56.26',       // Comodo
+            '8.20.247.20',      // Comodo
+            '64.6.64.6',        // Verisign
+            '64.6.65.6',        // Verisign
+        ];
         let dns_list = [ ];
         dns_list.push( E('option', { value: 'dns_default' }, [ 'default' ] ) );
         for (let id = 0; id < DNS_LIST.length; id++) {
