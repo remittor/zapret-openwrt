@@ -100,7 +100,6 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ipset
 	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)$(ZAPRET_DIR)/ipset/
 	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck.sh  $(1)$(ZAPRET_DIR)/blockcheck.sh
-	#$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.default $(1)$(ZAPRET_DIR)/config.default
 	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/tmp
 	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt
 	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)$(ZAPRET_DIR)/init.d/openwrt/
@@ -132,9 +131,13 @@ define Package/$(PKG_NAME)/install
 			$(INSTALL_DATA) /dev/null "$$$${dst}"; \
 		fi; \
 	)
+	# Fix main config file
+	rm -f $(1)$(ZAPRET_DIR)/config
+	$(INSTALL_DATA) ./config.default $(1)$(ZAPRET_DIR)/config
+	$(INSTALL_DATA) ./config.default $(1)$(ZAPRET_DIR)/config.default
 	# Install def conf files
 	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ipset_def
-	$(CP) ./ipset/zapret*.txt  $(1)/opt/zapret/ipset_def/
+	$(CP) ./ipset/zapret*.txt  $(1)$(ZAPRET_DIR)/ipset_def/
 	# Fix permissions
 	chmod 644 $(1)$(ZAPRET_DIR)/ipset/*.txt
 	chmod 644 $(1)$(ZAPRET_DIR)/ipset_def/*.txt
