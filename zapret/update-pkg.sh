@@ -75,9 +75,13 @@ ZAP_PKG_URL=
 if command -v apk >/dev/null; then
 	PKG_MGR=apk
 	ZAP_PKG_EXT=apk
+	PKG_CHECK="apk info -e "
+	PKG_REMOVE="apk del --force "
 elif command -v opkg >/dev/null; then
 	PKG_MGR=opkg
 	ZAP_PKG_EXT=ipk
+	PKG_CHECK="opkg status "
+	PKG_REMOVE="opkg remove --force-remove "
 else
 	echo "ERROR: No package manager found"
 	return 1
@@ -524,6 +528,14 @@ if [ "$opt_update" != "" ]; then
 	echo "ZAP_PKG_LUCI_FN = $ZAP_PKG_LUCI_FN"
 	if [ "$opt_forced" = true ]; then
 		pkg_mgr_update
+	fi
+	if ${PKG_CHECK} ${ZAPRET_CFG_NAME}-mdig >/dev/null 2>&1; then
+		echo "Uninstall mdig..."
+		${PKG_REMOVE} ${ZAPRET_CFG_NAME}-mdig
+	fi
+	if ${PKG_CHECK} ${ZAPRET_CFG_NAME}-ip2net >/dev/null 2>&1; then
+		echo "Uninstall ip2net..."
+		${PKG_REMOVE} ${ZAPRET_CFG_NAME}-ip2net
 	fi
 	echo "Install downloaded packages..."
 	if [ "$PKG_MGR" != "apk" ]; then
