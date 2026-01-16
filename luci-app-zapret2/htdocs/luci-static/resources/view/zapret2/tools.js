@@ -370,11 +370,46 @@ return baseclass.extend({
             ]);
         },
 
-        handleSaveAdv: function(ev) {
-            let txt = document.getElementById('widget.modal_content');
-            let value = txt.value.trim().replace(/\r\n/g, '\n') + '\n';
+        writeAdv: async function(fileName, data, chunkSize = 8000)
+        {
+            let tmpFile = fileName + '.tmp';
+            try {
+                for (let wsize = 0; wsize <= data.length; wsize += chunkSize) {
+                    let chunk = data.slice(wsize, wsize + chunkSize);
+                    if (wsize > 0 && chunk.length == 0) {
+                        break;  // EOF
+                    }
+                    chunk = chunk.replace(/'/g, `'\"'\"'`);
+                    let teeArg = (wsize === 0) ? '' : '-a';
+                    let cmd = `printf %s '${chunk}' | tee ${teeArg} '${tmpFile}'`;
+                    let res = await fs.exec('/bin/busybox', [ 'sh', '-c', cmd ]);
+                    if (res.code !== 0) {
+                        throw new Error('tee failed, rc = ' + res.code);
+                    }
+                }
+                let res = await fs.exec('/bin/busybox', [ 'mv', '-f', tmpFile, fileName ]);
+                if (res.code != 0) {
+                    throw new Error('mv failed, rc = ' + res.code);
+                }
+            } catch(e) {
+                try {
+                    await fs.exec('/bin/busybox', [ 'rm', '-f', tmpFile ]);
+                } catch(e2) {
+                    // nothing
+                }
+                throw e;
+            }
+            return fs.stat(fileName);
+        },
 
-            return fs.write(this.file, value).then(async rc => {
+        handleSaveAdv: async function(ev)
+        {
+            let txt = document.getElementById('widget.modal_content');
+            let value = txt.value.trim().replace(/\r\n/g, '\n');
+            if (value.length > 0) {
+                value += '\n';
+            }
+            return this.writeAdv(this.file, value).then(async rc => {
                 txt.value = value;
                 ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
                 if (this.callback) {
