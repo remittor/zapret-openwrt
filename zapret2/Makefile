@@ -71,89 +71,101 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
 endef
 
+ZAPRET_DIR := /opt/zapret2
+
+define ZAPRET_CONFFILES_LIST
+$(ZAPRET_DIR)/config
+$(ZAPRET_DIR)/ipset/zapret-hosts-google.txt
+$(ZAPRET_DIR)/ipset/zapret-hosts-user.txt
+$(ZAPRET_DIR)/ipset/zapret-hosts-user-exclude.txt
+$(ZAPRET_DIR)/ipset/zapret-ip-exclude.txt
+$(ZAPRET_DIR)/ipset/zapret-hosts-auto.txt
+$(ZAPRET_DIR)/ipset/cust1.txt
+$(ZAPRET_DIR)/ipset/cust2.txt
+$(ZAPRET_DIR)/ipset/cust3.txt
+$(ZAPRET_DIR)/ipset/cust4.txt
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/10-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/20-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/50-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/60-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/90-script.sh
+endef
+
+$(eval ZAPRET_CONFFILES := $(foreach file,$(ZAPRET_CONFFILES_LIST),$(strip $(file))))
+
 define Package/$(PKG_NAME)/conffiles
-/opt/zapret2/config
-/opt/zapret2/ipset/zapret-hosts-google.txt
-/opt/zapret2/ipset/zapret-hosts-user.txt
-/opt/zapret2/ipset/zapret-hosts-user-exclude.txt
-/opt/zapret2/ipset/zapret-ip-exclude.txt
-/opt/zapret2/ipset/zapret-hosts-auto.txt
-/opt/zapret2/init.d/openwrt/custom.d/10-script.sh
-/opt/zapret2/init.d/openwrt/custom.d/20-script.sh
-/opt/zapret2/init.d/openwrt/custom.d/50-script.sh
-/opt/zapret2/init.d/openwrt/custom.d/60-script.sh
-/opt/zapret2/init.d/openwrt/custom.d/90-script.sh
+$(ZAPRET_CONFFILES_LIST)
 endef
 
 define Package/$(PKG_NAME)/install
-	$(INSTALL_DIR) $(1)/opt/zapret2
-	$(INSTALL_DIR) $(1)/opt/zapret2/$(MAKE_PATH)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2 $(1)/opt/zapret2/$(MAKE_PATH)/
-	$(INSTALL_DIR) $(1)/opt/zapret2/ip2net
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)/opt/zapret2/ip2net/
-	$(INSTALL_DIR) $(1)/opt/zapret2/mdig
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdig/mdig $(1)/opt/zapret2/mdig/
-	$(INSTALL_DIR) $(1)/opt/zapret2/common
-	$(CP) $(PKG_BUILD_DIR)/common/* $(1)/opt/zapret2/common/
-	$(INSTALL_DIR) $(1)/opt/zapret2/lua
-	$(CP) $(PKG_BUILD_DIR)/lua/* $(1)/opt/zapret2/lua/
-	#$(INSTALL_DIR) $(1)/opt/zapret2/docs
-	#$(CP) $(PKG_BUILD_DIR)/docs/* $(1)/opt/zapret2/docs/
-	$(INSTALL_DIR) $(1)/opt/zapret2/files
-	$(CP) $(PKG_BUILD_DIR)/files/* $(1)/opt/zapret2/files/
-	$(CP)                ./files/* $(1)/opt/zapret2/files/
-	$(INSTALL_DIR) $(1)/opt/zapret2/ipset
-	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)/opt/zapret2/ipset/
-	$(INSTALL_DIR) $(1)/opt/zapret2/blockcheck2.d
-	$(CP) $(PKG_BUILD_DIR)/blockcheck2.d/* $(1)/opt/zapret2/blockcheck2.d/
-	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck2.sh  $(1)/opt/zapret2/blockcheck2.sh
-	#$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret2/config.default
-	$(INSTALL_DIR) $(1)/opt/zapret2/tmp
-	$(INSTALL_DIR) $(1)/opt/zapret2/init.d/openwrt
-	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)/opt/zapret2/init.d/openwrt/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/$(MAKE_PATH)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2 $(1)$(ZAPRET_DIR)/$(MAKE_PATH)/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ip2net
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)$(ZAPRET_DIR)/ip2net/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/mdig
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdig/mdig $(1)$(ZAPRET_DIR)/mdig/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/common
+	$(CP) $(PKG_BUILD_DIR)/common/* $(1)$(ZAPRET_DIR)/common/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/lua
+	$(CP) $(PKG_BUILD_DIR)/lua/* $(1)$(ZAPRET_DIR)/lua/
+	#$(INSTALL_DIR) $(1)$(ZAPRET_DIR)docs
+	#$(CP) $(PKG_BUILD_DIR)/docs/* $(1)$(ZAPRET_DIR)/docs/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/files
+	$(CP) $(PKG_BUILD_DIR)/files/* $(1)$(ZAPRET_DIR)/files/
+	$(CP)                ./files/* $(1)$(ZAPRET_DIR)/files/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ipset
+	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)$(ZAPRET_DIR)/ipset/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/blockcheck2.d
+	$(CP) $(PKG_BUILD_DIR)/blockcheck2.d/* $(1)$(ZAPRET_DIR)/blockcheck2.d/
+	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck2.sh  $(1)$(ZAPRET_DIR)/blockcheck2.sh
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/tmp
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt
+	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)$(ZAPRET_DIR)/init.d/openwrt/
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/90-zapret2 $(1)/etc/hotplug.d/iface/90-zapret2
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./init.d.sh $(1)/etc/init.d/zapret2
-	$(INSTALL_DATA) ./config.default $(1)/opt/zapret2/config.default
-	$(INSTALL_DATA) ./config.default $(1)/opt/zapret2/config
-	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret2/ipset/zapret-hosts-google.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret2/ipset/zapret-hosts-user.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret2/ipset/zapret-hosts-user-exclude.txt
-	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret2/ipset/zapret-ip-exclude.txt
-	$(INSTALL_DIR) $(1)/opt/zapret2/ipset_def
-	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret2/ipset_def/zapret-hosts-google.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret2/ipset_def/zapret-hosts-user.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret2/ipset_def/zapret-hosts-user-exclude.txt
-	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret2/ipset_def/zapret-ip-exclude.txt
-	$(INSTALL_DIR) $(1)/opt/zapret2/init.d
-	$(INSTALL_DIR) $(1)/opt/zapret2/init.d/openwrt
-	$(INSTALL_DIR) $(1)/opt/zapret2/init.d/openwrt/custom.d
-	$(CP) ./custom.d/* $(1)/opt/zapret2/init.d/openwrt/custom.d/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt/custom.d
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret2-uci-def-cfg.sh
 	# install all sh-scripts
-	$(CP) ./*.sh $(1)/opt/zapret2/
-	rm -f $(1)/opt/zapret2/init.d.sh
-	# Create empty conf files
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/ipset/zapret-hosts-auto.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/ipset/cust1.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/ipset/cust2.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/ipset/cust3.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/ipset/cust4.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/init.d/openwrt/custom.d/10-script.sh
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/init.d/openwrt/custom.d/20-script.sh
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/init.d/openwrt/custom.d/60-script.sh
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret2/init.d/openwrt/custom.d/90-script.sh
+	$(CP) ./*.sh $(1)$(ZAPRET_DIR)/
+	rm -f $(1)$(ZAPRET_DIR)/init.d.sh
+	# Install conf files
+	$(foreach cfg,$(ZAPRET_CONFFILES), \
+		rel="$(cfg:$(ZAPRET_DIR)/%=%)"; \
+		src="./$$$$rel"; \
+		if echo "$$$$rel" | grep -q "/custom.d/"; then \
+			src="./custom.d/$$$$(basename $$$$rel)"; \
+		fi; \
+		dst="$(1)$(cfg)"; \
+		mkdir -p "$(1)$(dir $(cfg))"; \
+		rm -f "$$$${dst}"; \
+		if [ -f "$$$${src}" ]; then \
+			$(INSTALL_DATA) "$$$${src}" "$$$${dst}"; \
+		else \
+			$(INSTALL_DATA) /dev/null "$$$${dst}"; \
+		fi; \
+	)
+	# Fix main config file
+	rm -f $(1)$(ZAPRET_DIR)/config
+	$(INSTALL_DATA) ./config.default $(1)$(ZAPRET_DIR)/config
+	$(INSTALL_DATA) ./config.default $(1)$(ZAPRET_DIR)/config.default
+	# Install def conf files
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ipset_def
+	$(CP) ./ipset/zapret*.txt  $(1)$(ZAPRET_DIR)/ipset_def/
 	# Fix permissions
-	chmod 644 $(1)/opt/zapret2/ipset/*.txt
-	chmod 644 $(1)/opt/zapret2/ipset_def/*.txt
-	chmod 644 $(1)/opt/zapret2/init.d/openwrt/custom.d/*.sh
-	chmod 644 $(1)/opt/zapret2/config*
-	chmod 755 $(1)/opt/zapret2/*.sh
-	chmod 755 $(1)/opt/zapret2/$(MAKE_PATH)/*
-	chmod 755 $(1)/opt/zapret2/ip2net/*
-	chmod 755 $(1)/opt/zapret2/mdig/*
+	chmod 644 $(1)$(ZAPRET_DIR)/ipset/*.txt
+	chmod 644 $(1)$(ZAPRET_DIR)/ipset_def/*.txt
+	chmod 644 $(1)$(ZAPRET_DIR)/init.d/openwrt/custom.d/*.sh
+	chmod 644 $(1)$(ZAPRET_DIR)/config*
+	chmod 755 $(1)$(ZAPRET_DIR)/*.sh
+	chmod 755 $(1)$(ZAPRET_DIR)/$(MAKE_PATH)/*
+	chmod 755 $(1)$(ZAPRET_DIR)/ip2net/*
+	chmod 755 $(1)$(ZAPRET_DIR)/mdig/*
 endef
 
 define Package/$(PKG_NAME)/preinst
