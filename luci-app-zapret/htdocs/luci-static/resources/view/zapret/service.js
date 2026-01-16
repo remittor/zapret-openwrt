@@ -289,7 +289,7 @@ return view.extend({
             if (document.getElementById('cfg_erase_autohostlist').checked) {
                 opt_flags += '(erase_autohostlist)';
             };
-            if (document.getElementById('enable_custom_d').checked) {
+            if (document.getElementById('cfg_enable_custom_d').checked) {
                 opt_flags += '(enable_custom_d)';
             };
             //console.log('RESET: opt_flags = ' + opt_flags);
