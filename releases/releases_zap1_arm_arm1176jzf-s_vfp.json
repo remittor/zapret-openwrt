@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-16T17:52:19Z",
+  "generated_at": "2026-01-16T20:15:38Z",
   "releases": [
     {
       "tag": "v72.20260116",
       "name": "zapret v72.20260116",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-01-16T17:22:02Z",
-      "updated_at": "2026-01-16T17:52:07Z",
+      "updated_at": "2026-01-16T20:15:27Z",
       "published_at": "2026-01-16T17:52:07Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260116",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 400548,
           "digest": "sha256:36b647c6ebb4dc202bc494c578285561f309b4f188aa5ce0b4c624567d0abe4a",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-16T17:52:06Z",
           "updated_at": "2026-01-16T17:52:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260116/zapret_v72.20260116_arm_arm1176jzf-s_vfp.zip"

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-16T17:52:20Z",
+  "generated_at": "2026-01-16T20:15:40Z",
   "releases": [
     {
       "tag": "v72.20260116",
       "name": "zapret v72.20260116",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-01-16T17:22:02Z",
-      "updated_at": "2026-01-16T17:52:07Z",
+      "updated_at": "2026-01-16T20:15:27Z",
       "published_at": "2026-01-16T17:52:07Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260116",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 408375,
           "digest": "sha256:743aefd38d7a2c32026d050276f76ff66879c2a193e6f4a739873bbc1e02336c",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-16T17:52:06Z",
           "updated_at": "2026-01-16T17:52:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260116/zapret_v72.20260116_mipsel_mips32.zip"

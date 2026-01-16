@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-16T17:52:20Z",
+  "generated_at": "2026-01-16T20:15:39Z",
   "releases": [
     {
       "tag": "v72.20260116",
       "name": "zapret v72.20260116",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-01-16T17:22:02Z",
-      "updated_at": "2026-01-16T17:52:07Z",
+      "updated_at": "2026-01-16T20:15:27Z",
       "published_at": "2026-01-16T17:52:07Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260116",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 416899,
           "digest": "sha256:efd315c845631fc08213fea7c89d0615ad209b3b79ec6307b0707d9d6540b94c",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-16T17:52:06Z",
           "updated_at": "2026-01-16T17:52:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260116/zapret_v72.20260116_mips64_octeonplus.zip"
