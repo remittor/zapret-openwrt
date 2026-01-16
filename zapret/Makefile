@@ -56,87 +56,96 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
 endef
 
+ZAPRET_DIR := /opt/zapret
+
+define ZAPRET_CONFFILES_LIST
+$(ZAPRET_DIR)/config
+$(ZAPRET_DIR)/ipset/zapret-hosts-google.txt
+$(ZAPRET_DIR)/ipset/zapret-hosts-user.txt
+$(ZAPRET_DIR)/ipset/zapret-hosts-user-exclude.txt
+$(ZAPRET_DIR)/ipset/zapret-ip-exclude.txt
+$(ZAPRET_DIR)/ipset/zapret-hosts-auto.txt
+$(ZAPRET_DIR)/ipset/cust1.txt
+$(ZAPRET_DIR)/ipset/cust2.txt
+$(ZAPRET_DIR)/ipset/cust3.txt
+$(ZAPRET_DIR)/ipset/cust4.txt
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/10-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/20-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/50-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/60-script.sh
+$(ZAPRET_DIR)/init.d/openwrt/custom.d/90-script.sh
+endef
+
+$(eval ZAPRET_CONFFILES := $(foreach file,$(ZAPRET_CONFFILES_LIST),$(strip $(file))))
+
 define Package/$(PKG_NAME)/conffiles
-/opt/zapret/config
-/opt/zapret/ipset/zapret-hosts-google.txt
-/opt/zapret/ipset/zapret-hosts-user.txt
-/opt/zapret/ipset/zapret-hosts-user-exclude.txt
-/opt/zapret/ipset/zapret-ip-exclude.txt
-/opt/zapret/ipset/zapret-hosts-auto.txt
-/opt/zapret/init.d/openwrt/custom.d/10-script.sh
-/opt/zapret/init.d/openwrt/custom.d/20-script.sh
-/opt/zapret/init.d/openwrt/custom.d/50-script.sh
-/opt/zapret/init.d/openwrt/custom.d/60-script.sh
-/opt/zapret/init.d/openwrt/custom.d/90-script.sh
+$(ZAPRET_CONFFILES_LIST)
 endef
 
 define Package/$(PKG_NAME)/install
-	$(INSTALL_DIR) $(1)/opt/zapret
-	$(INSTALL_DIR) $(1)/opt/zapret/$(MAKE_PATH)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws $(1)/opt/zapret/$(MAKE_PATH)/
-	$(INSTALL_DIR) $(1)/opt/zapret/ip2net
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)/opt/zapret/ip2net/
-	$(INSTALL_DIR) $(1)/opt/zapret/mdig
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdig/mdig $(1)/opt/zapret/mdig/
-	$(INSTALL_DIR) $(1)/opt/zapret/common
-	$(CP) $(PKG_BUILD_DIR)/common/* $(1)/opt/zapret/common/
-	#$(INSTALL_DIR) $(1)/opt/zapret/docs
-	#$(CP) $(PKG_BUILD_DIR)/docs/* $(1)/opt/zapret/docs/
-	$(INSTALL_DIR) $(1)/opt/zapret/files
-	$(CP) $(PKG_BUILD_DIR)/files/* $(1)/opt/zapret/files/
-	$(CP)                ./files/* $(1)/opt/zapret/files/
-	$(INSTALL_DIR) $(1)/opt/zapret/ipset
-	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)/opt/zapret/ipset/
-	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck.sh  $(1)/opt/zapret/blockcheck.sh
-	#$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.default $(1)/opt/zapret/config.default
-	$(INSTALL_DIR) $(1)/opt/zapret/tmp
-	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt
-	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)/opt/zapret/init.d/openwrt/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/$(MAKE_PATH)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws $(1)$(ZAPRET_DIR)/$(MAKE_PATH)/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ip2net
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip2net/ip2net $(1)$(ZAPRET_DIR)/ip2net/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/mdig
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdig/mdig $(1)$(ZAPRET_DIR)/mdig/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/common
+	$(CP) $(PKG_BUILD_DIR)/common/* $(1)$(ZAPRET_DIR)/common/
+	#$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/docs
+	#$(CP) $(PKG_BUILD_DIR)/docs/* $(1)$(ZAPRET_DIR)/docs/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/files
+	$(CP) $(PKG_BUILD_DIR)/files/* $(1)$(ZAPRET_DIR)/files/
+	$(CP)                ./files/* $(1)$(ZAPRET_DIR)/files/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ipset
+	$(CP) $(PKG_BUILD_DIR)/ipset/* $(1)$(ZAPRET_DIR)/ipset/
+	$(INSTALL_BIN)  $(PKG_BUILD_DIR)/blockcheck.sh  $(1)$(ZAPRET_DIR)/blockcheck.sh
+	#$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.default $(1)$(ZAPRET_DIR)/config.default
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/tmp
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt
+	$(CP) $(PKG_BUILD_DIR)/init.d/openwrt/* $(1)$(ZAPRET_DIR)/init.d/openwrt/
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/init.d/openwrt/90-zapret $(1)/etc/hotplug.d/iface/90-zapret
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./init.d.sh $(1)/etc/init.d/zapret
-	$(INSTALL_DATA) ./config.default $(1)/opt/zapret/config.default
-	$(INSTALL_DATA) ./config.default $(1)/opt/zapret/config
-	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset/zapret-hosts-google.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset/zapret-hosts-user.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset/zapret-hosts-user-exclude.txt
-	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset/zapret-ip-exclude.txt
-	$(INSTALL_DIR) $(1)/opt/zapret/ipset_def
-	$(INSTALL_DATA) ./ipset/zapret-hosts-google.txt       $(1)/opt/zapret/ipset_def/zapret-hosts-google.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user.txt         $(1)/opt/zapret/ipset_def/zapret-hosts-user.txt
-	$(INSTALL_DATA) ./ipset/zapret-hosts-user-exclude.txt $(1)/opt/zapret/ipset_def/zapret-hosts-user-exclude.txt
-	$(INSTALL_DATA) ./ipset/zapret-ip-exclude.txt         $(1)/opt/zapret/ipset_def/zapret-ip-exclude.txt
-	$(INSTALL_DIR) $(1)/opt/zapret/init.d
-	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt
-	$(INSTALL_DIR) $(1)/opt/zapret/init.d/openwrt/custom.d
-	$(CP) ./custom.d/* $(1)/opt/zapret/init.d/openwrt/custom.d/
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/init.d/openwrt/custom.d
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./uci-def-cfg.sh     $(1)/etc/uci-defaults/zapret-uci-def-cfg.sh
 	# install all sh-scripts
-	$(CP) ./*.sh $(1)/opt/zapret/
-	rm -f $(1)/opt/zapret/init.d.sh
-	# Create empty conf files
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/zapret-hosts-auto.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust1.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust2.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust3.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/ipset/cust4.txt
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/10-script.sh
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/20-script.sh
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/60-script.sh
-	$(INSTALL_DATA) /dev/null $(1)/opt/zapret/init.d/openwrt/custom.d/90-script.sh
+	$(CP) ./*.sh $(1)$(ZAPRET_DIR)/
+	rm -f $(1)$(ZAPRET_DIR)/init.d.sh
+	# Install conf files
+	$(foreach cfg,$(ZAPRET_CONFFILES), \
+		rel="$(cfg:$(ZAPRET_DIR)/%=%)"; \
+		src="./$$$$rel"; \
+		if echo "$$$$rel" | grep -q "/custom.d/"; then \
+			src="./custom.d/$$$$(basename $$$$rel)"; \
+		fi; \
+		dst="$(1)$(cfg)"; \
+		mkdir -p "$(1)$(dir $(cfg))"; \
+		rm -f "$$$${dst}"; \
+		if [ -f "$$$${src}" ]; then \
+			$(INSTALL_DATA) "$$$${src}" "$$$${dst}"; \
+		else \
+			$(INSTALL_DATA) /dev/null "$$$${dst}"; \
+		fi; \
+	)
+	# Install def conf files
+	$(INSTALL_DIR) $(1)$(ZAPRET_DIR)/ipset_def
+	$(CP) ./ipset/zapret*.txt  $(1)/opt/zapret/ipset_def/
 	# Fix permissions
-	chmod 644 $(1)/opt/zapret/ipset/*.txt
-	chmod 644 $(1)/opt/zapret/ipset_def/*.txt
-	chmod 644 $(1)/opt/zapret/init.d/openwrt/custom.d/*.sh
-	chmod 644 $(1)/opt/zapret/config*
-	chmod 755 $(1)/opt/zapret/*.sh
-	chmod 755 $(1)/opt/zapret/$(MAKE_PATH)/*
-	chmod 755 $(1)/opt/zapret/ip2net/*
-	chmod 755 $(1)/opt/zapret/mdig/*
+	chmod 644 $(1)$(ZAPRET_DIR)/ipset/*.txt
+	chmod 644 $(1)$(ZAPRET_DIR)/ipset_def/*.txt
+	chmod 644 $(1)$(ZAPRET_DIR)/init.d/openwrt/custom.d/*.sh
+	chmod 644 $(1)$(ZAPRET_DIR)/config*
+	chmod 755 $(1)$(ZAPRET_DIR)/*.sh
+	chmod 755 $(1)$(ZAPRET_DIR)/$(MAKE_PATH)/*
+	chmod 755 $(1)$(ZAPRET_DIR)/ip2net/*
+	chmod 755 $(1)$(ZAPRET_DIR)/mdig/*
 	# Disable TPWS in blockcheck
-	grep -q '^SKIP_TPWS=' $(1)/opt/zapret/blockcheck.sh || sed -i '/^NFT_TABLE=blockcheck$$$$/a SKIP_TPWS=$$$${SKIP_TPWS:-1}' $(1)/opt/zapret/blockcheck.sh
+	grep -q '^SKIP_TPWS=' $(1)$(ZAPRET_DIR)/blockcheck.sh || sed -i '/^NFT_TABLE=blockcheck$$$$/a SKIP_TPWS=$$$${SKIP_TPWS:-1}' $(1)$(ZAPRET_DIR)/blockcheck.sh
 endef
 
 define Package/$(PKG_NAME)/preinst
