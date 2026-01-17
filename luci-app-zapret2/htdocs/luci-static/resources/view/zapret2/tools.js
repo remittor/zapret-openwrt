@@ -320,14 +320,17 @@ return baseclass.extend({
     },
 
     fileEditDialog: baseclass.extend({
-        __init__: function(file, title, desc, aux = null, rows = 10, callback, file_exists = false) {
-            this.file        = file;
-            this.title       = title;
-            this.desc        = desc;
-            this.aux         = aux;
-            this.rows        = rows,
-            this.callback    = callback;
-            this.file_exists = file_exists;
+        __init__: function(opts = {})
+        {
+            Object.assign(this, {
+                file: '',
+                title: '',
+                desc: '',
+                aux: '',
+                rows: 10,
+                callback: null,
+                file_exists: false
+            }, opts);
         },
 
         load: function() {
@@ -455,13 +458,16 @@ return baseclass.extend({
     }),
 
     longstrEditDialog: baseclass.extend({
-        __init__: function(cfgsec, cfgparam, title, desc, rows = 10, multiline = false) {
-            this.cfgsec      = cfgsec;
-            this.cfgparam    = cfgparam;
-            this.title       = title;
-            this.desc        = desc;
-            this.rows        = rows;
-            this.multiline   = multiline;
+        __init__: function(opts = {})
+        {
+            Object.assign(this, {
+                cfgsec: '',
+                cfgparam: '',
+                title: '',
+                desc: '',
+                rows: 10,
+                multiline: false  // may be 2
+            }, opts);
             env_tools.load_env(this);
         },
 

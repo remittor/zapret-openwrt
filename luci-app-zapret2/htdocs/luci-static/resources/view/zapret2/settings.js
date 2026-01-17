@@ -157,7 +157,14 @@ return view.extend({
             if (multiline == 2) {
                 desc += '<br/>' + _('Example') + ': <a target=_blank href=%s>%s</a>'.format(tools.nfqws_opt_url);
             }
-            btn.onclick = () => new tools.longstrEditDialog('config', param, param, desc, rows, multiline).show();
+            btn.onclick = () => new tools.longstrEditDialog({
+                cfgsec: 'config',
+                cfgparam: param,
+                title: param,
+                desc: desc,
+                rows: rows,
+                multiline: multiline,
+            }).show();
         };
 
         if (tools.appName == 'zapret2') {
@@ -313,13 +320,12 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.autoHostListFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.autoHostListFN,
-            _('Auto host list'),
-            '',
-            '',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.autoHostListFN,
+            title: _('Auto host list'),
+            desc: '',
+            rows: 15,
+        }).show();
 
         o = s.taboption(tabname, form.Flag, 'AUTOHOSTLIST_DEBUGLOG', _('DEBUGLOG'));
         o.rmempty     = false;
@@ -329,13 +335,12 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.autoHostListDbgFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.autoHostListDbgFN,
-            _('Auto host debug list'),
-            '',
-            '',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.autoHostListDbgFN,
+            title: _('Auto host debug list'),
+            desc: '',
+            rows: 15,
+        }).show();
         
         /* HostList settings */
 
@@ -346,37 +351,37 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.hostsGoogleFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.hostsGoogleFN,
-            _('Google hostname entries'),
-            _('One hostname per line.<br />Examples:'),
-            '<code>youtube.com<br />googlevideo.com</code>',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.hostsGoogleFN,
+            title: _('Google hostname entries'),
+            desc: _('One hostname per line.<br />Examples:'),
+            aux: '<code>youtube.com<br />googlevideo.com</code>',
+            rows: 15,
+        }).show();
 
         o = s.taboption(tabname, form.Button, '_user_entries_btn', _('User hostname entries <HOSTLIST>'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.hostsUserFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.hostsUserFN,
-            _('User entries'),
-            _('One hostname per line.<br />Examples:'),
-            '<code>domain.net<br />sub.domain.com<br />facebook.com</code>',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.hostsUserFN,
+            title: _('User entries'),
+            desc: _('One hostname per line.<br />Examples:'),
+            aux: '<code>domain.net<br />sub.domain.com<br />facebook.com</code>',
+            rows: 15,
+        }).show();
 
         o = s.taboption(tabname, form.Button, '_user_excluded_entries_btn', _('User excluded hostname entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.hostsUserExcludeFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.hostsUserExcludeFN,
-            _('User excluded entries'),
-            _('One hostname per line.<br />Examples:'),
-            '<code>domain.net<br />sub.domain.com<br />gosuslugi.ru</code>',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.hostsUserExcludeFN,
+            title: _('User excluded entries'),
+            desc: _('One hostname per line.<br />Examples:'),
+            aux: '<code>domain.net<br />sub.domain.com<br />gosuslugi.ru</code>',
+            rows: 15,
+        }).show();
         
         add_delim(s);
 
@@ -384,37 +389,37 @@ return view.extend({
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.iplstExcludeFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.iplstExcludeFN,
-            _('Excluded IP filter'),
-            _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
-            '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.iplstExcludeFN,
+            title: _('Excluded IP filter'),
+            desc: _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
+            aux: '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
+            rows: 15,
+        }).show();
 
         o = s.taboption(tabname, form.Button, '_user_ip_filter_btn', _('User IP entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.iplstUserFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.iplstUserFN,
-            _('User IP filter'),
-            _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
-            '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.iplstUserFN,
+            title: _('User IP filter'),
+            desc: _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
+            aux: '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
+            rows: 15,
+        }).show();
 
         o = s.taboption(tabname, form.Button, '_user_excluded_ip_filter_btn', _('User excluded IP entries'));
         o.inputtitle = _('Edit');
         o.inputstyle = 'edit btn';
         o.description = tools.iplstUserExcludeFN;
-        o.onclick = () => new tools.fileEditDialog(
-            tools.iplstUserExcludeFN,
-            _('User excluded IP filter'),
-            _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
-            '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
-            15
-        ).show();
+        o.onclick = () => new tools.fileEditDialog({
+            file: tools.iplstUserExcludeFN,
+            title: _('User excluded IP filter'),
+            desc: _('Patterns can be strings or regular expressions. Each pattern in a separate line<br />Examples:'),
+            aux: '<code>128.199.0.0/16<br />34.217.90.52<br />162.13.190.77</code>',
+            rows: 15,
+        }).show();
         
         add_delim(s);
         
@@ -425,7 +430,7 @@ return view.extend({
             o.inputtitle = _('Edit');
             o.inputstyle = 'edit btn';
             o.description = fn;
-            o.onclick = () => new tools.fileEditDialog(fn, name, '', '', 15).show();
+            o.onclick = () => new tools.fileEditDialog({ file: fn, title: name, rows: 15}).show();
         }
 
         /* custom.d files */
@@ -467,7 +472,7 @@ return view.extend({
                     desc += '<a target=_blank href=' + url + '>' + filename + '</a>';
                 }
             }
-            o.onclick = () => new tools.fileEditDialog(fn, name, desc, '', 15).show();
+            o.onclick = () => new tools.fileEditDialog({ file: fn, title: name, desc: desc, rows: 15}).show();
         }
 
         let map_promise = m.render();
