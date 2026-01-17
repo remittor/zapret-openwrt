@@ -329,7 +329,8 @@ return baseclass.extend({
                 aux: '',
                 rows: 10,
                 callback: null,
-                file_exists: false
+                file_exists: false,
+                setperm: 644,
             }, opts);
         },
 
@@ -388,6 +389,12 @@ return baseclass.extend({
                     let res = await fs.exec('/bin/busybox', [ 'sh', '-c', cmd ]);
                     if (res.code !== 0) {
                         throw new Error('tee failed, rc = ' + res.code);
+                    }
+                }
+                if (this.setperm) {
+                    let res = await fs.exec('/bin/busybox', [ 'chmod', '' + this.setperm, tmpFile ]);
+                    if (res.code != 0) {
+                        throw new Error('chmod failed, rc = ' + res.code);
                     }
                 }
                 let res = await fs.exec('/bin/busybox', [ 'mv', '-f', tmpFile, fileName ]);
