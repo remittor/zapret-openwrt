@@ -531,6 +531,10 @@ return baseclass.extend({
                 if (value != "" && value != "\t") {
                     value = '\n' + value + '\n';
                     if (this.multiline == 2) {
+                        if (value.includes("'") || value.includes('"')) {
+                            alert(_('Unable to save the contents') + ':\n' + _('text cannot contain quotes!'));
+                            return false;
+                        }
                         value = value.replace(/"/g, '');
                         value = value.replace(/'/g, '');
                     }
