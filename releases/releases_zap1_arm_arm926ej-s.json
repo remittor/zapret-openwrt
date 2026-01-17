@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-17T14:36:02Z",
+  "generated_at": "2026-01-17T16:59:29Z",
   "releases": [
     {
       "tag": "v72.20260117",
       "name": "zapret v72.20260117",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-01-17T14:06:40Z",
-      "updated_at": "2026-01-17T14:35:50Z",
+      "updated_at": "2026-01-17T16:59:19Z",
       "published_at": "2026-01-17T14:35:50Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260117",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 401923,
           "digest": "sha256:77d5fe5e5a7dd27f96ac7131f52ddaaf4f8f9c354b40ecff33aac65814c732d6",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-17T14:35:50Z",
           "updated_at": "2026-01-17T14:35:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260117/zapret_v72.20260117_arm_arm926ej-s.zip"
