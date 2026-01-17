@@ -204,9 +204,15 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 			res=100
 		fi
 	fi
+	if [ $res -lt 100 ] && [ -f "$FNAME.hdr" ] && [ $BODY_SIZE -eq 0 ]; then
+		if grep -q 'x-amzn-waf-action: challenge' "$FNAME.hdr"; then
+			status="WARN: tested site required JS-challenge"
+			res=999
+		fi
+	fi
 	printf '%12s / %-15s / %-13s: %s \n' "$TAG" "$IPADDR" "$PROVIDER" "$status"
 	echo "$BODY_SIZE" > "$FNAME.size"
-	if [ $res != 100 ]; then
+	if [ $res -lt 100 ]; then
 		URL=$( cat "$FNAME.url" )
 		echo "$FILENAME : $URL" >> "$FAIL_URL_LIST"
 	fi
