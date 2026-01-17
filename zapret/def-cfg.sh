@@ -75,7 +75,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443 <HOSTLIST>
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -104,7 +104,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443 <HOSTLIST>
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -137,7 +137,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443 <HOSTLIST>
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -170,7 +170,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -211,7 +211,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -252,7 +252,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443,2053,2083,2087,2096,8443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443,19294-19344,50000-50100'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -297,7 +297,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443,2053,2083,2087,2096,8443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443,19294-19344,50000-50100'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -348,7 +348,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
@@ -384,7 +384,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS_PORTS_UDP='443'
 			set $cfgname.config.NFQWS_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=443
 				--hostlist=/opt/zapret/ipset/zapret-hosts-google.txt
