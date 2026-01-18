@@ -674,7 +674,14 @@ return baseclass.extend({
                     return callback(cbarg, retCode, 'ERROR: Process failed with error ' + retCode);
                 }
             } catch (e) {
+                let skip_err = false;
                 if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
+                    skip_err = true;
+                }
+                if (e.message?.includes('XHR request timed out')) {
+                    skip_err = true;
+                }
+                if (skip_err) {
                     console.warn('WARN: execAndRead: ' + e.message);
                     return;  // goto next timer iteration
                 }
