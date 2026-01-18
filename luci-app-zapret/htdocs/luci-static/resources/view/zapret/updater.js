@@ -102,9 +102,11 @@ return baseclass.extend({
                 }
                 let pkg_url = txt.match(/^ZAP_PKG_URL\s*=\s*(.+)$/m);
                 if (code && pkg_url) {
-                    if (code[1] == 'E' && !wnd.forced_reinstall) {
-                        wnd.setStage(0);  // install not needed
-                        return;
+                    if (!wnd.forced_reinstall) {
+                        if (code[1] == 'E' || code[1] == 'G') {
+                            wnd.setStage(0);  // install not needed
+                            return;
+                        }
                     }
                     wnd.pkg_url = pkg_url[1];
                     wnd.setStage(2);  // enable all buttons
