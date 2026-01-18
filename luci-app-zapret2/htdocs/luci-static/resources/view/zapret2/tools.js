@@ -639,61 +639,62 @@ return baseclass.extend({
         }
         let lastLen = 0;
         let retCode = -1;
-        let timerBusy = false;
-        let timer = setInterval(async () => {
-            if (timerBusy)
-                return;  // skip iteration
-            timerBusy = true;
-            try {
-                let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
-                if (res.stdout && res.stdout.length > lastLen) {
-                    let log = res.stdout.slice(lastLen);
-                    hide_rows.forEach(re => {
-                        log = log.replace(re, '');
-                    });                    
-                    appendLog(log, '');
-                    lastLen = res.stdout.length;
-                }
-                if (retCode < 0) {
-                    let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
-                    if (rc.code != 0) {
-                        clearInterval(timer);
+        return await new Promise(async (resolve, reject) => {
+            async function poll()
+            {
+                try {
+                    let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
+                    if (res.stdout && res.stdout.length > lastLen) {
+                        let log = res.stdout.slice(lastLen);
+                        hide_rows.forEach(re => {
+                            log = log.replace(re, '');
+                        });                    
+                        appendLog(log, '');
+                        lastLen = res.stdout.length;
+                    }
+                    if (retCode < 0) {
+                        let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
+                        if (rc.code != 0) {
+                            fixLogEnd();
+                            resolve(callback(cbarg, 545, 'ERROR: cannot read file "' + rcFile + '"'));
+                            return;
+                        }
+                        if (rc.stdout) {
+                            retCode = parseInt(rc.stdout.trim(), 10);
+                        }
+                    }
+                    if (retCode >= 0) {
                         fixLogEnd();
-                        return callback(cbarg, 545, 'ERROR: cannot read file "' + rcFile + '"');
+                        if (retCode == 0 && res.stdout) {
+                            resolve(callback(cbarg, 0, res.stdout));
+                            return;
+                        }
+                        resolve(callback(cbarg, retCode, 'ERROR: Process failed with error ' + retCode));
+                        return;
                     }
-                    if (rc.stdout) {
-                        retCode = parseInt(rc.stdout.trim(), 10);
+                    setTimeout(poll, 500);
+                } catch (e) {
+                    let skip_err = false;
+                    if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
+                        skip_err = true;
                     }
-                }
-                if (retCode >= 0) {
-                    clearInterval(timer);
+                    if (e.message?.includes('XHR request timed out')) {
+                        skip_err = true;
+                    }
+                    if (skip_err) {
+                        console.warn('WARN: execAndRead: ' + e.message);
+                        setTimeout(poll, 500);
+                        return;  // goto next poll iteration
+                    }
                     fixLogEnd();
-                    if (retCode == 0 && res.stdout) {
-                        return callback(cbarg, 0, res.stdout);
-                    }
-                    return callback(cbarg, retCode, 'ERROR: Process failed with error ' + retCode);
+                    let errtxt = 'ERROR: execAndRead: ' + e.message;
+                    errtxt    += 'ERROR: execAndRead: ' + e.stack?.trim().split('\n')[0];
+                    callback(cbarg, 540, errtxt);
+                    reject(e);
                 }
-            } catch (e) {
-                let skip_err = false;
-                if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
-                    skip_err = true;
-                }
-                if (e.message?.includes('XHR request timed out')) {
-                    skip_err = true;
-                }
-                if (skip_err) {
-                    console.warn('WARN: execAndRead: ' + e.message);
-                    return;  // goto next timer iteration
-                }
-                clearInterval(timer);
-                fixLogEnd();
-                let errtxt = 'ERROR: execAndRead: ' + e.message;
-                errtxt    += 'ERROR: execAndRead: ' + e.stack?.trim().split('\n')[0];
-                return callback(cbarg, 540, errtxt);
-            } finally {
-                timerBusy = false;
             }
-        }, 500);
+            poll();
+        });
     },
 
 });
