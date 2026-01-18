@@ -25,35 +25,28 @@ return baseclass.extend({
         this.logArea.scrollTop = this.logArea.scrollHeight;
     },
 
-    setBtnMode: function(enable)
+    setBtnMode: function(check, install, cancel)
     {
-        this.btn_cancel.disabled = enable ? false : true;
-        this.btn_action.disabled = (enable == 2) ? false : true;
+        this.btn_check.disabled   = check   ? false : true;
+        this.btn_install.disabled = install ? false : true;
+        this.btn_cancel.disabled  = cancel  ? false : true;
     },
     
     setStage: function(stage, btn_flag = true)
     {
-        if (stage == 0) {
-            this.btn_action.textContent = _('Check for updates');
-            this.btn_action.classList.remove('hidden');
-        } else
-        if (stage == 1) {
-            this.btn_action.textContent = _('Update packages');
-            this.btn_action.classList.remove('hidden');
-        } else {
-            this.btn_action.classList.add('hidden');
-        }
-        if (stage > 1 && typeof(this.btn_action) == 'object') {
-            this.setBtnMode(1);
-        }
+        if (stage == 0) this.setBtnMode(1, 0, 1);
+        if (stage == 1) this.setBtnMode(0, 0, 1);
+        if (stage == 2) this.setBtnMode(1, 1, 1);
+        if (stage == 3) this.setBtnMode(0, 0, 0);
+        if (stage == 8) this.setBtnMode(0, 0, 1);
+        if (stage >= 9) this.setBtnMode(0, 0, 0);
         this.stage = stage;
     },
-    
-    checkUpdates: async function()
+
+    checkUpdates: async function(ev)
     {
         this._action = 'checkUpdates';
-        this.setStage(0);
-        this.setBtnMode(0);
+        this.setStage(1);
         this.pkg_url = null;
         this.appendLog(_('Checking for updates...'));
         let cmd = [ fn_update_pkg_sh, '-c' ];  // check for updates
@@ -61,33 +54,38 @@ return baseclass.extend({
             cmd.push('-p');  // include prereleases ZIP-files
         }
         this.forced_reinstall = document.getElementById('cfg_forced_reinstall').checked;
-        let log = '/tmp/'+tools.appName+'_pkg_check.log';
-        let callback = this.execAndReadCallback;
-        let wnd = this;
-        return tools.execAndRead({ cmd: cmd, log: log, logArea: this.logArea, callback: callback, cbarg: wnd });
+        return tools.execAndRead({
+            cmd: cmd,
+            log: '/tmp/'+tools.appName+'_pkg_check.log',
+            logArea: this.logArea,
+            callback: this.execAndReadCallback,
+            cbarg: this,  // wnd
+        });
     },
 
-    installUpdates: async function()
+    installUpdates: async function(ev)
     {
-        this._action = 'installUpdates';
-        this.setStage(1);
-        this.setBtnMode(0);
         if (!this.pkg_url || this.pkg_url.length < 10) {
             this.appendLog('ERROR: pkg_url = null');
-            this.setStage(999);
+            this.setStage(9);
             return;
         }
+        this._action = 'installUpdates';
+        this.setStage(3);
         this.appendLog(_('Install updates...'));
         let cmd = [ fn_update_pkg_sh, '-u', this.pkg_url ];  // update packages
         if (document.getElementById('cfg_forced_reinstall').checked == true) {
             cmd.push('-f');  // forced reinstall if same version
         }
         //this._test = 1; cmd.push('-t'); cmd.push('45');  // only for testing
-        let log = '/tmp/'+tools.appName+'_pkg_install.log';
-        let hiderow = /^ \* resolve_conffiles.*(?:\r?\n|$)/gm;
-        let callback = this.execAndReadCallback;
-        let wnd = this;
-        return tools.execAndRead({ cmd: cmd, log: log, logArea: this.logArea, hiderow: hiderow, callback: callback, cbarg: wnd });
+        return tools.execAndRead({
+            cmd: cmd,
+            log: '/tmp/'+tools.appName+'_pkg_install.log',
+            logArea: this.logArea,
+            hiderow: /^ \* resolve_conffiles.*(?:\r?\n|$)/gm,
+            callback: this.execAndReadCallback,
+            cbarg: this,  // wnd
+        });
     },
 
     execAndReadCallback: function(wnd, rc, txt = '')
@@ -96,30 +94,32 @@ return baseclass.extend({
         if (rc == 0 && txt) {
             let code = txt.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
             if (wnd._action == 'checkUpdates') {
+                wnd.appendLog('=========================================================');
+                if (code && code[1] == 'E') {
+                    wnd.btn_install.textContent = _('Reinstall');
+                } else {
+                    wnd.btn_install.textContent = _('Install');
+                }
                 let pkg_url = txt.match(/^ZAP_PKG_URL\s*=\s*(.+)$/m);
                 if (code && pkg_url) {
-                    wnd.appendLog('=========================================================');
-                    wnd.pkg_url = pkg_url[1];
-                    code = code[1];
-                    if (code == 'E' && !wnd.forced_reinstall) {
-                        wnd.setStage(999);  // install not needed
+                    if (code[1] == 'E' && !wnd.forced_reinstall) {
+                        wnd.setStage(0);  // install not needed
                         return;
                     }
-                    wnd.setStage(1);
-                    wnd.setBtnMode(2);  // enable all buttons
+                    wnd.pkg_url = pkg_url[1];
+                    wnd.setStage(2);  // enable all buttons
                     return;  // install allowed
                 }
             }
             if (wnd._action == 'installUpdates') {
                 if (wnd._test || (code && code[1] == '+')) {
-                    wnd.stage = 999;
-                    wnd.btn_action.textContent = _('OK');
-                    wnd.btn_action.disabled = false;
-                    wnd.btn_cancel.disabled = true;
+                    wnd.setStage(9);
+                    wnd.appendLog('Please update WEB-page (press F5)');
                     return;
                 }
             }
         }
+        wnd.setStage(0);
         if (rc >= 500) {
             if (txt) {
                 wnd.appendLog(txt.startsWith('ERROR') ? txt : 'ERROR: ' + txt);
@@ -129,10 +129,7 @@ return baseclass.extend({
         } else {
             wnd.appendLog('ERROR: Process finished with retcode = ' + rc);
         }
-        wnd.setStage(999);
-        if (wnd._action == 'checkUpdates') {
-            wnd.appendLog('=========================================================');
-        }
+        wnd.appendLog('=========================================================');
     },
 
     openUpdateDialog: function(pkg_arch)
@@ -166,25 +163,30 @@ return baseclass.extend({
         }, _('Cancel'));
         this.btn_cancel.onclick = ui.hideModal;
 
-        this.btn_action = E('button', {
-            'id': 'btn_action',
-            'name': 'btn_action',
+        this.btn_check = E('button', {
+            'id': 'btn_check',
+            'name': 'btn_check',
             'class': btn_style_action,
-        }, 'BUTTON_ACTION');
-        this.btn_action.onclick = ui.createHandlerFn(this, () => {
-            if (this.stage == 0) {
-                return this.checkUpdates();
+        }, _('Check'));
+        this.btn_check.onclick = ui.createHandlerFn(this, this.checkUpdates);
+
+        this.btn_install = E('button', {
+            'id': 'btn_install',
+            'name': 'btn_install',
+            'class': btn_style_positive,
+        }, _('Install'));
+        this.btn_install.onclick = ui.createHandlerFn(this, async () => {
+            let res = await this.installUpdates();
+            if (true) {
+                setTimeout(() => {
+                    this.btn_install.disabled = true;
+                }, 0);
             }
-            if (this.stage == 1) {
-                return this.installUpdates();
-            }
-            return ui.hideModal();
         });
         
         this.setStage(0);
-        this.setBtnMode(2);
 
-        ui.showModal(_('Package update'), [
+        ui.showModal(_('Check for updates and install'), [
             E('div', { 'class': 'cbi-section' }, [
                 exclude_prereleases,
                 E('br'), E('br'),
@@ -194,9 +196,11 @@ return baseclass.extend({
                 this.logArea,
             ]),
             E('div', { 'class': 'right' }, [
-                this.btn_cancel,
+                this.btn_check,
                 ' ',
-                this.btn_action,
+                this.btn_install,
+                ' ',
+                this.btn_cancel,
             ])
         ]);
     }    
