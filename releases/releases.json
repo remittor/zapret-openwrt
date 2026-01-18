@@ -32,9 +32,9 @@
     "name": "zapret2 v0.8.20260118",
     "draft": false,
     "immutable": false,
-    "prerelease": true,
+    "prerelease": false,
     "created_at": "2026-01-18T10:35:06Z",
-    "updated_at": "2026-01-18T11:04:26Z",
+    "updated_at": "2026-01-18T11:07:46Z",
     "published_at": "2026-01-18T11:04:26Z",
     "assets": [
       {
@@ -976,7 +976,7 @@
     ],
     "tarball_url": "https://api.github.com/repos/remittor/zapret-openwrt/tarball/v0.8.20260118",
     "zipball_url": "https://api.github.com/repos/remittor/zapret-openwrt/zipball/v0.8.20260118",
-    "body": "zapret2 v0.8.20260118 for OpenWrt\n"
+    "body": "zapret2 v0.8.20260118 for OpenWrt\r\n"
   },
   {
     "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/277623525",
@@ -1155,7 +1155,7 @@
         "state": "uploaded",
         "size": 411945,
         "digest": "sha256:feb1a0261d76b1539a4e2d4131de5e141d70f77051675015bcdc191e5c2a719c",
-        "download_count": 27,
+        "download_count": 28,
         "created_at": "2026-01-17T14:35:50Z",
         "updated_at": "2026-01-17T14:35:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260117/zapret_v72.20260117_aarch64_generic.zip"
@@ -1839,7 +1839,7 @@
         "state": "uploaded",
         "size": 407402,
         "digest": "sha256:b5870ee5adba1b50015b353b2f61b3a3275877b90e464f35b8d48e2e6b6ae265",
-        "download_count": 53,
+        "download_count": 54,
         "created_at": "2026-01-17T14:35:50Z",
         "updated_at": "2026-01-17T14:35:50Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260117/zapret_v72.20260117_mips_24kc.zip"
@@ -3010,7 +3010,7 @@
         "state": "uploaded",
         "size": 513300,
         "digest": "sha256:f0f6fdba9fcc9a800ce09b7dc1eab66438432ec0f48671ffcfad26d29d8a4bf7",
-        "download_count": 11,
+        "download_count": 12,
         "created_at": "2026-01-17T08:34:18Z",
         "updated_at": "2026-01-17T08:34:18Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260117/zapret2_v0.8.20260117_x86_64.zip"
