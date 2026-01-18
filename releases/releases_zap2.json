@@ -1,6 +1,201 @@
 {
-  "generated_at": "2026-01-17T16:59:28Z",
+  "generated_at": "2026-01-18T11:04:36Z",
   "releases": [
+    {
+      "id": 277703184,
+      "version": "0.8.20260118",
+      "tag": "v0.8.20260118",
+      "name": "zapret2 v0.8.20260118",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2026-01-18T10:35:06Z",
+      "published_at": "2026-01-18T11:04:26Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.8.20260118",
+      "assets": [
+        {
+          "id": 342263337,
+          "name": "zapret2_v0.8.20260118_aarch64_cortex-a53.zip",
+          "size": 516591,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_aarch64_cortex-a53.zip"
+        },
+        {
+          "id": 342263332,
+          "name": "zapret2_v0.8.20260118_aarch64_cortex-a72.zip",
+          "size": 516582,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_aarch64_cortex-a72.zip"
+        },
+        {
+          "id": 342263339,
+          "name": "zapret2_v0.8.20260118_aarch64_cortex-a76.zip",
+          "size": 516582,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_aarch64_cortex-a76.zip"
+        },
+        {
+          "id": 342263331,
+          "name": "zapret2_v0.8.20260118_aarch64_generic.zip",
+          "size": 516568,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_aarch64_generic.zip"
+        },
+        {
+          "id": 342263326,
+          "name": "zapret2_v0.8.20260118_arm_arm1176jzf-s_vfp.zip",
+          "size": 500923,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_arm1176jzf-s_vfp.zip"
+        },
+        {
+          "id": 342263334,
+          "name": "zapret2_v0.8.20260118_arm_arm926ej-s.zip",
+          "size": 502899,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_arm926ej-s.zip"
+        },
+        {
+          "id": 342263333,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a15_neon-vfpv4.zip",
+          "size": 500602,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a15_neon-vfpv4.zip"
+        },
+        {
+          "id": 342263335,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a5_vfpv4.zip",
+          "size": 500575,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a5_vfpv4.zip"
+        },
+        {
+          "id": 342263338,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a7.zip",
+          "size": 500516,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a7.zip"
+        },
+        {
+          "id": 342263328,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a7_neon-vfpv4.zip",
+          "size": 500641,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a7_neon-vfpv4.zip"
+        },
+        {
+          "id": 342263336,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a7_vfpv4.zip",
+          "size": 500372,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a7_vfpv4.zip"
+        },
+        {
+          "id": 342263327,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a8_vfpv3.zip",
+          "size": 500692,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a8_vfpv3.zip"
+        },
+        {
+          "id": 342263330,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a9.zip",
+          "size": 500903,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a9.zip"
+        },
+        {
+          "id": 342263329,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a9_neon.zip",
+          "size": 500764,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a9_neon.zip"
+        },
+        {
+          "id": 342263317,
+          "name": "zapret2_v0.8.20260118_arm_cortex-a9_vfpv3-d16.zip",
+          "size": 248719,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a9_vfpv3-d16.zip"
+        },
+        {
+          "id": 342263316,
+          "name": "zapret2_v0.8.20260118_arm_fa526.zip",
+          "size": 503014,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_fa526.zip"
+        },
+        {
+          "id": 342263325,
+          "name": "zapret2_v0.8.20260118_arm_xscale.zip",
+          "size": 503211,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_xscale.zip"
+        },
+        {
+          "id": 342263321,
+          "name": "zapret2_v0.8.20260118_mips64_octeonplus.zip",
+          "size": 515374,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mips64_octeonplus.zip"
+        },
+        {
+          "id": 342263319,
+          "name": "zapret2_v0.8.20260118_mipsel_24kc.zip",
+          "size": 508968,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mipsel_24kc.zip"
+        },
+        {
+          "id": 342263320,
+          "name": "zapret2_v0.8.20260118_mipsel_24kc_24kf.zip",
+          "size": 509080,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mipsel_24kc_24kf.zip"
+        },
+        {
+          "id": 342263324,
+          "name": "zapret2_v0.8.20260118_mipsel_74kc.zip",
+          "size": 508952,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mipsel_74kc.zip"
+        },
+        {
+          "id": 342263322,
+          "name": "zapret2_v0.8.20260118_mipsel_mips32.zip",
+          "size": 508934,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mipsel_mips32.zip"
+        },
+        {
+          "id": 342263323,
+          "name": "zapret2_v0.8.20260118_mips_24kc.zip",
+          "size": 507435,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mips_24kc.zip"
+        },
+        {
+          "id": 342263315,
+          "name": "zapret2_v0.8.20260118_mips_4kec.zip",
+          "size": 251778,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mips_4kec.zip"
+        },
+        {
+          "id": 342263318,
+          "name": "zapret2_v0.8.20260118_mips_mips32.zip",
+          "size": 507457,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_mips_mips32.zip"
+        },
+        {
+          "id": 342263314,
+          "name": "zapret2_v0.8.20260118_x86_64.zip",
+          "size": 514347,
+          "content_type": "application/zip",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_x86_64.zip"
+        }
+      ]
+    },
     {
       "id": 277600359,
       "version": "0.8.20260117",
