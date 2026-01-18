@@ -392,7 +392,7 @@ return baseclass.extend({
                     }
                 }
                 if (this.setperm) {
-                    let res = await fs.exec('/bin/busybox', [ 'chmod', '644', tmpFile ]);
+                    let res = await fs.exec('/bin/busybox', [ 'chmod', '' + this.setperm, tmpFile ]);
                     if (res.code != 0) {
                         throw new Error('chmod failed, rc = ' + res.code);
                     }
@@ -674,7 +674,14 @@ return baseclass.extend({
                     return callback(cbarg, retCode, 'ERROR: Process failed with error ' + retCode);
                 }
             } catch (e) {
+                let skip_err = false;
                 if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
+                    skip_err = true;
+                }
+                if (e.message?.includes('XHR request timed out')) {
+                    skip_err = true;
+                }
+                if (skip_err) {
                     console.warn('WARN: execAndRead: ' + e.message);
                     return;  // goto next timer iteration
                 }
