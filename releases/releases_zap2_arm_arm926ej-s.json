@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-18T11:07:55Z",
+  "generated_at": "2026-01-19T15:03:46Z",
   "releases": [
     {
       "tag": "v0.8.20260118",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 502899,
           "digest": "sha256:e9136eae6c26a341b46e76e39dc3a89d487fa52843783549de0c914a42246c1e",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-18T11:04:26Z",
           "updated_at": "2026-01-18T11:04:26Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_arm926ej-s.zip"
