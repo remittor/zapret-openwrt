@@ -23,9 +23,17 @@ return baseclass.extend({
         this.logArea.scrollTop = this.logArea.scrollHeight;
     },
 
+    setBtnMode: function(check1, check2, cancel)
+    {
+        this.btn_dpicheck.disabled   = check1  ? false : true;
+        this.btn_sitescheck.disabled = check2  ? false : true;
+        this.btn_cancel.disabled     = cancel  ? false : true;
+    },
+
     dpiCheck: async function()
     {
         this._action = 'dpiCheck';
+        this.setBtnMode(0, 0, 0);
         this.appendLog('DPI check [tcp 16-20]...');
         this.appendLog('Original sources: https://github.com/hyperion-cs/dpi-checkers');
         this.appendLog('WEB-version: https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/');
@@ -36,19 +44,42 @@ return baseclass.extend({
             cmd.push(...[ '-d', dns_ip.trim() ]);
         }
         cmd.push('-R');  // show recommendations
-        let log = '/tmp/'+tools.appName+'_dwc.log';
-        let callback = this.execAndReadCallback;
-        let wnd = this;
-        return tools.execAndRead({ cmd: cmd, log: log, logArea: this.logArea, callback: callback, cbarg: wnd });
+        return tools.execAndRead({
+            cmd: cmd,
+            log: '/tmp/'+tools.appName+'_dwc.log',
+            logArea: this.logArea,
+            callback: this.execAndReadCallback,
+            cbarg: this,  // wnd
+        });
+    },
+
+    sitesCheck: async function()
+    {
+        this._action = 'dpiCheck';
+        this.setBtnMode(0, 0, 0);
+        this.appendLog('Sites check...');
+        let cmd = [ fn_dwc_sh ];
+        let resolve_dns = document.getElementById('cfg_resolve_dns');
+        let dns_ip = resolve_dns.options[resolve_dns.selectedIndex].text;
+        if (dns_ip && dns_ip != 'default') {
+            cmd.push(...[ '-d', dns_ip.trim() ]);
+        }
+        cmd.push('-s');  // mode: check sites
+        return tools.execAndRead({
+            cmd: cmd,
+            log: '/tmp/'+tools.appName+'_dwc.log',
+            logArea: this.logArea,
+            callback: this.execAndReadCallback,
+            cbarg: this,  // wnd
+        });
     },
 
     execAndReadCallback: function(wnd, rc, txt = '')
     {
+        wnd.setBtnMode(1, 1, 1);
         if (rc == 0 && txt) {
-            if (wnd._action == 'dpiCheck') {
-                wnd.appendLog('=========================================================');
-                return;
-            }
+            wnd.appendLog('=========================================================');
+            return;
         }
         if (rc >= 500) {
             if (txt) {
@@ -111,8 +142,15 @@ return baseclass.extend({
             'id': 'btn_dpicheck',
             'name': 'btn_dpicheck',
             'class': btn_style_action,
-        }, _('DPI check [tcp 16-20]'));
-        this.btn_dpicheck.onclick = ui.createHandlerFn(this, () => { this.dpiCheck() });
+        }, _('DPI check'));
+        this.btn_dpicheck.onclick = ui.createHandlerFn(this, this.dpiCheck);
+
+        this.btn_sitescheck = E('button', {
+            'id': 'btn_sitescheck',
+            'name': 'btn_sitescheck',
+            'class': btn_style_action,
+        }, _('Sites check'));
+        this.btn_sitescheck.onclick = ui.createHandlerFn(this, this.sitesCheck);
         
         ui.showModal(_('Diagnostics'), [
             E('div', { 'class': 'cbi-section' }, [
@@ -121,6 +159,8 @@ return baseclass.extend({
                 this.logArea,
             ]),
             E('div', { 'class': 'right' }, [
+                this.btn_sitescheck,
+                ' ',
                 this.btn_dpicheck,
                 ' ',
                 this.btn_cancel,

@@ -3,13 +3,15 @@
 
 ZAP_TMP_DIR=/tmp/zapret2_dwc
 
+opt_sites=
 opt_dig=
 opt_recom=
 opt_tmp_dir=
 opt_test=
 
-while getopts "d:RT:t" opt; do
+while getopts "sd:RT:t" opt; do
 	case $opt in
+		s) opt_sites="true";;
 		d) opt_dig="$OPTARG";;
 		R) opt_recom="true";;     # Recommendations
 		T) opt_tmp_dir="$OPTARG";;
@@ -25,7 +27,7 @@ TARGET_LIST_FILE="$ZAP_TMP_DIR/targets"
 [ -f "$TARGET_LIST_FILE" ] && exit 3
 
 CURL_TIMEOUT=5
-CURL_RANGETO=65535
+CURL_MAXBODY=65536
 CURL_NOCACHE='cache-control: no-cache'
 CURL_NOCACHE2='pragma: no-cache'
 CURL_USERAGENT='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36'
@@ -67,7 +69,7 @@ fi
 #echo 'Original sources: https://github.com/hyperion-cs/dpi-checkers'
 #echo 'WEB-version: https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/'
 
-TEST_SUITE='[
+TEST_SUITE='
   { id: "US.CF-01", provider: "🇺🇸 Cloudflare", times: 1, url: "https://img.wzstats.gg/cleaver/gunFullDisplay" },
   { id: "US.CF-02", provider: "🇺🇸 Cloudflare", times: 1, url: "https://genshin.jmp.blue/characters/all#" },
   { id: "US.CF-03", provider: "🇺🇸 Cloudflare", times: 1, url: "https://api.frankfurter.dev/v1/2000-01-01..2002-12-31" },
@@ -76,7 +78,7 @@ TEST_SUITE='[
   { id: "DE.HE-01", provider: "🇩🇪 Hetzner", times: 1, url: "https://j.dejure.org/jcg/doctrine/doctrine_banner.webp" },
   { id: "DE.HE-02", provider: "🇩🇪 Hetzner", times: 1, url: "https://maps.gnosis.earth/ogcapi/api/swagger-ui/swagger-ui-standalone-preset.js#" },
   { id: "FI.HE-01", provider: "🇫🇮 Hetzner", times: 1, url: "https://251b5cd9.nip.io/1MB.bin" },
-  { id: "FI.HE-02", provider: "🇫🇮 Hetzner", times: 1, url: "https://5fd8c176.nip.io/1MB.bin" },
+  { id: "FI.HE-02", provider: "🇫🇮 Hetzner", times: 1, url: "https://nioges.com/libs/fontawesome/webfonts/fa-solid-900.woff2" },
   { id: "FI.HE-03", provider: "🇫🇮 Hetzner", times: 1, url: "https://5fd8bdae.nip.io/1MB.bin" },
   { id: "FI.HE-04", provider: "🇫🇮 Hetzner", times: 1, url: "https://5fd8bca5.nip.io/1MB.bin" },
   { id: "FR.OVH-01", provider: "🇫🇷 OVH", times: 1, url: "https://eu.api.ovh.com/console/rapidoc-min.js" },
@@ -93,7 +95,38 @@ TEST_SUITE='[
   { id: "FR.CNTB-01", provider: "🇫🇷 Contabo", times: 1, url: "https://airsea.no/images/main_logo.png" },
   { id: "NL.SW-01", provider: "🇳🇱 Scaleway", times: 1, url: "https://www.velivole.fr/img/header.jpg" },
   { id: "US.CNST-01", provider: "🇺🇸 Constant", times: 1, url: "https://cdn.xuansiwei.com/common/lib/font-awesome/4.7.0/fontawesome-webfont.woff2?v=4.7.0" }
-]'
+'
+
+if [ "$opt_sites" = true ]; then
+	TEST_SUITE='
+	gosuslugi.ru          | @  |  40000 | https://gosuslugi.ru/__jsch/static/script.js
+	esia.gosuslugi.ru     | @  |  40000 | https://esia.gosuslugi.ru/__jsch/static/script.js
+	gu-st.ru              |    |        | https://gu-st.ru/portal-st/lib-assets/fonts/Lato-Regular-v3.woff2
+	nalog.ru              |    |        | https://data.nalog.ru/images/new/buttons/TSET-button.png
+	lkfl2.nalog.ru        |    |        | https://lkfl2.nalog.ru/lkfl/static/assets/main-desktop-1920-CvJsHANg.jpg
+	rutube.ru             | @  |  40000 | https://static.rutube.ru/static/wdp/fonts/Semibold/OpenSans-Semibold.woff2?20231026
+	youtube.com           | @# | 300000 | https://youtube.com
+	instagram.com         | @# | 300000 | https://instagram.com
+	rutracker.org         | @# |  80000 | https://rutracker.org
+	nnmclub.to            | @# | 120000 | https://nnmclub.to
+	rutor.info            | @# | 110000 | https://rutor.info
+	epidemz.net.co        | @# |  40000 | https://epidemz.net.co
+	filmix.my             | @  |  23000 | https://filmix.my/templates/Filmix/media/fonts/Roboto/roboto-v20-latin_cyrillic-italic.woff2
+	openwrt.org           | +  |  60000 | https://openwrt.org/lib/tpl/bootstrap3/assets/bootstrap/default/bootstrap.min.css
+	ntc.party             | @# | 200000 | https://ntc.party
+	sxyprn.net            | @# | 310000 | https://sxyprn.net
+	pornhub.com           | @# | 700000 | https://pornhub.com
+	spankbang.com         | @# |  80000 | https://spankbang.com
+	discord.com           | @# | 120000 | https://discord.com
+	x.com                 | @  |  39000 | https://abs.twimg.com/fonts/v1/chirp-extended-heavy-web.woff2
+	flightradar24.com     | @  | 100000 | https://www.flightradar24.com/mobile/airlines?format=2&version=0
+	cdn77.com             | @  |  24000 | https://cdn77.com/fonts/Eina01-Regular.woff2
+	play.google.com       | @# | 100000 | https://gstatic.com/feedback/js/help/prod/service/lazy.min.js
+	genderize.io          | @# | 210000 | https://genderize.io
+	ottai.com             | @  |  70000 | https://seas.static.ottai.com/ottai-website/public/images/new/home/banner/uk/banner.webp
+	'
+	CURL_TIMEOUT=7
+fi
 
 function trim
 {
@@ -105,6 +138,17 @@ mkdir -p "$ZAP_TMP_DIR"
 : > "$TARGET_LIST_FILE"
 IDX=0
 while IFS= read -r line; do
+	if [ "$opt_sites" = true ]; then
+		echo -n "$line" | grep -q ' | http' || continue
+		IDX=$((IDX + 1))
+		TAG=$( printf '%s\n' "$line" | cut -d'|' -f1 | awk '{$1=$1;print}' )
+		FLAGS=$( printf '%s\n' "$line" | cut -d'|' -f2 | awk '{$1=$1;print}' )
+		TSIZE=$( printf '%s\n' "$line" | cut -d'|' -f3 | awk '{$1=$1;print}' )
+		URL=$( printf '%s\n' "$line" | cut -d'|' -f4 | awk '{$1=$1;print}' )
+		COUNTRY="XX"
+		echo "${IDX}|${TAG}|${COUNTRY}|${FLAGS}|${TSIZE}|${URL}" >> "$TARGET_LIST_FILE"
+		continue
+	fi
 	case "$line" in
 		*id:*provider:*url:*)
 			IDX=$((IDX + 1))
@@ -127,10 +171,31 @@ CURL_SPEED_LIMIT=1
 
 while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 	[ -z "$TAG" ] && continue
-	ID=$((ID+1))
 	ID3=$( printf '%03d' "$ID" )
-	COUNTRY=$( echo "$TAG" | cut -d. -f1 )
-	CNTFLAG=$( echo "$PROVIDER" | awk '{print $1}' )
+	RANGETO=""
+	REDIRECT=""
+	USERAGENT="$CURL_USERAGENT"
+	if [ "$opt_sites" = true ]; then
+		FLAGS="$PROVIDER"
+		TSIZE="$TIMES"
+		[ "$TSIZE" = "" ] && TSIZE=$CURL_MAXBODY
+		if echo "$FLAGS" | grep -q '@'; then
+			RANGETO=""
+		else
+			RANGETO="--range 0-$((TSIZE - 1))"
+		fi
+		PROVIDER="$TSIZE"
+		if echo "$FLAGS" | grep -q '#'; then
+			REDIRECT="-L"
+		fi
+		if echo "$FLAGS" | grep -q '+'; then
+			USERAGENT="curl/8.12"
+		fi
+	else
+		RANGETO="--range 0-$((CURL_MAXBODY - 1))"
+		COUNTRY=$( echo "$TAG" | cut -d. -f1 )
+		CNTFLAG=$( echo "$PROVIDER" | awk '{print $1}' )
+	fi
 	URL_NO_PROTO="${URL#*://}"
 	DOMAIN="${URL_NO_PROTO%%/*}"
 	URLPATH="/${URL_NO_PROTO#*/}"
@@ -157,12 +222,13 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 		echo "$URL" > "$FNAME.url"
 		curl "$URL" \
 			$RESOLVE_OPT \
+			$REDIRECT \
 			--connect-timeout $CURL_CON_TIMEOUT \
 			--max-time $CURL_TIMEOUT \
 			--speed-time $CURL_SPEED_TIME \
 			--speed-limit $CURL_SPEED_LIMIT	\
-			--range 0-$CURL_RANGETO \
-			-A "$CURL_USERAGENT" \
+			$RANGETO \
+			-A "$USERAGENT" \
 			-D "$FNAME.hdr" \
 			-o "$FNAME.body"
 	) > "$FNAME.log" 2>&1 &
@@ -181,6 +247,8 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 	TAG=$( echo "$FILENAME" | cut -d= -f2)
 	PROVIDER=$(echo "$FILENAME" | cut -d= -f3 )
 	FNAME="$ZAP_TMP_DIR/$FILENAME"
+	REQ_SIZE=$CURL_MAXBODY
+	[ "$opt_sites" = true ] && REQ_SIZE="$PROVIDER"
 	BODY_SIZE=0
 	[ -f "$FNAME.body" ] && BODY_SIZE=$( wc -c < "$FNAME.body" )
 	IPADDR="x.x.x.x"
@@ -196,7 +264,7 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 	elif [ ! -s "$FNAME.body" ]; then
 		status="Possibly detected"
 	else
-		if [ "$BODY_SIZE" -le $CURL_RANGETO ]; then
+		if [ $BODY_SIZE -lt $REQ_SIZE ]; then
 			status="Failed (recv $BODY_SIZE bytes)"
 			res=5
 		else
@@ -204,7 +272,11 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 			res=100
 		fi
 	fi
-	printf '%12s / %-15s / %-13s: %s \n' "$TAG" "$IPADDR" "$PROVIDER" "$status"
+	if [ "$opt_sites" = true ]; then
+		printf '%18s / %-15s : %s \n' "$TAG" "$IPADDR" "$status"
+	else
+		printf '%12s / %-15s / %-13s: %s \n' "$TAG" "$IPADDR" "$PROVIDER" "$status"
+	fi
 	echo "$BODY_SIZE" > "$FNAME.size"
 	if [ $res != 100 ]; then
 		URL=$( cat "$FNAME.url" )
@@ -212,7 +284,9 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 	fi
 done
 
-rm -f "$ZAP_TMP_DIR"/*.body >/dev/null 2>&1
+if [ "$opt_test" != true ]; then
+	rm -f "$ZAP_TMP_DIR"/*.body >/dev/null 2>&1
+fi
 
 [ "$opt_recom" != "true" ] && return 0
 
