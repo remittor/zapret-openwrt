@@ -11,6 +11,7 @@ fe80::/10
 nalog.ru
 gstatic.com
 gosuslugi.ru
+mos.ru
 mos-gorsud.ru
 gov.ru
 sudrf.ru
@@ -284,4 +285,7 @@ huaweicloud-dns.cn
 huaweicloud-dns.ru
 huaweicloud-dns.com
 huaweicloud-dns.org
+#################################### Okko
+okko.tv
+playfamily.ru
 ####################################
