@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-19T15:03:46Z",
+  "generated_at": "2026-01-20T12:47:22Z",
   "releases": [
     {
       "tag": "v72.20260119",
       "name": "zapret v72.20260119",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-01-19T14:35:01Z",
-      "updated_at": "2026-01-19T15:03:32Z",
+      "updated_at": "2026-01-20T12:46:11Z",
       "published_at": "2026-01-19T15:03:32Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260119",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 402646,
           "digest": "sha256:01f4d4c8fdf8f82c2341fc1b7862db19dcfa963fd57ce6628a11580a2a5374c3",
-          "download_count": 0,
+          "download_count": 4,
           "created_at": "2026-01-19T15:03:32Z",
           "updated_at": "2026-01-19T15:03:32Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260119/zapret_v72.20260119_arm_cortex-a7.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 399609,
           "digest": "sha256:7775b6403b5081248f63f69cb25c85601411989f364982e044ef1b72c93a6f56",
-          "download_count": 10,
+          "download_count": 11,
           "created_at": "2026-01-17T14:35:50Z",
           "updated_at": "2026-01-17T14:35:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260117/zapret_v72.20260117_arm_cortex-a7.zip"
