@@ -18,14 +18,14 @@ const btn_style_success  = 'btn cbi-button-success important';
 return view.extend({
     get_svc_buttons: function(elems = { }) {
         return {
-            enable  : elems.btn_enable  || document.getElementById('btn_enable'),
-            disable : elems.btn_disable || document.getElementById('btn_disable'),
-            start   : elems.btn_start   || document.getElementById('btn_start'),
-            restart : elems.btn_restart || document.getElementById('btn_restart'),
-            stop    : elems.btn_stop    || document.getElementById('btn_stop'),
-            reset   : elems.btn_reset   || document.getElementById('btn_reset'),
-            diag    : elems.btn_diag    || document.getElementById('btn_diag'),
-            update  : elems.btn_update  || document.getElementById('btn_update'),
+            "enable"  : elems.btn_enable  || document.getElementById('btn_enable'),
+            "disable" : elems.btn_disable || document.getElementById('btn_disable'),
+            "start"   : elems.btn_start   || document.getElementById('btn_start'),
+            "restart" : elems.btn_restart || document.getElementById('btn_restart'),
+            "stop"    : elems.btn_stop    || document.getElementById('btn_stop'),
+            "reset"   : elems.btn_reset   || document.getElementById('btn_reset'),
+            "diag"    : elems.btn_diag    || document.getElementById('btn_diag'),
+            "update"  : elems.btn_update  || document.getElementById('btn_update'),
         };
     },
     
