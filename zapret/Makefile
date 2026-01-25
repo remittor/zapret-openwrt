@@ -242,6 +242,10 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 	chmod 644 $${ZAPRET_DIR}/ipset_def/*.txt >/dev/null 2>&1
 	chmod 644 $${ZAPRET_DIR}/init.d/openwrt/custom.d/*.sh >/dev/null 2>&1
 	chmod 644 $${ZAPRET_DIR}/config* >/dev/null 2>&1
+	# cleanup custom.d directory
+	rm -f $${ZAPRET_DIR}/init.d/openwrt/custom.d/*-opkg*
+	rm -f $${ZAPRET_DIR}/init.d/openwrt/custom.d/*.opkg*
+	rm -f $${ZAPRET_DIR}/init.d/openwrt/custom.d/*.apk*
 	# creating main config if its not exists
 	if [ ! -f "$${ZAPRET_CONFIG}" ]; then
 		cp -f "$${ZAPRET_CONFIG_DEF}" "$${ZAPRET_CONFIG}"
