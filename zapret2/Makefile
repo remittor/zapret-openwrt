@@ -30,7 +30,7 @@ ifeq ($(LUA_JIT),1)
 	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/luajit-$(LUAJIT_VER)
 	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -lluajit-$(LUA_VER)
 else
-	LUA_VER?=5.3
+	LUA_VER?=5.5
 	LUA_DEPEND:=lua$(LUA_VER)
 	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/lua$(LUA_VER)
 	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -llua$(LUA_VER)
