@@ -193,6 +193,9 @@ function init_before_start
 	[ ! -f "$HOSTLIST_FN" ] && touch "$HOSTLIST_FN"
 	chmod 644 $ZAPRET_BASE/ipset/*.txt
 	chmod 666 $ZAPRET_BASE/ipset/*.log
+	rm -f $ZAPRET_BASE/init.d/openwrt/custom.d/*-opkg*
+	rm -f $ZAPRET_BASE/init.d/openwrt/custom.d/*.opkg*
+	rm -f $ZAPRET_BASE/init.d/openwrt/custom.d/*.apk*
 	rm -f /tmp/$ZAPRET_CFG_NAME+*.log
 	#*/
 	if [ "$DAEMON_LOG_ENABLE" = "1" ]; then
