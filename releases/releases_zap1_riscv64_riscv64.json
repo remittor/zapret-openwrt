@@ -1,6 +1,53 @@
 {
-  "generated_at": "2026-01-20T12:47:23Z",
+  "generated_at": "2026-01-25T07:31:58Z",
   "releases": [
+    {
+      "tag": "v72.20260125",
+      "name": "zapret v72.20260125",
+      "prerelease": true,
+      "created_at": "2026-01-25T07:01:09Z",
+      "updated_at": "2026-01-25T07:31:47Z",
+      "published_at": "2026-01-25T07:31:47Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260125",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/345564250",
+          "id": 345564250,
+          "node_id": "RA_kwDOM-Npcs4UmORa",
+          "name": "zapret_v72.20260125_riscv64_riscv64.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 210872,
+          "digest": "sha256:d3c11d5f7421950e6420d4c178875a4db9eb64ebec0c9aafacfd52c95f866759",
+          "download_count": 0,
+          "created_at": "2026-01-25T07:31:46Z",
+          "updated_at": "2026-01-25T07:31:46Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260125/zapret_v72.20260125_riscv64_riscv64.zip"
+        }
+      ]
+    },
     {
       "tag": "v72.20260119",
       "name": "zapret v72.20260119",
@@ -41,7 +88,7 @@
           "state": "uploaded",
           "size": 210626,
           "digest": "sha256:4e152cd52a8514d408cab7c6e45bfea9a92917756b0766b8ce32d54679a342e0",
-          "download_count": 3,
+          "download_count": 11,
           "created_at": "2026-01-19T15:03:32Z",
           "updated_at": "2026-01-19T15:03:32Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260119/zapret_v72.20260119_riscv64_riscv64.zip"
@@ -88,7 +135,7 @@
           "state": "uploaded",
           "size": 208741,
           "digest": "sha256:48669054df0767ea705af5e872dad5486b73880270ad8b5d623177d071ea5dca",
-          "download_count": 4,
+          "download_count": 5,
           "created_at": "2026-01-17T14:35:50Z",
           "updated_at": "2026-01-17T14:35:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260117/zapret_v72.20260117_riscv64_riscv64.zip"
@@ -135,7 +182,7 @@
           "state": "uploaded",
           "size": 208624,
           "digest": "sha256:b09f5d059b44623fde8ec616f68462ad18467dfd26fadc1297bc59ddee74aac1",
-          "download_count": 2,
+          "download_count": 3,
           "created_at": "2026-01-16T17:52:06Z",
           "updated_at": "2026-01-16T17:52:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260116/zapret_v72.20260116_riscv64_riscv64.zip"
@@ -182,7 +229,7 @@
           "state": "uploaded",
           "size": 207711,
           "digest": "sha256:b2f66b085b0d2d40a78ba29aef960354ae9a6583038c599fa6a49c653f8929fa",
-          "download_count": 2,
+          "download_count": 3,
           "created_at": "2026-01-15T20:02:39Z",
           "updated_at": "2026-01-15T20:02:40Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260115/zapret_v72.20260115_riscv64_riscv64.zip"
@@ -229,7 +276,7 @@
           "state": "uploaded",
           "size": 207479,
           "digest": "sha256:24b7df0ae6e20ec130f8d892429b952b7d619dd890c44c8da351c105c5c0438e",
-          "download_count": 2,
+          "download_count": 3,
           "created_at": "2026-01-14T19:34:08Z",
           "updated_at": "2026-01-14T19:34:08Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260114/zapret_v72.20260114_riscv64_riscv64.zip"
@@ -276,7 +323,7 @@
           "state": "uploaded",
           "size": 207127,
           "digest": "sha256:d0d214b9537a13474210171249be1b2dc2023534d21f12aaca00187ed91a7286",
-          "download_count": 7,
+          "download_count": 8,
           "created_at": "2026-01-13T11:21:46Z",
           "updated_at": "2026-01-13T11:21:46Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260113/zapret_v72.20260113_riscv64_riscv64.zip"
@@ -323,7 +370,7 @@
           "state": "uploaded",
           "size": 207030,
           "digest": "sha256:588c21c5ddf447d066897f977d3622a72e44f5888e0d35157a04a77d30d4c542",
-          "download_count": 4,
+          "download_count": 5,
           "created_at": "2026-01-11T13:04:25Z",
           "updated_at": "2026-01-11T13:04:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_riscv64_riscv64.zip"
@@ -455,16 +502,6 @@
       "updated_at": "2025-10-22T13:41:14Z",
       "published_at": "2025-10-22T13:41:13Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251022",
-      "assets": []
-    },
-    {
-      "tag": "v72.20250924",
-      "name": "zapret v72.20250924",
-      "prerelease": false,
-      "created_at": "2025-09-24T10:25:50Z",
-      "updated_at": "2025-09-24T11:49:40Z",
-      "published_at": "2025-09-24T11:49:39Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20250924",
       "assets": []
     }
   ]

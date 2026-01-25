@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-20T12:47:22Z",
+  "generated_at": "2026-01-25T07:31:57Z",
   "releases": [
     {
       "tag": "v0.8.20260118",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 500516,
           "digest": "sha256:f8c2dfddabee93c317e3c7f2bd0c8d812875bf28858fb160cf62ea7d3ef7b671",
-          "download_count": 3,
+          "download_count": 7,
           "created_at": "2026-01-18T11:04:26Z",
           "updated_at": "2026-01-18T11:04:26Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_arm_cortex-a7.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 499469,
           "digest": "sha256:12ac20bbe33b3085fd02d89292a951f239f3c108017ccb6d2431ef3b7666b9e3",
-          "download_count": 3,
+          "download_count": 4,
           "created_at": "2026-01-17T08:34:18Z",
           "updated_at": "2026-01-17T08:34:18Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260117/zapret2_v0.8.20260117_arm_cortex-a7.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 493125,
           "digest": "sha256:c9cfdc2abc1db3e69325d2f91f0b9297432927b412de81e83d0ebaf3875c3195",
-          "download_count": 3,
+          "download_count": 4,
           "created_at": "2026-01-13T12:14:50Z",
           "updated_at": "2026-01-13T12:14:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_arm_cortex-a7.zip"

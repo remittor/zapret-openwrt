@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-20T12:47:22Z",
+  "generated_at": "2026-01-25T07:31:56Z",
   "releases": [
     {
       "tag": "v0.8.20260118",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 516591,
           "digest": "sha256:7e134739dcfa52c08f7a0d8f72404959181893408174a2f66740374944d9c241",
-          "download_count": 284,
+          "download_count": 625,
           "created_at": "2026-01-18T11:04:26Z",
           "updated_at": "2026-01-18T11:04:26Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_aarch64_cortex-a53.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 515586,
           "digest": "sha256:78b0c2365a65ca787ab3d9ffe364ee701a005de81f43acd9f077fdf9360715c1",
-          "download_count": 176,
+          "download_count": 180,
           "created_at": "2026-01-17T08:34:18Z",
           "updated_at": "2026-01-17T08:34:18Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260117/zapret2_v0.8.20260117_aarch64_cortex-a53.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 509301,
           "digest": "sha256:d3e8f6853113b5082285b104ff9400ae96e25cbf3cc0bc61591d9a9c34968c91",
-          "download_count": 314,
+          "download_count": 318,
           "created_at": "2026-01-13T12:14:50Z",
           "updated_at": "2026-01-13T12:14:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260113/zapret2_v0.8.20260113_aarch64_cortex-a53.zip"
@@ -182,7 +182,7 @@
           "state": "uploaded",
           "size": 507319,
           "digest": "sha256:7747358cc486416e6ae101856fb60094ce6ed1b900a7f3fd32bc47604411ffd3",
-          "download_count": 98,
+          "download_count": 101,
           "created_at": "2026-01-11T13:24:59Z",
           "updated_at": "2026-01-11T13:24:59Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260111/zapret2_v0.8.20260111_aarch64_cortex-a53.zip"
@@ -229,7 +229,7 @@
           "state": "uploaded",
           "size": 497764,
           "digest": "sha256:89dfbcfc7f99851852eabf064889071ab97d47a120c5c78d1ff4b367405ec5d8",
-          "download_count": 448,
+          "download_count": 450,
           "created_at": "2026-01-09T14:24:39Z",
           "updated_at": "2026-01-09T14:24:39Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260109/zapret2_v0.8.20260109_aarch64_cortex-a53.zip"
@@ -276,7 +276,7 @@
           "state": "uploaded",
           "size": 497043,
           "digest": "sha256:427713e34b6a1f60f683b66f8c8239b6456df7a722d65bdb9a1364fb157b4913",
-          "download_count": 18,
+          "download_count": 19,
           "created_at": "2026-01-09T12:50:54Z",
           "updated_at": "2026-01-09T12:50:55Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260107/zapret2_v0.8.20260107_aarch64_cortex-a53.zip"
@@ -323,7 +323,7 @@
           "state": "uploaded",
           "size": 492438,
           "digest": "sha256:43198ea9a94f8b585f57c1622cdb3a1faa487920e2ec602357476215778262f5",
-          "download_count": 1117,
+          "download_count": 1119,
           "created_at": "2025-12-29T17:05:21Z",
           "updated_at": "2025-12-29T17:05:21Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20251229/zapret2_v0.8.20251229_aarch64_cortex-a53.zip"
@@ -370,7 +370,7 @@
           "state": "uploaded",
           "size": 472126,
           "digest": "sha256:121fadb235583a7832d0a0cae3149d6d2f0daf47054faa47ba9329ac62694e25",
-          "download_count": 187,
+          "download_count": 188,
           "created_at": "2025-12-27T14:25:01Z",
           "updated_at": "2025-12-27T14:25:01Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251227/zapret2_v0.7.20251227_aarch64_cortex-a53.zip"
@@ -417,7 +417,7 @@
           "state": "uploaded",
           "size": 468313,
           "digest": "sha256:970785199598bcef8aaa5ee8b6a2ef5535fbf48a69b0983c58cdb62800b4bc88",
-          "download_count": 481,
+          "download_count": 482,
           "created_at": "2025-12-26T06:46:25Z",
           "updated_at": "2025-12-26T06:46:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251226/zapret2_v0.7.20251226_aarch64_cortex-a53.zip"
@@ -464,7 +464,7 @@
           "state": "uploaded",
           "size": 467990,
           "digest": "sha256:97192f4d8e5952c2e3b9006961ffc9c177a1514c81bf9fc175cb7215b99db5b3",
-          "download_count": 32,
+          "download_count": 33,
           "created_at": "2025-12-25T16:28:35Z",
           "updated_at": "2025-12-25T16:28:36Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225-r2/zapret2_v0.7.20251225-r2_aarch64_cortex-a53.zip"
@@ -511,7 +511,7 @@
           "state": "uploaded",
           "size": 467547,
           "digest": "sha256:6b69e8d976336ee7d660274707783211df31ef9515d4bdb403d95bb2dc825841",
-          "download_count": 33,
+          "download_count": 34,
           "created_at": "2025-12-25T07:22:45Z",
           "updated_at": "2025-12-25T07:22:46Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225/zapret2_v0.7.20251225_aarch64_cortex-a53.zip"
@@ -558,7 +558,7 @@
           "state": "uploaded",
           "size": 466460,
           "digest": "sha256:ee6d881f2884ac97eb73108b8574a1a83cfec8ff458e7f249dc92c897d675065",
-          "download_count": 198,
+          "download_count": 199,
           "created_at": "2025-12-24T08:13:17Z",
           "updated_at": "2025-12-24T08:13:17Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251224/zapret2_v0.7.20251224_aarch64_cortex-a53.zip"
@@ -605,7 +605,7 @@
           "state": "uploaded",
           "size": 464900,
           "digest": "sha256:1b6a489502c1ce468fa235f640ace0f836814e05166247815d8e98f769bfbda2",
-          "download_count": 840,
+          "download_count": 842,
           "created_at": "2025-12-20T08:28:51Z",
           "updated_at": "2025-12-20T08:28:51Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251220/zapret2_v0.7.20251220_aarch64_cortex-a53.zip"
