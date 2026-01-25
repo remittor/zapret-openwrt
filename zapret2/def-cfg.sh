@@ -80,7 +80,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS2_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS2_PORTS_UDP='443'
 			set $cfgname.config.NFQWS2_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=80
 				--filter-l7=http <HOSTLIST>
@@ -109,7 +109,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS2_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS2_PORTS_UDP='443'
 			set $cfgname.config.NFQWS2_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=80
 				--filter-l7=http <HOSTLIST>
@@ -136,7 +136,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS2_PORTS_TCP='80,443'
 			set $cfgname.config.NFQWS2_PORTS_UDP='443'
 			set $cfgname.config.NFQWS2_OPT="
-				# Strategy $strat
+				--comment=Strategy__$strat
 				
 				--filter-tcp=80
 				--filter-l7=http <HOSTLIST>
