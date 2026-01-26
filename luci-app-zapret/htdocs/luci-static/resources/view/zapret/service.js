@@ -135,89 +135,51 @@ return view.extend({
         }
     },
 
-    serviceAction: function(action, button) {
-        if (button) {
-            let elem = document.getElementById(button);
-            this.disableButtons(true, elem);
-        }
+    serviceActionEx: async function(action, button, args = [ ], hide_modal = false, btn_dis = true)
+    {
+        let btn = document.getElementById(button);
+        this.disableButtons(true, btn);
         poll.stop();
-        
-        let _this = this;
-        
-        return tools.handleServiceAction(tools.appName, action)
-        .then(() => {
-            return _this.getAppStatus().then(
-                (status_array) => {
-                    _this.setAppStatus(status_array);
+        let errmsg = null;
+        try {
+            let exec_cmd = null;
+            let exec_arg = [ ];
+            if (action == 'start' || action == 'restart') {
+                if (tools.checkUnsavedChanges()) {
+                    ui.changes.apply(true);
+                    await new Promise(resolve => setTimeout(resolve, 100));
                 }
-            );
-        })
-        .catch(e => { 
-            ui.addNotification(null, E('p', _('Unable to run service action.') + ' Error: ' + e.message));
-        });
-    },
-
-    serviceActionEx: function(action, button, args = [ ], hide_modal = false) {
-        if (button) {
-            let elem = document.getElementById(button);
-            this.disableButtons(true, elem);
-        }
-        poll.stop();
-        
-        let _this = this;
-        let exec_cmd = null;
-        let exec_arg = [ ];
-        let errmsg = 'ERROR:';
-        if (action == 'start' || action == 'restart') {
-            exec_cmd = tools.syncCfgPath;
-            errmsg = _('Unable to run sync_config.sh script.');
-        }
-        else if (action == 'reset') {
-            exec_cmd = tools.defaultCfgPath;
-            exec_arg = args;  // (reset_ipset)(sync) ==> restore all configs + sync config
-            errmsg = _('Unable to run restore-def-cfg.sh script.');
-            action = null;
-        } else {
-            ui.addNotification(null, E('p', 'ERROR: unknown action'));
-            return null;
-        }
-        return fs.exec(exec_cmd, exec_arg)
-        .then(function(res) { 
-            if (res.code != 0) {
-                ui.addNotification(null, E('p', errmsg + ' res.code = ' + res.code));
-                action = null;  // return with error
+                exec_cmd = tools.syncCfgPath;
+                errmsg = _('Unable to run sync_config.sh script.');
+            }
+            if (action == 'reset') {
+                exec_cmd = tools.defaultCfgPath;
+                exec_arg = args;  // (reset_ipset)(sync) ==> restore all configs + sync config
+                errmsg = _('Unable to run restore-def-cfg.sh script.');
+                action = null;
+            }
+            if (exec_cmd) {
+                let res = await fs.exec(exec_cmd, exec_arg);
+                if (res.code != 0) {
+                    throw Error('res.code = ' + res.code);
+                }
             }
             if (hide_modal) {
                 ui.hideModal();
             }
-            if (!action) {
-                return _this.getAppStatus().then(
-                    (status_array) => {
-                        _this.setAppStatus(status_array);
-                    }
-                );
+            errmsg = null;
+            await tools.handleServiceAction(tools.appName, action);
+        } catch(e) { 
+            let msg = errmsg ? errmsg : _('Unable to run service action') + ' "' + action + '".';
+            ui.addNotification(null, E('p', msg + ' Error: ' + e.message));
+        } finally {
+            if (!poll.active()) {
+                poll.start();
             }
-            return _this.serviceAction(action, null);
-        })
-        .catch(e => { 
-            ui.addNotification(null, E('p', errmsg + ' Error: ' + e.message));
-        });
-    },
-
-    appAction: function(action, button) {
-        if (button) {
-            let elem = document.getElementById(button);
-            this.disableButtons(true, elem);
+            if (btn && btn_dis) {
+                setTimeout(() => { btn.disabled = true; }, 0);
+            }
         }
-        poll.stop();
-        return fs.exec_direct(tools.execPath, [ action ]).then(res => {
-            return this.getAppStatus().then(
-                (status_array) => {
-                    this.setAppStatus(status_array);
-                    ui.hideModal();
-                }
-            );
-        });
     },
 
     statusPoll: function() {
@@ -226,7 +188,12 @@ return view.extend({
         );
     },
 
-    dialogResetCfg: function(ev) {
+    dialogResetCfg: function(ev)
+    {
+        if (tools.checkUnsavedChanges()) {
+            ui.addNotification(null, E('p', _('You have unapplied changes')));
+            return;
+        }
         ev.target.blur();
 
         let reset_base = E('label', [
@@ -274,7 +241,7 @@ return view.extend({
         let resetcfg_btn = E('button', {
             'class': btn_style_action,
         }, _('Reset settings'));
-        resetcfg_btn.onclick = ui.createHandlerFn(this, () => {
+        resetcfg_btn.onclick = ui.createHandlerFn(this, async () => {
             //cancel_button.disabled = true;
             let opt_flags = '';
             if (document.getElementById('cfg_reset_base').checked == false) {
@@ -390,9 +357,9 @@ return view.extend({
         };
         
         let btn_enable      = create_btn('btn_enable',  btn_style_success, _('Enable'));
-        btn_enable.onclick  = ui.createHandlerFn(this, this.serviceAction, 'enable', 'btn_enable');
+        btn_enable.onclick  = ui.createHandlerFn(this, this.serviceActionEx, 'enable', 'btn_enable');
         let btn_disable     = create_btn('btn_disable', btn_style_warning, _('Disable'));
-        btn_disable.onclick = ui.createHandlerFn(this, this.serviceAction, 'disable', 'btn_disable');
+        btn_disable.onclick = ui.createHandlerFn(this, this.serviceActionEx, 'disable', 'btn_disable');
         layout_append(_('Service autorun control'), null, [ btn_enable, btn_disable ] );
 
         let btn_start       = create_btn('btn_start',   btn_style_action, _('Start'));
@@ -400,7 +367,7 @@ return view.extend({
         let btn_restart     = create_btn('btn_restart', btn_style_action, _('Restart'));
         btn_restart.onclick = ui.createHandlerFn(this, this.serviceActionEx, 'restart', 'btn_restart');
         let btn_stop        = create_btn('btn_stop',    btn_style_warning, _('Stop'));
-        btn_stop.onclick    = ui.createHandlerFn(this, this.serviceAction, 'stop', 'btn_stop');
+        btn_stop.onclick    = ui.createHandlerFn(this, this.serviceActionEx, 'stop', 'btn_stop');
         layout_append(_('Service daemons control'), null, [ btn_start, btn_restart, btn_stop ] );
 
         let btn_reset       = create_btn('btn_reset', btn_style_action, _('Reset settings'));
@@ -428,7 +395,7 @@ return view.extend({
         };
         this.setAppStatus(status_array, elems);
 
-        poll.add(L.bind(this.statusPoll, this));
+        poll.add(L.bind(this.statusPoll, this), 2);  // interval 2 sec
 
         let page_title = tools.AppName;
         page_title += ' &nbsp ';

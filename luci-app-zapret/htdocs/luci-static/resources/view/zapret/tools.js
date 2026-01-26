@@ -148,6 +148,13 @@ return baseclass.extend({
             ui.addNotification(null, E('p', _('Service action failed "%s %s": %s').format(name, action, e)));
         });
     },
+    
+    checkUnsavedChanges: function()
+    {
+        if (!ui.changes) return false;
+        if (!ui.changes.changes) return false;
+        return ui.changes.changes[this.appName] ? true : false;
+    },
 
     normalizeValue: function(v) {
         return (v && typeof(v) === 'string') ? v.trim().replace(/\r?\n/g, '') : v;
