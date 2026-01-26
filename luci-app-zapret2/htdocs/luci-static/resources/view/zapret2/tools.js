@@ -101,6 +101,30 @@ return baseclass.extend({
         });
     },
 
+    getPackageDict: function()
+    {
+        let ses_var_name = this.appName+'_pkgdict';
+        let exec_cmd = this.packager.path;
+        let exec_arg = this.packager.args;
+        return fs.exec(exec_cmd, exec_arg).then(res => {
+            let pdict_json = sessionStorage.getItem(ses_var_name);
+            if (res.code != 0) {
+                console.log(this.appName + ': Unable to enumerate installed packages. code = ' + res.code);
+                if (pdict_json != null) {
+                    return JSON.parse(pdict_json);  // return cached value
+                }
+                return null;
+            }
+            let pdict = this.decode_pkg_list(res.stdout);
+            if (pdict != pdict_json) {
+                sessionStorage.setItem(ses_var_name, JSON.stringify(pdict));  // renew cache
+            }
+            return pdict;
+        }).catch(e => {
+            ui.addNotification(null, E('p', _('Unable to enumerate installed packages.') + ' Error: %s'.format(e)));
+        });
+    },
+
     getStratList: function() {
         let exec_cmd = '/bin/busybox';
         let exec_arg = [ 'awk', '-F', '"', '/if \\[ "\\$strat" = "/ {print $4}', this.defCfgPath ];
@@ -141,7 +165,7 @@ return baseclass.extend({
         return m ? m[2] : defval;        
     },
 
-    decode_pkg_list: function(pkg_list, with_suffix_r1 = true) {
+    decode_pkg_list: function(pkg_list) {
         let pkg_dict = { };
         if (!pkg_list) {
             return pkg_dict;
@@ -180,11 +204,7 @@ return baseclass.extend({
                 }
             }
             if (rev >= 0) {
-                if (rev == 1 && !with_suffix_r1) {
-                    // nothing
-                } else {
-                    ver += '-r' + rev;
-                }
+                ver += '-r' + rev;
             }
             pkg_dict[name] = ver;
         }

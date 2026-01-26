@@ -50,7 +50,7 @@ return view.extend({
             fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
             tools.getSvcInfo(),                     // svc_info
             fs.exec('/bin/busybox', [ 'ps' ]),      // process list
-            fs.exec(tools.packager.path, tools.packager.args),  // installed packages
+            tools.getPackageDict(),                 // installed packages
             tools.getStratList(),                   // nfqws strategy list
             fs.exec('/bin/cat', [ '/etc/openwrt_release' ]),  // CPU arch
             uci.load(tools.appName),              // config
@@ -75,7 +75,7 @@ return view.extend({
         let svc_en    = status_array[1];   // stdout: empty or error text
         let svc_info  = status_array[2];   // stdout: JSON as text
         let proc_list = status_array[3];   // stdout: multiline text
-        let pkg_list  = status_array[4];   // stdout: installed packages
+        let pkg_dict  = status_array[4];   // stdout: installed packages
         let stratlist = status_array[5];   // array of strat names
         let sys_info  = status_array[6];   // stdout: openwrt distrib info
         
@@ -95,8 +95,8 @@ return view.extend({
             this.disableButtons(true, -1, elems);
             return;
         }
-        if (pkg_list.code != 0) {
-            ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': setAppStatus()'));
+        if (!pkg_dict) {
+            ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': getPackageDict()'));
             this.disableButtons(true, -1, elems);
             return;
         }
@@ -342,9 +342,9 @@ return view.extend({
         }
         let cfg = uci.get(tools.appName, 'config');
 
-        let pkg_list = status_array[4];
-        if (pkg_list === undefined || typeof(pkg_list) !== 'object' || pkg_list.code != 0) {
-            ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': setAppStatus()'));
+        let pkgdict = status_array[4];
+        if (pkgdict == null) {
+            ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': render()'));
             return;
         }
 
@@ -431,12 +431,12 @@ return view.extend({
         poll.add(L.bind(this.statusPoll, this));
 
         let page_title = tools.AppName;
-        let pkgdict = tools.decode_pkg_list(pkg_list.stdout, false);
         page_title += ' &nbsp ';
         if (pkgdict[tools.appName] === undefined || pkgdict[tools.appName] == '') {
             page_title += 'unknown version';
         } else {
             page_title += 'v' + pkgdict[tools.appName];
+            page_title = page_title.replace(/-r1$/, '');
         }
         let aux1 = E('em');
         let aux2 = E('em');
