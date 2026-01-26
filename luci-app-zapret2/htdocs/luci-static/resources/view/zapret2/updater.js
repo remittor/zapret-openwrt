@@ -136,6 +136,10 @@ return baseclass.extend({
 
     openUpdateDialog: function(pkg_arch)
     {
+        if (tools.checkUnsavedChanges()) {
+            ui.addNotification(null, E('p', _('You have unapplied changes')));
+            return;
+        }
         this.stage = 0;
         this.pkg_arch = pkg_arch;
         this.pkg_url = null;
