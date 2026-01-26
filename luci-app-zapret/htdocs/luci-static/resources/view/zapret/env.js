@@ -49,5 +49,7 @@ return baseclass.extend({
             dst_obj.packager.path = '/bin/opkg';
             dst_obj.packager.args = [ 'list-installed', '*'+this.appName+'*' ];
         }
+        dst_obj.skey_pkg_dict = this.appName + '-pkg-dict';
+        dst_obj.skey_need_restart = this.appName + '-need-restart';
     }
 });
