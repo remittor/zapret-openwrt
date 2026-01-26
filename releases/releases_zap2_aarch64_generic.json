@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-25T09:32:14Z",
+  "generated_at": "2026-01-26T19:36:26Z",
   "releases": [
     {
       "tag": "v0.8.20260125",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 517436,
           "digest": "sha256:f5dc31434381eac11f02f0f1c8a33c8e481c7a98a5130419af58f3e787a23609",
-          "download_count": 2,
+          "download_count": 8,
           "created_at": "2026-01-25T08:23:35Z",
           "updated_at": "2026-01-25T08:23:35Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260125/zapret2_v0.8.20260125_aarch64_generic.zip"
@@ -652,7 +652,7 @@
           "state": "uploaded",
           "size": 464858,
           "digest": "sha256:7d2784a9ec26cb59851dd5cf9d5d749ed06a40447b3f3436718af6000d18bace",
-          "download_count": 38,
+          "download_count": 39,
           "created_at": "2025-12-20T08:28:51Z",
           "updated_at": "2025-12-20T08:28:51Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251220/zapret2_v0.7.20251220_aarch64_generic.zip"
