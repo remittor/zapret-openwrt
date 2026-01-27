@@ -59,7 +59,7 @@ return baseclass.extend({
             log: '/tmp/'+tools.appName+'_pkg_check.log',
             logArea: this.logArea,
             callback: this.execAndReadCallback,
-            cbarg: this,  // wnd
+            ctx: this,
         });
     },
 
@@ -84,54 +84,54 @@ return baseclass.extend({
             logArea: this.logArea,
             hiderow: /^ \* resolve_conffiles.*(?:\r?\n|$)/gm,
             callback: this.execAndReadCallback,
-            cbarg: this,  // wnd
+            ctx: this,
         });
     },
 
-    execAndReadCallback: function(wnd, rc, txt = '')
+    execAndReadCallback: function(rc, txt = '')
     {
-        //console.log('execAndReadCallback = ' + rc + '; _action = ' + wnd._action);
+        //console.log('execAndReadCallback = ' + rc + '; _action = ' + this._action);
         if (rc == 0 && txt) {
             let code = txt.match(/^RESULT:\s*\(([^)]+)\)\s+.+$/m);
-            if (wnd._action == 'checkUpdates') {
-                wnd.appendLog('=========================================================');
+            if (this._action == 'checkUpdates') {
+                this.appendLog('=========================================================');
                 if (code && code[1] == 'E') {
-                    wnd.btn_install.textContent = _('Reinstall');
+                    this.btn_install.textContent = _('Reinstall');
                 } else {
-                    wnd.btn_install.textContent = _('Install');
+                    this.btn_install.textContent = _('Install');
                 }
                 let pkg_url = txt.match(/^ZAP_PKG_URL\s*=\s*(.+)$/m);
                 if (code && pkg_url) {
-                    if (!wnd.forced_reinstall) {
+                    if (!this.forced_reinstall) {
                         if (code[1] == 'E' || code[1] == 'G') {
-                            wnd.setStage(0);  // install not needed
+                            this.setStage(0);  // install not needed
                             return;
                         }
                     }
-                    wnd.pkg_url = pkg_url[1];
-                    wnd.setStage(2);  // enable all buttons
+                    this.pkg_url = pkg_url[1];
+                    this.setStage(2);  // enable all buttons
                     return;  // install allowed
                 }
             }
-            if (wnd._action == 'installUpdates') {
-                if (wnd._test || (code && code[1] == '+')) {
-                    wnd.setStage(9);
-                    wnd.appendLog('Please update WEB-page (press F5)');
+            if (this._action == 'installUpdates') {
+                if (this._test || (code && code[1] == '+')) {
+                    this.setStage(9);
+                    this.appendLog('Please update WEB-page (press F5)');
                     return;
                 }
             }
         }
-        wnd.setStage(0);
+        this.setStage(0);
         if (rc >= 500) {
             if (txt) {
-                wnd.appendLog(txt.startsWith('ERROR') ? txt : 'ERROR: ' + txt);
+                this.appendLog(txt.startsWith('ERROR') ? txt : 'ERROR: ' + txt);
             } else {
-                wnd.appendLog('ERROR: ' + wnd._action + ': Terminated with error code = ' + rc);
+                this.appendLog('ERROR: ' + this._action + ': Terminated with error code = ' + rc);
             }
         } else {
-            wnd.appendLog('ERROR: Process finished with retcode = ' + rc);
+            this.appendLog('ERROR: Process finished with retcode = ' + rc);
         }
-        wnd.appendLog('=========================================================');
+        this.appendLog('=========================================================');
     },
 
     openUpdateDialog: function(pkg_arch)

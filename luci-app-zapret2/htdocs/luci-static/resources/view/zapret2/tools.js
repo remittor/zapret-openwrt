@@ -740,7 +740,7 @@ return baseclass.extend({
         },
     }),
 
-    execAndRead: async function({ cmd = [ ], log = '', logArea = null, callback = null, cbarg = null, hiderow = [ ], rpc_timeout = 5, rpc_root = false } = {})
+    execAndRead: async function({ cmd = [ ], log = '', logArea = null, callback = null, ctx = null, hiderow = [ ], rpc_timeout = 5, rpc_root = false } = {})
     {
         function appendLog(msg, end = '\n')
         {
@@ -764,23 +764,23 @@ return baseclass.extend({
             await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null, rpc_opt);
             appendLog('Output file cleared!');
         } catch (e) {
-            return callback(cbarg, 500, 'ERROR: Failed to clear output file');
+            return callback.call(ctx, 500, 'ERROR: Failed to clear output file');
         }
         try {
             let opt_list = [ logFile ];
             opt_list.push(...cmd);
             let res = await fs.exec(this.appDir+'/script-exec.sh', opt_list, null, rpc_opt);
             if (res.code != 0) {
-                return callback(cbarg, 525, 'ERROR: cannot run "' + cmd[0] + '" script! (error = ' + res.code + ')');
+                return callback.call(ctx, 525, 'ERROR: cannot run "' + cmd[0] + '" script! (error = ' + res.code + ')');
             }
             appendLog('Process started...');
         } catch (e) {
-            return callback(cbarg, 520, 'ERROR: Failed on execute process: ' + e.message);
+            return callback.call(ctx, 520, 'ERROR: Failed on execute process: ' + e.message);
         }
         let lastLen = 0;
         let retCode = -1;
         return await new Promise(async (resolve, reject) => {
-            async function poll()
+            async function epoll()
             {
                 try {
                     let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
@@ -796,7 +796,7 @@ return baseclass.extend({
                         let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
                         if (rc.code != 0) {
                             fixLogEnd();
-                            resolve(callback(cbarg, 545, 'ERROR: cannot read file "' + rcFile + '"'));
+                            resolve(callback.call(ctx, 545, 'ERROR: cannot read file "' + rcFile + '"'));
                             return;
                         }
                         if (rc.stdout) {
@@ -806,13 +806,13 @@ return baseclass.extend({
                     if (retCode >= 0) {
                         fixLogEnd();
                         if (retCode == 0 && res.stdout) {
-                            resolve(callback(cbarg, 0, res.stdout));
+                            resolve(callback.call(ctx, 0, res.stdout));
                             return;
                         }
-                        resolve(callback(cbarg, retCode, 'ERROR: Process failed with error ' + retCode));
+                        resolve(callback.call(ctx, retCode, 'ERROR: Process failed with error ' + retCode));
                         return;
                     }
-                    setTimeout(poll, 500);
+                    setTimeout(epoll, 500);
                 } catch (e) {
                     let skip_err = false;
                     if (e.message?.includes('RPC call to file/exec failed with error -32000: Object not found')) {
@@ -823,17 +823,17 @@ return baseclass.extend({
                     }
                     if (skip_err) {
                         console.warn('WARN: execAndRead: ' + e.message);
-                        setTimeout(poll, 500);
-                        return;  // goto next poll iteration
+                        setTimeout(epoll, 500);
+                        return;  // goto next epoll iteration
                     }
                     fixLogEnd();
                     let errtxt = 'ERROR: execAndRead: ' + e.message;
                     errtxt    += 'ERROR: execAndRead: ' + e.stack?.trim().split('\n')[0];
-                    callback(cbarg, 540, errtxt);
+                    callback.call(ctx, 540, errtxt);
                     reject(e);
                 }
             }
-            poll();
+            epoll();
         });
     },
 
