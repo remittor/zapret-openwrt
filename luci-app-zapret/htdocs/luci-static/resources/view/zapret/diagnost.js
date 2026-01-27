@@ -49,7 +49,7 @@ return baseclass.extend({
             log: '/tmp/'+tools.appName+'_dwc.log',
             logArea: this.logArea,
             callback: this.execAndReadCallback,
-            cbarg: this,  // wnd
+            ctx: this,
         });
     },
 
@@ -70,27 +70,27 @@ return baseclass.extend({
             log: '/tmp/'+tools.appName+'_dwc.log',
             logArea: this.logArea,
             callback: this.execAndReadCallback,
-            cbarg: this,  // wnd
+            ctx: this,
         });
     },
 
-    execAndReadCallback: function(wnd, rc, txt = '')
+    execAndReadCallback: function(rc, txt = '')
     {
-        wnd.setBtnMode(1, 1, 1);
+        this.setBtnMode(1, 1, 1);
         if (rc == 0 && txt) {
-            wnd.appendLog('=========================================================');
+            this.appendLog('=========================================================');
             return;
         }
         if (rc >= 500) {
             if (txt) {
-                wnd.appendLog(txt.startsWith('ERROR') ? txt : 'ERROR: ' + txt);
+                this.appendLog(txt.startsWith('ERROR') ? txt : 'ERROR: ' + txt);
             } else {
-                wnd.appendLog('ERROR: ' + wnd._action + ': Terminated with error code = ' + rc);
+                this.appendLog('ERROR: ' + this._action + ': Terminated with error code = ' + rc);
             }
         } else {
-            wnd.appendLog('ERROR: Process finished with retcode = ' + rc);
+            this.appendLog('ERROR: Process finished with retcode = ' + rc);
         }
-        wnd.appendLog('=========================================================');
+        this.appendLog('=========================================================');
     },
 
     openDiagnostDialog: function(pkg_arch)
