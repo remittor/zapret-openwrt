@@ -24,7 +24,7 @@ return view.extend({
             return;
         }
         this.svc_info = data.svc_info;
-        tools.checkAndRestartSvc(this.svc_info);
+        tools.execDefferedAction(this.svc_info);
 
         let m, s, o, tabname;
 
@@ -458,10 +458,14 @@ return view.extend({
     handleSaveApply: function(ev, mode)
     {
         return this.handleSave(ev).then(() => {
-            ui.changes.apply(mode == '0');
-            if (this.svc_info?.dmn.inited) {
-                localStorage.setItem(tools.skey_need_restart, '1');
-                console.log('STOR KEY: '+tools.skey_need_restart+' = 1');
+            let apply_exec = tools.checkUnsavedChanges();
+            if (apply_exec) {
+                ui.changes.apply(mode == '0');
+                tools.setDefferedAction('restart', this.svc_info);
+            } else {
+                if (this.svc_info?.dmn.inited) {
+                    tools.serviceActionEx('restart');
+                }
             }
         });
     },

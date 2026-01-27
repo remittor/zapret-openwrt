@@ -62,7 +62,9 @@ return view.extend({
         });
     },
 
-    setAppStatus: function(status_array, elems = { }, force_app_status = 0) {
+    setAppStatus: function(status_array, elems = { }, force_app_status = 0)
+    {
+        tools.execDefferedAction();
         let cfg = uci.get(tools.appName, 'config');
         if (!status_array || cfg == null || typeof(cfg) !== 'object') {
             let elem_status = elems.status || document.getElementById("status");
@@ -141,6 +143,15 @@ return view.extend({
         this.disableButtons(true, btn);
         poll.stop();
         try {
+            if (action == 'start' || action == 'restart') {
+                let apply_exec = tools.checkUnsavedChanges();
+                if (apply_exec) {
+                    ui.changes.apply(true);  // apply_rollback
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    tools.setDefferedAction(action, null, true);
+                    return;
+                }
+            }
             await tools.serviceActionEx(action, args, false);
             if (hide_modal) {
                 ui.hideModal();
@@ -148,13 +159,14 @@ return view.extend({
         } catch(e) { 
             //ui.addNotification(null, E('p', 'Error: ' + e.message));
         } finally {
-            if (btn && btn_dis) {
-                setTimeout(() => { btn.disabled = true; }, 0);
-            }
-            if (!poll.active()) {
-                await new Promise(resolve => setTimeout(resolve, 10));
-                poll.start();
-            }
+            setTimeout(() => {
+                if (btn && btn_dis) {
+                    btn.disabled = true;
+                }
+                if (!poll.active()) {
+                    poll.start();
+                }
+            }, 0);
         }
     },
 
@@ -284,8 +296,6 @@ return view.extend({
             return;
         }
         let cfg = uci.get(tools.appName, 'config');
-
-        tools.checkAndRestartSvc(status_array[2]);  // svc_info
 
         let pkgdict = status_array[4];
         if (pkgdict == null) {

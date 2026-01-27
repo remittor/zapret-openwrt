@@ -50,6 +50,6 @@ return baseclass.extend({
             dst_obj.packager.args = [ 'list-installed', '*'+this.appName+'*' ];
         }
         dst_obj.skey_pkg_dict = this.appName + '-pkg-dict';
-        dst_obj.skey_need_restart = this.appName + '-need-restart';
+        dst_obj.skey_deffered_action = this.appName + '-deffered-action';
     }
 });

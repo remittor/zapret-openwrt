@@ -160,10 +160,6 @@ return baseclass.extend({
             let exec_cmd = null;
             let exec_arg = [ ];
             if (action == 'start' || action == 'restart') {
-                if (this.checkUnsavedChanges()) {
-                    await ui.changes.apply(true);
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
                 exec_cmd = this.syncCfgPath;
                 errmsg = _('Unable to run sync_config.sh script.');
             }
@@ -198,7 +194,7 @@ return baseclass.extend({
             uci.load(this.appName),
         ])
         .then( ([svcInfo, uci_data]) => {
-            let svc_info = this.decode_svc_info(true, svcInfo, [ ], null);
+            let svc_info = this.decodeSvcInfo(svcInfo);
             let ret = { svc_info, uci_data };
             if (typeof callback === 'function') {
                 const res = callback(cbarg, ret);
@@ -215,22 +211,48 @@ return baseclass.extend({
         });
     },
 
-    checkAndRestartSvc: function(svcInfo)
+    decodeSvcInfo: function(svc_info, svc_autorun = true, proc_list = [ ])
     {
-        let svc_info = null;
-        if (svcInfo?.autorun !== undefined && svcInfo?.dmn !== undefined) {
-            svc_info = svcInfo;
-        } else
-        if (typeof(svcInfo) == 'object') {
-            svc_info = this.decode_svc_info(true, svcInfo, [ ], null);
+        if (svc_info?.autorun !== undefined && svc_info?.dmn !== undefined) {
+            return svc_info;
         }
-        //console.log('checkAndRestartSvc: svc_info = '+JSON.stringify(svc_info));
-        let need_restart = localStorage.getItem(this.skey_need_restart);
-        if (need_restart) {
-            localStorage.removeItem(this.skey_need_restart);
-            if (svcInfo?.dmn !== undefined && svc_info.dmn.inited) {
-                this.serviceActionEx('restart');
+        if (svc_info != null && typeof(svc_info) == 'object') {
+            return this.decode_svc_info(svc_autorun, svc_info, proc_list);
+        }
+        return null;
+    },
+
+    setDefferedAction: function(action, svcInfo = null, forced = false)
+    {
+        let svc_info = this.decodeSvcInfo(svcInfo);
+        if (action == 'start' && svc_info?.dmn.inited) {
+            action = 'restart';
+        }
+        if (action == 'start') {
+            if (!forced && svc_info?.dmn.inited) {
+                action = null;
             }
+        }
+        if (action == 'restart') {
+            if (!forced && !svc_info?.dmn.inited) {
+                action = null;
+            }
+        }
+        if (action && localStorage.getItem(this.skey_deffered_action) == null) {
+            localStorage.setItem(this.skey_deffered_action, action);
+            console.log('setDefferedAction: '+this.skey_deffered_action+' = '+action);
+        }
+    },
+    
+    execDefferedAction: function(svcInfo = null)
+    {
+        let svc_info = this.decodeSvcInfo(svcInfo);
+        //console.log('execDefferedAction: svc_info = '+JSON.stringify(svc_info));
+        let action = localStorage.getItem(this.skey_deffered_action);
+        if (action) {
+            localStorage.removeItem(this.skey_deffered_action);
+            console.log('execDefferedAction: '+action);
+            this.serviceActionEx(action);
         }
     },
     
@@ -320,7 +342,8 @@ return baseclass.extend({
         return plist;
     },
 
-    decode_svc_info: function(svc_autorun, svc_info, proc_list, cfg) {
+    decode_svc_info: function(svc_autorun, svc_info, proc_list, cfg = null)
+    {
         let result = {
             "autorun": svc_autorun,
             "dmn": {
@@ -340,6 +363,9 @@ return baseclass.extend({
             if (plist.length < 4) {
                 return -3;
             }
+        }
+        if (svc_info == null) {
+            return null;
         }
         if (typeof(svc_info) !== 'object') {
             return -4;
