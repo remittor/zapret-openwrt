@@ -16,6 +16,8 @@ const btn_style_warning  = 'btn cbi-button-negative';
 const btn_style_success  = 'btn cbi-button-success important';
 
 return view.extend({
+    POLL: new tools.POLLER( { } ),
+    
     get_svc_buttons: function(elems = { }) {
         return {
             "enable"  : elems.btn_enable  || document.getElementById('btn_enable'),
@@ -84,7 +86,7 @@ return view.extend({
         this.nfqws_strat_list = stratlist;
         this.pkg_arch = tools.getConfigPar(sys_info.stdout, 'DISTRIB_ARCH', 'unknown');
         
-        //console.log('svc_en: ' + svc_en.code);
+        //console.log('svc_en: ' + svc_en.code + '  poll.running = ' + this.POLL.running);
         svc_en = (svc_en.code == 0) ? true : false;
         
         if (typeof(svc_info) !== 'object') {
@@ -131,17 +133,22 @@ return view.extend({
         }
         let elem_status = elems.status || document.getElementById("status");
         elem_status.innerHTML = tools.makeStatusString(svcinfo, this.pkg_arch, '');
-        
-        if (!poll.active()) {
-            poll.start();
-        }
+        this.POLL.running = false;
     },
 
-    serviceActionEx: async function(action, button, args = [ ], hide_modal = false, btn_dis = true)
+    serviceActionEx: async function(action, button, args = [ ], hide_modal = false)
     {
         let btn = document.getElementById(button);
+        if (btn?.create_args) {
+            args = btn.create_args();
+            console.log('serviceActionEx: btn.args = '+JSON.stringify(args));
+        }
+        if (action == 'reset') {
+            hide_modal = true;
+        }
+        await this.POLL.stopAndWait();
         this.disableButtons(true, btn);
-        poll.stop();
+        //console.log('serviceActionEx: poll.running = '+this.POLL.running);
         try {
             if (action == 'start' || action == 'restart') {
                 let apply_exec = tools.checkUnsavedChanges();
@@ -158,19 +165,23 @@ return view.extend({
             }
         } catch(e) { 
             //ui.addNotification(null, E('p', 'Error: ' + e.message));
-        } finally {
-            setTimeout(() => {
-                if (btn && btn_dis) {
-                    btn.disabled = true;
-                }
-                if (!poll.active()) {
-                    poll.start();
-                }
-            }, 0);
         }
     },
+    
+    serviceActionExCallback: function(btn, result, error)
+    {
+        //console.log('serviceActionExCallback: poll.active = '+this.POLL.active);
+        this.POLL.start(150);
+    },
 
-    statusPoll: function() {
+    createServiceHandlerFn: function(action, btn_name)
+    {
+        let opt = { keepDisabled: true, callback: this.serviceActionExCallback };
+        return tools.createHandlerFnEx(this, 'serviceActionEx', opt, action, btn_name);
+    },
+
+    statusPoll: function()
+    {
         this.getAppStatus().then(
             L.bind(this.setAppStatus, this)
         );
@@ -227,10 +238,11 @@ return view.extend({
         }, _('Cancel'));
 
         let resetcfg_btn = E('button', {
+            'id': 'resetcfg_btn',
+            'name': 'resetcfg_btn',
             'class': btn_style_action,
         }, _('Reset settings'));
-        resetcfg_btn.onclick = ui.createHandlerFn(this, async () => {
-            //cancel_button.disabled = true;
+        resetcfg_btn.create_args = () => {
             let opt_flags = '';
             if (document.getElementById('cfg_reset_base').checked == false) {
                 opt_flags += '(skip_base)';
@@ -247,17 +259,15 @@ return view.extend({
             if (document.getElementById('cfg_enable_custom_d').checked) {
                 opt_flags += '(enable_custom_d)';
             };
-            //console.log('RESET: opt_flags = ' + opt_flags);
             let sel_strat = document.getElementById('cfg_nfqws_strat');
             let opt_strat = sel_strat.options[sel_strat.selectedIndex].text;
-            //console.log('RESET: strat = ' + opt_strat);
             if (opt_strat == 'not change') {
                 opt_strat = '-';
             }
             opt_flags += '(sync)';
-            let args = [ opt_flags, opt_strat ];
-            return this.serviceActionEx('reset', resetcfg_btn, args, true);
-        });
+            return [ opt_flags, opt_strat ];
+        };
+        resetcfg_btn.onclick = this.createServiceHandlerFn('reset', 'resetcfg_btn');
 
         ui.showModal(_('Reset settings to default'), [
             E('div', { 'class': 'cbi-section' }, [
@@ -282,16 +292,17 @@ return view.extend({
         ]);
     },
 
-    load: function() {
-        var _this = this;
+    load: function()
+    {
         return Promise.all([
             L.resolveDefault(fs.stat('/bin/cat'), null),
-        ]).then(function(data) {
-            return _this.getAppStatus();
+        ]).then( (data) => {
+            return this.getAppStatus();
         });
     },
 
-    render: function(status_array) {
+    render: function(status_array)
+    {
         if (!status_array) {
             return;
         }
@@ -345,17 +356,17 @@ return view.extend({
         };
         
         let btn_enable      = create_btn('btn_enable',  btn_style_success, _('Enable'));
-        btn_enable.onclick  = ui.createHandlerFn(this, this.serviceActionEx, 'enable', 'btn_enable');
+        btn_enable.onclick  = this.createServiceHandlerFn('enable', 'btn_enable');
         let btn_disable     = create_btn('btn_disable', btn_style_warning, _('Disable'));
-        btn_disable.onclick = ui.createHandlerFn(this, this.serviceActionEx, 'disable', 'btn_disable');
+        btn_disable.onclick = this.createServiceHandlerFn('disable', 'btn_disable');
         layout_append(_('Service autorun control'), null, [ btn_enable, btn_disable ] );
 
         let btn_start       = create_btn('btn_start',   btn_style_action, _('Start'));
-        btn_start.onclick   = ui.createHandlerFn(this, this.serviceActionEx, 'start', 'btn_start');
+        btn_start.onclick   = this.createServiceHandlerFn('start', 'btn_start');
         let btn_restart     = create_btn('btn_restart', btn_style_action, _('Restart'));
-        btn_restart.onclick = ui.createHandlerFn(this, this.serviceActionEx, 'restart', 'btn_restart');
+        btn_restart.onclick = this.createServiceHandlerFn('restart', 'btn_restart');
         let btn_stop        = create_btn('btn_stop',    btn_style_warning, _('Stop'));
-        btn_stop.onclick    = ui.createHandlerFn(this, this.serviceActionEx, 'stop', 'btn_stop');
+        btn_stop.onclick    = this.createServiceHandlerFn('stop', 'btn_stop');
         layout_append(_('Service daemons control'), null, [ btn_start, btn_restart, btn_stop ] );
 
         let btn_reset       = create_btn('btn_reset', btn_style_action, _('Reset settings'));
@@ -383,7 +394,9 @@ return view.extend({
         };
         this.setAppStatus(status_array, elems);
 
-        poll.add(L.bind(this.statusPoll, this), 2);  // interval 2 sec
+        this.POLL.mode = 1;
+        this.POLL.init( L.bind(this.statusPoll, this), 2000 );  // interval 2 sec
+        this.POLL.start(500);  // first step after 500 ms
 
         let page_title = tools.AppName;
         page_title += ' &nbsp ';
