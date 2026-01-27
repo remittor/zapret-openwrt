@@ -13,43 +13,18 @@ document.head.appendChild(E('link', {
 }));
 
 return view.extend({
-    parsers: { },
-
-    appStatusCode: null,
-
-    depends: function(elem, key, array, empty=true) {
-        if (empty && array.length === 0) {
-            elem.depends(key, '_dummy');
-        } else {
-            array.forEach(e => elem.depends(key, e));
-        }
-    },
-
-    validateIpPort: function(section, value) {
-        return (/^$|^([0-9]{1,3}\.){3}[0-9]{1,3}(#[\d]{2,5})?$/.test(value)) ? true : _('Expecting:')
-            + ` ${_('One of the following:')}\n - ${_('valid IP address')}\n - ${_('valid address#port')}\n`;
-    },
-
-    validateUrl: function(section, value) {
-        return (/^$|^https?:\/\/[\w.-]+(:[0-9]{2,5})?[\w\/~.&?+=-]*$/.test(value)) ? true : _('Expecting:')
-            + ` ${_('valid URL')}\n`;
-    },
+    svc_info: null,
 
     load: function() {
-        return Promise.all([
-            { code: -1}, // L.resolveDefault(fs.exec(tools.execPath, [ 'raw-status' ]), 1),
-            null, // L.resolveDefault(fs.list(tools.parsersDir), null),
-            uci.load(tools.appName),
-        ]).catch(e => {
-            ui.addNotification(null, E('p', _('Unable to read the contents') + ': %s '.format(e.message) ));
-        });
+        return tools.baseLoad();
     },
 
     render: function(data) {
         if (!data) {
             return;
         }
-        this.appStatusCode = data[0].code;
+        this.svc_info = data.svc_info;
+        tools.execDefferedAction(this.svc_info);
 
         let m, s, o, tabname;
 
@@ -480,12 +455,18 @@ return view.extend({
         return map_promise;
     },
 
-    handleSaveApply: function(ev, mode) {
+    handleSaveApply: function(ev, mode)
+    {
         return this.handleSave(ev).then(() => {
-            ui.changes.apply(mode == '0');
-            //if (this.appStatusCode != 1 && this.appStatusCode != 2) {
-            //    window.setTimeout(() => fs.exec(tools.execPath, [ 'restart' ]), 3000);
-            //}
+            let apply_exec = tools.checkUnsavedChanges();
+            if (apply_exec) {
+                ui.changes.apply(mode == '0');
+                tools.setDefferedAction('restart', this.svc_info);
+            } else {
+                if (this.svc_info?.dmn.inited) {
+                    tools.serviceActionEx('restart');
+                }
+            }
         });
     },
 });

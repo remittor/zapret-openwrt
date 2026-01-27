@@ -62,7 +62,9 @@ return view.extend({
         });
     },
 
-    setAppStatus: function(status_array, elems = { }, force_app_status = 0) {
+    setAppStatus: function(status_array, elems = { }, force_app_status = 0)
+    {
+        tools.execDefferedAction();
         let cfg = uci.get(tools.appName, 'config');
         if (!status_array || cfg == null || typeof(cfg) !== 'object') {
             let elem_status = elems.status || document.getElementById("status");
@@ -73,7 +75,7 @@ return view.extend({
         }
         let svc_boot  = status_array[0] ? true : false;
         let svc_en    = status_array[1];   // stdout: empty or error text
-        let svc_info  = status_array[2];   // stdout: JSON as text
+        let svc_info  = status_array[2];   // dict for services
         let proc_list = status_array[3];   // stdout: multiline text
         let pkg_dict  = status_array[4];   // stdout: installed packages
         let stratlist = status_array[5];   // array of strat names
@@ -140,45 +142,31 @@ return view.extend({
         let btn = document.getElementById(button);
         this.disableButtons(true, btn);
         poll.stop();
-        let errmsg = null;
         try {
-            let exec_cmd = null;
-            let exec_arg = [ ];
             if (action == 'start' || action == 'restart') {
-                if (tools.checkUnsavedChanges()) {
-                    ui.changes.apply(true);
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-                exec_cmd = tools.syncCfgPath;
-                errmsg = _('Unable to run sync_config.sh script.');
-            }
-            if (action == 'reset') {
-                exec_cmd = tools.defaultCfgPath;
-                exec_arg = args;  // (reset_ipset)(sync) ==> restore all configs + sync config
-                errmsg = _('Unable to run restore-def-cfg.sh script.');
-                action = null;
-            }
-            if (exec_cmd) {
-                let res = await fs.exec(exec_cmd, exec_arg);
-                if (res.code != 0) {
-                    throw Error('res.code = ' + res.code);
+                let apply_exec = tools.checkUnsavedChanges();
+                if (apply_exec) {
+                    ui.changes.apply(true);  // apply_rollback
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    tools.setDefferedAction(action, null, true);
+                    return;
                 }
             }
+            await tools.serviceActionEx(action, args, false);
             if (hide_modal) {
                 ui.hideModal();
             }
-            errmsg = null;
-            await tools.handleServiceAction(tools.appName, action);
         } catch(e) { 
-            let msg = errmsg ? errmsg : _('Unable to run service action') + ' "' + action + '".';
-            ui.addNotification(null, E('p', msg + ' Error: ' + e.message));
+            //ui.addNotification(null, E('p', 'Error: ' + e.message));
         } finally {
-            if (!poll.active()) {
-                poll.start();
-            }
-            if (btn && btn_dis) {
-                setTimeout(() => { btn.disabled = true; }, 0);
-            }
+            setTimeout(() => {
+                if (btn && btn_dis) {
+                    btn.disabled = true;
+                }
+                if (!poll.active()) {
+                    poll.start();
+                }
+            }, 0);
         }
     },
 

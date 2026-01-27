@@ -103,11 +103,10 @@ return baseclass.extend({
 
     getPackageDict: function()
     {
-        let ses_var_name = this.appName+'_pkgdict';
         let exec_cmd = this.packager.path;
         let exec_arg = this.packager.args;
         return fs.exec(exec_cmd, exec_arg).then(res => {
-            let pdict_json = sessionStorage.getItem(ses_var_name);
+            let pdict_json = localStorage.getItem(this.skey_pkg_dict);
             if (res.code != 0) {
                 console.log(this.appName + ': Unable to enumerate installed packages. code = ' + res.code);
                 if (pdict_json != null) {
@@ -117,7 +116,7 @@ return baseclass.extend({
             }
             let pdict = this.decode_pkg_list(res.stdout);
             if (pdict != pdict_json) {
-                sessionStorage.setItem(ses_var_name, JSON.stringify(pdict));  // renew cache
+                localStorage.setItem(this.skey_pkg_dict, JSON.stringify(pdict));  // renew cache
             }
             return pdict;
         }).catch(e => {
@@ -138,7 +137,9 @@ return baseclass.extend({
         });
     },
 
-    handleServiceAction: function(name, action) {
+    handleServiceAction: function(name, action, throwed = false)
+    {
+        console.log('handleServiceAction: '+name+' '+action);
         return this.callInitAction(name, action).then(success => {
             if (!success) {
                 throw _('Command failed');
@@ -146,7 +147,113 @@ return baseclass.extend({
             return true;
         }).catch(e => {
             ui.addNotification(null, E('p', _('Service action failed "%s %s": %s').format(name, action, e)));
+            if (throwed) {
+                throw e;
+            }
         });
+    },
+
+    serviceActionEx: async function(action, args = [ ], throwed = false)
+    {
+        let errmsg = null;
+        try {
+            let exec_cmd = null;
+            let exec_arg = [ ];
+            if (action == 'start' || action == 'restart') {
+                exec_cmd = this.syncCfgPath;
+                errmsg = _('Unable to run sync_config.sh script.');
+            }
+            if (action == 'reset') {
+                exec_cmd = this.defaultCfgPath;
+                exec_arg = args;  // (reset_ipset)(sync) ==> restore all configs + sync config
+                errmsg = _('Unable to run restore-def-cfg.sh script.');
+                action = null;
+            }
+            if (exec_cmd) {
+                let res = await fs.exec(exec_cmd, exec_arg);
+                if (res.code != 0) {
+                    throw Error('res.code = ' + res.code);
+                }
+            }
+            errmsg = null;
+            await this.handleServiceAction(this.appName, action, throwed);
+        } catch(e) { 
+            if (throwed) {
+                throw e;
+            } else {
+                let msg = errmsg ? errmsg : _('Unable to run service action') + ' "' + action + '".';
+                ui.addNotification(null, E('p', msg + ' Error: ' + e.message));
+            }
+        }
+    },
+    
+    baseLoad: function(callback, cbarg)
+    {
+        return Promise.all([
+            this.getSvcInfo(),           // svc_info
+            uci.load(this.appName),
+        ])
+        .then( ([svcInfo, uci_data]) => {
+            let svc_info = this.decodeSvcInfo(svcInfo);
+            let ret = { svc_info, uci_data };
+            if (typeof callback === 'function') {
+                const res = callback(cbarg, ret);
+                if (res && typeof res.then === 'function') {
+                    return res.then(() => ret);
+                }
+                return ret;
+            }
+            return ret;
+        })
+        .catch(e => {
+            ui.addNotification(null, E('p', _('Unable to read the contents') + ' (baseLoad): %s '.format(e.message) ));
+            return null;
+        });
+    },
+
+    decodeSvcInfo: function(svc_info, svc_autorun = true, proc_list = [ ])
+    {
+        if (svc_info?.autorun !== undefined && svc_info?.dmn !== undefined) {
+            return svc_info;
+        }
+        if (svc_info != null && typeof(svc_info) == 'object') {
+            return this.decode_svc_info(svc_autorun, svc_info, proc_list);
+        }
+        return null;
+    },
+
+    setDefferedAction: function(action, svcInfo = null, forced = false)
+    {
+        let svc_info = this.decodeSvcInfo(svcInfo);
+        if (action == 'start' && svc_info?.dmn.inited) {
+            action = 'restart';
+        }
+        if (action == 'start') {
+            if (!forced && svc_info?.dmn.inited) {
+                action = null;
+            }
+        }
+        if (action == 'restart') {
+            if (!forced && !svc_info?.dmn.inited) {
+                action = null;
+            }
+        }
+        if (action && localStorage.getItem(this.skey_deffered_action) == null) {
+            localStorage.setItem(this.skey_deffered_action, action);
+            console.log('setDefferedAction: '+this.skey_deffered_action+' = '+action);
+        }
+    },
+    
+    execDefferedAction: function(svcInfo = null)
+    {
+        let svc_info = this.decodeSvcInfo(svcInfo);
+        //console.log('execDefferedAction: svc_info = '+JSON.stringify(svc_info));
+        let action = localStorage.getItem(this.skey_deffered_action);
+        if (action) {
+            localStorage.removeItem(this.skey_deffered_action);
+            console.log('execDefferedAction: '+action);
+            this.serviceActionEx(action);
+        }
     },
     
     checkUnsavedChanges: function()
@@ -235,7 +342,8 @@ return baseclass.extend({
         return plist;
     },
 
-    decode_svc_info: function(svc_autorun, svc_info, proc_list, cfg) {
+    decode_svc_info: function(svc_autorun, svc_info, proc_list, cfg = null)
+    {
         let result = {
             "autorun": svc_autorun,
             "dmn": {
@@ -246,13 +354,18 @@ return baseclass.extend({
             },
             "status": this.statusDict.error,
         };
-        if (proc_list.code != 0) {
-            return -2;
-        }        
-        let plist = this.get_pid_list(proc_list.stdout);
-        
-        if (plist.length < 4) {
-            return -3;
+        let plist = proc_list;
+        if (proc_list?.code !== undefined) {
+            if (proc_list.code != 0) {
+                return -2;
+            }        
+            plist = this.get_pid_list(proc_list.stdout);
+            if (plist.length < 4) {
+                return -3;
+            }
+        }
+        if (svc_info == null) {
+            return null;
         }
         if (typeof(svc_info) !== 'object') {
             return -4;
