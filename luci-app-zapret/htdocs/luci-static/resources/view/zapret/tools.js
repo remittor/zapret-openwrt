@@ -176,7 +176,9 @@ return baseclass.extend({
                 }
             }
             errmsg = null;
-            await this.handleServiceAction(this.appName, action, throwed);
+            if (action) {
+                await this.handleServiceAction(this.appName, action, throwed);
+            }
         } catch(e) { 
             if (throwed) {
                 throw e;
@@ -837,4 +839,138 @@ return baseclass.extend({
         });
     },
 
+    POLLER: baseclass.extend({
+        __init__: function(opts = { })
+        {
+            Object.assign(this, {
+                interval: 1000, // milliseconds
+                func: null,
+                active: false,
+                running: false,
+            }, opts);
+            env_tools.load_env(this);
+            this.ticks = 0;
+            this.timer = null;
+            this.mode = 0;
+        },
+
+        init: function(func, interval = null)
+        {
+            this.func = func;
+            if (interval) {
+                this.interval = interval;
+            }
+        },
+
+        start: function(delay = 0)
+        {
+            if (this.active) {
+                return;
+            }
+            this.ticks = 0;
+            this.active = true;
+            if (delay === null) {
+                this.step();
+                delay = this.interval;
+            }
+            this.timer = window.setTimeout(this.step.bind(this), delay);
+            return true;
+        },
+
+        stop: function()
+        {
+            this.active = false;
+            if (this.timer) {
+                window.clearTimeout(this.timer);
+                this.timer = null;
+            }
+        },
+        
+        step: function()
+        {
+            if (!this.active) {
+                return;
+            }
+            if (this.timer) {
+                window.clearTimeout(this.timer);
+            }
+            if (this.mode == 1 && this.running) {
+                this.timer = window.setTimeout(this.step.bind(this), 100);
+                return;
+            }
+            this.ticks += 1;
+            this.running = true;
+            Promise.resolve(this.func()).finally((function() { 
+                if (this.mode == 0) {
+                    this.running = false;
+                }
+                this.timer = null;
+                if (this.active) {
+                    this.timer = window.setTimeout(this.step.bind(this), this.interval);
+                }
+            }).bind(this));
+        },
+
+        stopAndWait: async function(interval = 50)
+        {
+            this.stop();
+            if (!this.running) {
+                return;
+            }
+            return new Promise((resolve) => {
+                if (!this.running) {
+                    return resolve();
+                }
+                const timer = setInterval(() => {
+                    if (!this.running) {
+                        resolve();
+                    }
+                }, interval);
+            });
+        },
+    }),
+
+    // original code: https://github.com/openwrt/luci/blob/95319793a27a3554be06070db8c6db71c6e28df1/modules/luci-base/htdocs/luci-static/resources/ui.js#L5342
+    createHandlerFnEx: function(ctx, fn, opts = { }, ...args)
+    {
+        if (typeof(fn) === 'string') {
+            fn = ctx[fn];
+        }
+        if (typeof(fn) !== 'function') {
+            return null;
+        }
+        const {
+            callback = null,   // callback(btn, result, error)
+            keepDisabled = false,
+            noSpin = false
+        } = opts;
+        return L.bind(function() {
+            const btn = arguments[args.length].currentTarget;
+            if (!noSpin) {
+                btn.classList.add('spinning');
+            }
+            btn.disabled = true;
+            if (btn.blur) btn.blur();
+            let result, error;
+            return Promise
+                .resolve()
+                .then(() => fn.apply(ctx, arguments))
+                .then(r => { result = r; })
+                .catch(e => { error = e; })
+                .finally(() => {
+                    if (!noSpin) {
+                        btn.classList.remove('spinning');
+                    }
+                    if (!keepDisabled) {
+                        btn.disabled = false;
+                    }
+                    if (typeof(callback) === 'function') {
+                        callback.call(ctx, btn, result, error);
+                    }
+                    if (error) {
+                        throw error;
+                    }
+                });
+        }, ctx, ...args);
+    },
 });
