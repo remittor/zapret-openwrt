@@ -46,7 +46,8 @@ return view.extend({
         btn.update.disabled  = (error_code == 0) ? flag : false;
     },
 
-    getAppStatus: function() {
+    getAppStatus: function()
+    {
         return Promise.all([
             tools.getInitState(tools.appName),      // svc_boot
             fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
@@ -294,9 +295,9 @@ return view.extend({
 
     load: function()
     {
-        return Promise.all([
-            L.resolveDefault(fs.stat('/bin/cat'), null),
-        ]).then( (data) => {
+        return tools.baseLoad(this, (data) => {
+            //console.log('SYS FEATURES: '+JSON.stringify(data.sys_feat));
+            tools.load_feat_env();
             return this.getAppStatus();
         });
     },

@@ -15,11 +15,17 @@ document.head.appendChild(E('link', {
 return view.extend({
     svc_info: null,
 
-    load: function() {
-        return tools.baseLoad();
+    load: function()
+    {
+        return tools.baseLoad(this, (data) => {
+            //console.log('SYS FEATURES: '+JSON.stringify(data.sys_feat));
+            tools.load_feat_env();
+            return data;
+        });
     },
 
-    render: function(data) {
+    render: function(data)
+    {
         if (!data) {
             return;
         }

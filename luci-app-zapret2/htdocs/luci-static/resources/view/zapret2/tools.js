@@ -40,7 +40,12 @@ return baseclass.extend({
         env_tools.load_env(this);
         //console.log('appName: ' + this.appName);
         //console.log('PACKAGER: ' + this.packager.name);
-    }, 
+    },
+
+    load_feat_env: function()
+    {
+        env_tools.load_feat_env(this);
+    },
 
     infoLabelRunning  : '<span class="label-status running">'  + _('Running')  + '</span>',
     infoLabelStarting : '<span class="label-status starting">' + _('Starting') + '</span>',
@@ -189,19 +194,20 @@ return baseclass.extend({
         }
     },
     
-    baseLoad: function(callback, cbarg)
+    baseLoad: function(ctx, callback)
     {
         return Promise.all([
+            L.probeSystemFeatures(),
             this.getSvcInfo(),           // svc_info
             uci.load(this.appName),
         ])
-        .then( ([svcInfo, uci_data]) => {
+        .then( ([ sys_feat, svcInfo, uci_data ]) => {
             let svc_info = this.decodeSvcInfo(svcInfo);
-            let ret = { svc_info, uci_data };
-            if (typeof callback === 'function') {
-                const res = callback(cbarg, ret);
-                if (res && typeof res.then === 'function') {
-                    return res.then(() => ret);
+            let ret = { sys_feat, svc_info, uci_data };
+            if (typeof(callback) === 'function') {
+                const res = callback.call(ctx, ret);
+                if (res && typeof(res.then) === 'function') {
+                    return res.then(() => res);
                 }
                 return ret;
             }
