@@ -193,6 +193,20 @@ return baseclass.extend({
             }
         }
     },
+
+    promiseAllDict: function(promisesDict)
+    {
+        const keys = Object.keys(promisesDict);
+        const promises = keys.map(key => promisesDict[key]);
+        return Promise.all(promises)
+            .then(results => {
+                const resultDict = { };
+                keys.forEach((key, index) => {
+                    resultDict[key] = results[index];
+                });
+                return resultDict;
+            });
+    },    
     
     baseLoad: function(ctx, callback)
     {
