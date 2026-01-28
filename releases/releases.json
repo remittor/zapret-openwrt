@@ -68,7 +68,7 @@
         "state": "uploaded",
         "size": 419784,
         "digest": "sha256:1756c5ecf7a9a01d1b57b002f86210772588d0e1100c93ccf8df9e6c36b4830a",
-        "download_count": 23,
+        "download_count": 25,
         "created_at": "2026-01-28T17:35:35Z",
         "updated_at": "2026-01-28T17:35:36Z",
         "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260128/zapret_v72.20260128_aarch64_cortex-a53.zip"
@@ -1083,9 +1083,9 @@
     "name": "zapret2 v0.9.20260128",
     "draft": false,
     "immutable": false,
-    "prerelease": true,
+    "prerelease": false,
     "created_at": "2026-01-28T17:13:37Z",
-    "updated_at": "2026-01-28T17:59:40Z",
+    "updated_at": "2026-01-28T19:41:56Z",
     "published_at": "2026-01-28T17:59:40Z",
     "assets": [
       {
@@ -2027,7 +2027,7 @@
     ],
     "tarball_url": "https://api.github.com/repos/remittor/zapret-openwrt/tarball/v0.9.20260128",
     "zipball_url": "https://api.github.com/repos/remittor/zapret-openwrt/zipball/v0.9.20260128",
-    "body": "zapret2 v0.9.20260128 for OpenWrt\n",
+    "body": "zapret2 v0.9.20260128 for OpenWrt\r\n",
     "reactions": {
       "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/280818685/reactions",
       "total_count": 3,
