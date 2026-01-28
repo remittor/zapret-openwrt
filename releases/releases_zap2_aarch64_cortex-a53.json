@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-26T19:36:25Z",
+  "generated_at": "2026-01-28T17:37:29Z",
   "releases": [
     {
       "tag": "v0.8.20260125",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 517323,
           "digest": "sha256:5fda3a6062529387ea3f30a98ad9ce4f1edd69993e60f585263da1766b0c6033",
-          "download_count": 154,
+          "download_count": 269,
           "created_at": "2026-01-25T08:23:35Z",
           "updated_at": "2026-01-25T08:23:35Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260125/zapret2_v0.8.20260125_aarch64_cortex-a53.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 516591,
           "digest": "sha256:7e134739dcfa52c08f7a0d8f72404959181893408174a2f66740374944d9c241",
-          "download_count": 628,
+          "download_count": 629,
           "created_at": "2026-01-18T11:04:26Z",
           "updated_at": "2026-01-18T11:04:26Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260118/zapret2_v0.8.20260118_aarch64_cortex-a53.zip"
