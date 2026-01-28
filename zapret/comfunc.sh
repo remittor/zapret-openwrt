@@ -170,17 +170,25 @@ function merge_cfg_with_def_values
 
 function remove_cron_task_logs
 {
-	if [ -f "$CRONTAB_FILE" ]; then
-		sed -i "/-name '$ZAPRET_CFG_NAME+\*.log' -size +/d" "$CRONTAB_FILE"
+	[ ! -f $CRONTAB_FILE ] && return 0
+	if grep -q -e "-name '$ZAPRET_CFG_NAME+\*\.log' -size " $CRONTAB_FILE; then
+		sed -i "/-name '$ZAPRET_CFG_NAME+\*.log' -size /d" $CRONTAB_FILE
+		#/etc/init.d/cron restart 2> /dev/null
 	fi
 }
 
 function insert_cron_task_logs
 {
-	[ ! -f "$CRONTAB_FILE" ] && touch "$CRONTAB_FILE"
-	[ ! -f "$CRONTAB_FILE" ] && return 1
-	if ! grep -q -e "-name '$ZAPRET_CFG_NAME+\*\.log' -size \+" "$CRONTAB_FILE"; then
-		echo "*/2 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name '$ZAPRET_CFG_NAME+*.log' -size +2600k -exec rm -f {} \;" >> "$CRONTAB_FILE"
+	local daemon_log_size_max=${1:-2000}
+	[ ! -f $CRONTAB_FILE ] && touch $CRONTAB_FILE
+	[ ! -f $CRONTAB_FILE ] && return 1
+	if ! grep -q -e "-name '$ZAPRET_CFG_NAME+\*\.log' -size " $CRONTAB_FILE; then
+		case "$daemon_log_size_max" in
+			''|'0'|*[!0-9]*)
+				daemon_log_size_max=2000
+				;;
+		esac
+		echo "*/1 * * * * /usr/bin/find /tmp -maxdepth 1 -type f -name '$ZAPRET_CFG_NAME+*.log' -size +${daemon_log_size_max}k -exec rm -f {} \;" >> $CRONTAB_FILE
 		/etc/init.d/cron restart 2> /dev/null
 	fi
 	return 0
@@ -188,7 +196,8 @@ function insert_cron_task_logs
 
 function init_before_start
 {
-	local DAEMON_LOG_ENABLE=$1
+	local daemon_log_enable=$1
+	local daemon_log_size_max=${2:-2000}
 	local HOSTLIST_FN="$ZAPRET_BASE/ipset/zapret-hosts-user.txt"
 	[ ! -f "$HOSTLIST_FN" ] && touch "$HOSTLIST_FN"
 	chmod 644 $ZAPRET_BASE/ipset/*.txt
@@ -198,8 +207,8 @@ function init_before_start
 	rm -f $ZAPRET_BASE/init.d/openwrt/custom.d/*.apk*
 	rm -f /tmp/$ZAPRET_CFG_NAME+*.log
 	#*/
-	if [ "$DAEMON_LOG_ENABLE" = "1" ]; then
-		insert_cron_task_logs
+	if [ "$daemon_log_enable" = "1" ]; then
+		insert_cron_task_logs "$daemon_log_size_max"
 	else
 		remove_cron_task_logs
 	fi

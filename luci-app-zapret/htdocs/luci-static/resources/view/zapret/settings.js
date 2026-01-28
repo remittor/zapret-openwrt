@@ -90,6 +90,43 @@ return view.extend({
         o.rmempty = false;
         o.default = 0;
 
+        let current_size = uci.get(tools.appName, 'config', 'DAEMON_LOG_SIZE_MAX') || '0';
+        let has_valid_value = false;
+        let size_list = [ 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7000 ];
+        if (current_size && current_size != '0') {
+            try {
+                current_size = parseInt(current_size, 10); 
+                if (!isNaN(current_size) && current_size > 0) {
+                    has_valid_value = true;
+                    if (!size_list.includes(current_size)) {
+                        size_list.push(current_size);
+                        size_list.sort((a, b) => a - b);
+                    }
+                }
+            } catch(e) {
+                has_valid_value = false;
+            }    
+        }
+        o = s.taboption(tabname, form.ListValue, 'DAEMON_LOG_SIZE_MAX', _('DAEMON_LOG_SIZE_MAX'));
+        o.rmempty = false;
+        if (!has_valid_value) {
+            o.value('', '');
+            o.default = '';
+        }
+        for (let idx = 0; idx < size_list.length; idx++) {
+            let fsize = size_list[idx];
+            o.value('' + fsize, fsize + ' KB');
+            if (has_valid_value && fsize === current_size) {
+                o.default = '' + fsize;
+            }
+        }
+        o.validate = function(section_id, value) {
+            if (!value || value === '') {
+                return _('Please select maximum log size');
+            }
+            return true;
+        };
+
         /* NFQWS_OPT_DESYNC tab */
 
         tabname = 'nfqws_params';

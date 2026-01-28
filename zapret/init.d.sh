@@ -70,18 +70,18 @@ function boot
 			fi
 		fi
 	fi
-	init_before_start "$DAEMON_LOG_ENABLE"
+	init_before_start "$DAEMON_LOG_ENABLE" "$DAEMON_LOG_SIZE_MAX"
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD start "$@"
 }
 
 function start
 {
-	init_before_start "$DAEMON_LOG_ENABLE"
+	init_before_start "$DAEMON_LOG_ENABLE" "$DAEMON_LOG_SIZE_MAX"
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD start "$@"
 }
 
 function restart
 {
-	init_before_start "$DAEMON_LOG_ENABLE"
+	init_before_start "$DAEMON_LOG_ENABLE" "$DAEMON_LOG_SIZE_MAX"
 	/bin/sh /etc/rc.common $ZAPRET_ORIG_INITD restart "$@"
 }
