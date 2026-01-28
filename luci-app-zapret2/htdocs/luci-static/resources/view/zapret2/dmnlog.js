@@ -8,15 +8,17 @@
 'require view.zapret2.tools as tools';
 
 return view.extend({
-    retrieveLog: async function() {
-        return Promise.all([
-            L.resolveDefault(fs.stat('/bin/cat'), null),
-            fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', tools.appName+'+*.log' ]),
-            uci.load(tools.appName),
-        ]).then(function(status_array) {
-            var filereader = status_array[0] ? status_array[0].path : null;
-            var log_data   = status_array[1];   // stdout: multiline text
-            if (log_data.code != 0) {
+    POLL: new tools.POLLER( { } ),
+    
+    retrieveLog: async function()
+    {
+        return tools.promiseAllDict({
+            filereader   : L.resolveDefault(fs.stat('/bin/cat'), null),
+            log_data     : fs.exec('/usr/bin/find', [ '/tmp', '-maxdepth', '1', '-type', 'f', '-name', tools.appName+'+*.log' ]),
+        }).then( (data) => {
+            var filereader = data.filereader ? data.filereader.path : null;
+            var log_data   = data.log_data;   // stdout: multiline text
+            if (log_data?.code === undefined || log_data.code != 0) {
                 ui.addNotification(null, E('p', _('Unable to get log files') + '(code = ' + log_data.code + ') : retrieveLog()'));
                 return null;
             }
@@ -68,17 +70,20 @@ return view.extend({
                 )));
                 return null;
             });
-        }).catch(function(e) {
+        }).catch( (e) => {
             const [, lineno, colno] = e.stack.match(/(\d+):(\d+)/);
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
                 + ': %s [ lineno: %s | %s | %s | %s ]'.format(
                     e.message, lineno, 'retrieveLog', 'uci.'+tools.appName
             )));
             return null;
+        }).finally( () => {
+            this.POLL.running = false;
         });
     },
 
-    pollLog: async function() {
+    pollLog: async function()
+    {
         let logdate_len = -2;
         let logdata;
         for (let txt_id = 0; txt_id < 10; txt_id++) {
@@ -111,26 +116,28 @@ return view.extend({
         }
     },
 
-    load: async function() {
-        poll.add(this.pollLog.bind(this));
-        return await this.retrieveLog();
+    load: function()
+    {
+        return tools.baseLoad(this, (data) => {
+            tools.load_feat_env();
+            this.svc_info = data.svc_info;
+            return this.retrieveLog();
+        });
     },
     
-    render: function(logdata) {
-        if (!logdata) {
-            return;
-        }
+    render: function(logdata)
+    {
         if (typeof(logdata) === 'string') {
             return E('div', {}, [
                 E('p', {'class': 'cbi-title-field'}, [ logdata ]),
             ]);
         }
-        if (!Array.isArray(logdata)) {
+        if (!logdata || !Array.isArray(logdata)) {
             ui.addNotification(null, E('p', _('Unable to get log files') + ' : render()'));
             return;
         }
         var h2 = E('div', {'class' : 'cbi-title-section'}, [
-            E('h2', {'class': 'cbi-title-field'}, [ tools.AppName + ' - ' + _('Log Viewer') ]),
+            E('h2', {'class': 'cbi-title-field'}, [ ]),
         ]);
 
         var tabs = E('div', {}, E('div'));
@@ -193,8 +200,11 @@ return view.extend({
             tabs.firstElementChild.appendChild(tab);
         }
         ui.tabs.initTabGroup(tabs.firstElementChild.childNodes);
-        //this.pollFn = L.bind(this.handleScanRefresh, this);
-        //poll.add(this.pollFn);
+
+        this.POLL.mode = 1;
+        this.POLL.init( this.pollLog.bind(this), 1000 );  // interval 1000 ms
+        this.POLL.start();
+
         return E('div', { }, [ h2, tabs ]);
     },
 
