@@ -423,7 +423,7 @@ return baseclass.extend({
         let svc_autorun = _('Unknown');
         let svc_daemons = _('Unknown');
         
-        if (typeof(svcinfo) == 'object') {
+        if (typeof(svcinfo) == 'object' && svcinfo?.autorun !== undefined) {
             svc_autorun = (svcinfo.autorun) ? _('Enabled') : _('Disabled');
             if (!svcinfo.dmn.inited) {
                 svc_daemons = _('Stopped');
