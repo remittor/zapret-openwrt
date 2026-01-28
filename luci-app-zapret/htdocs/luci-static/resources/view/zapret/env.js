@@ -32,24 +32,39 @@ return baseclass.extend({
     autoHostListFN    : '/opt/zapret/ipset/zapret-hosts-auto.txt',
     autoHostListDbgFN : '/opt/zapret/ipset/zapret-hosts-auto-debug.log',
 
-    load_env: function(dst_obj) {
+    load_env: function(ctx)
+    {
         let env_proto = Object.getPrototypeOf(this);
         Object.getOwnPropertyNames(env_proto).forEach(function(key) {
-            if (key === 'constructor' || key === 'load_env' || key.startsWith('__'))
+            if (key === 'constructor' || key.startsWith('__')) {
                 return;
-            dst_obj[key] = env_proto[key];
+            }
+            if (key === 'load_env' || key === 'load_feat_env') {
+                return;
+            }
+            ctx[key] = env_proto[key];
         });
-        dst_obj.packager = { };
-        if (L.hasSystemFeature('apk')) {
-            dst_obj.packager.name = 'apk';
-            dst_obj.packager.path = '/usr/bin/apk';
-            dst_obj.packager.args = [ 'list', '-I', '*'+this.appName+'*' ];
-        } else {
-            dst_obj.packager.name = 'opkg';
-            dst_obj.packager.path = '/bin/opkg';
-            dst_obj.packager.args = [ 'list-installed', '*'+this.appName+'*' ];
+        ctx.skey_pkg_dict = this.appName + '-pkg-dict';
+        ctx.skey_deffered_action = this.appName + '-deffered-action';
+        try {
+            L.hasSystemFeature('opkg');
+            this.load_feat_env(ctx);
+        } catch(e) {
+            // nothing
         }
-        dst_obj.skey_pkg_dict = this.appName + '-pkg-dict';
-        dst_obj.skey_deffered_action = this.appName + '-deffered-action';
-    }
+    },
+    
+    load_feat_env: function(ctx)
+    {
+        ctx.packager = { };
+        if (L.hasSystemFeature('apk')) {
+            ctx.packager.name = 'apk';
+            ctx.packager.path = '/usr/bin/apk';
+            ctx.packager.args = [ 'list', '-I', '*'+this.appName+'*' ];
+        } else {
+            ctx.packager.name = 'opkg';
+            ctx.packager.path = '/bin/opkg';
+            ctx.packager.args = [ 'list-installed', '*'+this.appName+'*' ];
+        }
+    },
 });

@@ -295,9 +295,9 @@ return view.extend({
 
     load: function()
     {
-        return Promise.all([
-            L.resolveDefault(fs.stat('/bin/cat'), null),
-        ]).then( (data) => {
+        return tools.baseLoad(this, (data) => {
+            //console.log('SYS FEATURES: '+JSON.stringify(data.sys_feat));
+            tools.load_feat_env();
             return this.getAppStatus();
         });
     },
