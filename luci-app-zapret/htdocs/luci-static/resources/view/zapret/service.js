@@ -48,16 +48,16 @@ return view.extend({
 
     getAppStatus: function()
     {
-        return Promise.all([
-            tools.getInitState(tools.appName),      // svc_boot
-            fs.exec(tools.execPath, [ 'enabled' ]), // svc_en
-            tools.getSvcInfo(),                     // svc_info
-            fs.exec('/bin/busybox', [ 'ps' ]),      // process list
-            tools.getPackageDict(),                 // installed packages
-            tools.getStratList(),                   // nfqws strategy list
-            fs.exec('/bin/cat', [ '/etc/openwrt_release' ]),  // CPU arch
-            uci.load(tools.appName),              // config
-        ]).catch(e => {
+        return tools.promiseAllDict({
+            svc_boot   : tools.getInitState(tools.appName),
+            svc_en     : fs.exec(tools.execPath, [ 'enabled' ]),
+            svc_info   : tools.getSvcInfo(),
+            proc_list  : fs.exec('/bin/busybox', [ 'ps' ]),
+            pkg_dict   : tools.getPackageDict(),
+            strat_list : tools.getStratList(),
+            sys_info   : fs.exec('/bin/cat', [ '/etc/openwrt_release' ]),
+            uci_data   : uci.load(tools.appName),
+        }).catch(e => {
             ui.addNotification(null, E('p', _('Unable to execute or read contents')
                 + ': %s [ %s | %s | %s ]'.format(
                     e.message, tools.execPath, 'tools.getInitState', 'uci.'+tools.appName
@@ -65,42 +65,34 @@ return view.extend({
         });
     },
 
-    setAppStatus: function(status_array, elems = { }, force_app_status = 0)
+    setAppStatus: function(data, elems = { }, force_app_status = 0)
     {
         tools.execDefferedAction();
         let cfg = uci.get(tools.appName, 'config');
-        if (!status_array || cfg == null || typeof(cfg) !== 'object') {
+        if (!data || cfg == null || typeof(cfg) !== 'object') {
             let elem_status = elems.status || document.getElementById("status");
             elem_status.innerHTML = tools.makeStatusString(null, '', '');
             ui.addNotification(null, E('p', _('Unable to read the contents') + ': setAppStatus()'));
             this.disableButtons(true, -1, elems);
             return;
         }
-        let svc_boot  = status_array[0] ? true : false;
-        let svc_en    = status_array[1];   // stdout: empty or error text
-        let svc_info  = status_array[2];   // dict for services
-        let proc_list = status_array[3];   // stdout: multiline text
-        let pkg_dict  = status_array[4];   // stdout: installed packages
-        let stratlist = status_array[5];   // array of strat names
-        let sys_info  = status_array[6];   // stdout: openwrt distrib info
+        let svc_boot = data.svc_boot ? true : false;
+        this.nfqws_strat_list = data.strat_list;
+        this.pkg_arch = tools.getConfigPar(data.sys_info.stdout, 'DISTRIB_ARCH', 'unknown');
+        //console.log('svc_en: ' + data.svc_en.code + '  poll.running = ' + this.POLL.running);
+        let svc_en = (data.svc_en.code == 0) ? true : false;
         
-        this.nfqws_strat_list = stratlist;
-        this.pkg_arch = tools.getConfigPar(sys_info.stdout, 'DISTRIB_ARCH', 'unknown');
-        
-        //console.log('svc_en: ' + svc_en.code + '  poll.running = ' + this.POLL.running);
-        svc_en = (svc_en.code == 0) ? true : false;
-        
-        if (typeof(svc_info) !== 'object') {
+        if (typeof(data.svc_info) !== 'object') {
             ui.addNotification(null, E('p', _('Unable to read the service info') + ': setAppStatus()'));
             this.disableButtons(true, -1, elems);
             return;
         }
-        if (proc_list.code != 0) {
+        if (data.proc_list.code != 0) {
             ui.addNotification(null, E('p', _('Unable to read process list') + ': setAppStatus()'));
             this.disableButtons(true, -1, elems);
             return;
         }
-        if (!pkg_dict) {
+        if (!data.pkg_dict) {
             ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': getPackageDict()'));
             this.disableButtons(true, -1, elems);
             return;
@@ -109,7 +101,7 @@ return view.extend({
         if (force_app_status) {
             svcinfo = force_app_status;
         } else {
-            svcinfo = tools.decode_svc_info(svc_en, svc_info, proc_list, cfg);
+            svcinfo = tools.decode_svc_info(svc_en, data.svc_info, data.proc_list, cfg);
         }
         let btn = this.get_svc_buttons(elems);
         btn.reset.disabled = false;
@@ -302,14 +294,14 @@ return view.extend({
         });
     },
 
-    render: function(status_array)
+    render: function(data)
     {
-        if (!status_array) {
+        if (!data) {
             return;
         }
         let cfg = uci.get(tools.appName, 'config');
 
-        let pkgdict = status_array[4];
+        let pkgdict = data.pkg_dict;
         if (pkgdict == null) {
             ui.addNotification(null, E('p', _('Unable to enumerate installed packages') + ': render()'));
             return;
@@ -393,7 +385,7 @@ return view.extend({
             "btn_diag": btn_diag,
             "btn_update": btn_update,
         };
-        this.setAppStatus(status_array, elems);
+        this.setAppStatus(data, elems);
 
         this.POLL.mode = 1;
         this.POLL.init( L.bind(this.statusPoll, this), 2000 );  // interval 2 sec
