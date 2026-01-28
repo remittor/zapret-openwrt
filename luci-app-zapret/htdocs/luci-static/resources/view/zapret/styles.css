@@ -3,4 +3,6 @@ textarea, .cbi-value textarea
     white-space: pre;
     overflow-x: auto;
     font-family: monospace;
+    pointer-events: auto !important;
+    user-select: text !important;    
 }
