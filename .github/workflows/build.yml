@@ -155,6 +155,7 @@ jobs:
           - mipsel_24kc_24kf
           - mipsel_74kc
           - mipsel_mips32
+          - riscv64_generic
           - x86_64
         isTestOrFake:
           - ${{ needs.check.outputs.test_build == 'true' || needs.check.outputs.fake_build == 'true' }}
@@ -163,6 +164,8 @@ jobs:
             arch: arm_cortex-a9_vfpv3-d16
           - branch: ${{ needs.var.outputs.APK_BRANCH }}
             arch: mips_4kec
+          - branch: ${{ needs.var.outputs.IPK_BRANCH }}
+            arch: riscv64_generic
           - { isTestOrFake: true }
         include:
           - branch: ${{ needs.var.outputs.IPK_BRANCH }}
