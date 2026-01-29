@@ -26,7 +26,7 @@ LUA_JIT?=1
 ifeq ($(LUA_JIT),1)
 	LUAJIT_VER?=2.1
 	LUA_VER?=5.1
-	LUA_DEPEND:=luajit
+	LUA_DEPEND:=luajit2
 	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/luajit-$(LUAJIT_VER)
 	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -lluajit-$(LUA_VER)
 else

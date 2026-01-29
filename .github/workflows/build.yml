@@ -272,6 +272,8 @@ jobs:
           sed -i 's/CONFIG_LUCI_JSMIN=y/CONFIG_LUCI_JSMIN=n/g' .config
           sed -i 's/CONFIG_LUCI_CSSTIDY=y/CONFIG_LUCI_CSSTIDY=n/g' .config
           grep -q '^CONFIG_LUCI_CSSTIDY=' .config || echo 'CONFIG_LUCI_CSSTIDY=n' >> .config
+          sed -i 's/CONFIG_PACKAGE_luajit2=n/CONFIG_PACKAGE_luajit2=y/g' .config
+          grep -q '^CONFIG_PACKAGE_luajit2=' .config || echo 'CONFIG_PACKAGE_luajit2=y' >> .config
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Show config
@@ -286,7 +288,8 @@ jobs:
         env:
           ARCH_TAG: ${{ matrix.arch }}
         run: |
-          PKGLIST="package/zapret-openwrt/zapret2/compile"
+          PKGLIST="package/feeds/packages/luajit2/compile"
+          PKGLIST="$PKGLIST package/zapret-openwrt/zapret2/compile"
           if [ "$ARCH_TAG" = "$LUCI_ARCH" ]; then
               PKGLIST="$PKGLIST package/zapret-openwrt/luci-app-zapret2/compile"
           fi
