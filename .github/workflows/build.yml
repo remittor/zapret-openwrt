@@ -270,6 +270,8 @@ jobs:
         run: |
           make defconfig
           sed -i 's/CONFIG_LUCI_JSMIN=y/CONFIG_LUCI_JSMIN=n/g' .config
+          sed -i 's/CONFIG_LUCI_CSSTIDY=y/CONFIG_LUCI_CSSTIDY=n/g' .config
+          grep -q '^CONFIG_LUCI_CSSTIDY=' .config || echo 'CONFIG_LUCI_CSSTIDY=n' >> .config
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Show config
