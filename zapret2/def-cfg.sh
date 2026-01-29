@@ -211,7 +211,7 @@ function set_cfg_nfqws_strat
 				--new
 				--filter-tcp=443
 				--filter-l3=ipv4
-				--filter-l7=tls <HOSTLIST_AUTO>
+				--filter-l7=tls <HOSTLIST>
 				--out-range=-s34228
 				--in-range=-s5556 --lua-desync=circular:fails=2:maxtime=60
 				--in-range=x
