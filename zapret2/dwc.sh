@@ -76,7 +76,7 @@ TEST_SUITE='
   { id: "US.CF-04", provider: "🇨🇦 Cloudflare", times: 1, url: "https://www.bigcartel.com/" },
   { id: "US.DO-01", provider: "🇺🇸 DigitalOcean", times: 2, url: "https://genderize.io/" },
   { id: "DE.HE-01", provider: "🇩🇪 Hetzner", times: 1, url: "https://j.dejure.org/jcg/doctrine/doctrine_banner.webp" },
-  { id: "DE.HE-02", provider: "🇩🇪 Hetzner", times: 1, url: "https://maps.gnosis.earth/ogcapi/api/swagger-ui/swagger-ui-standalone-preset.js#" },
+  { id: "DE.HE-02", provider: "🇩🇪 Hetzner", times: 1, url: "https://accesorioscelular.com/tienda/css/plugins.css" },
   { id: "FI.HE-01", provider: "🇫🇮 Hetzner", times: 1, url: "https://251b5cd9.nip.io/1MB.bin" },
   { id: "FI.HE-02", provider: "🇫🇮 Hetzner", times: 1, url: "https://nioges.com/libs/fontawesome/webfonts/fa-solid-900.woff2" },
   { id: "FI.HE-03", provider: "🇫🇮 Hetzner", times: 1, url: "https://5fd8bdae.nip.io/1MB.bin" },
@@ -92,7 +92,7 @@ TEST_SUITE='
   { id: "US.AKM-01", provider: "🇺🇸 Akamai", times: 1, url: "https://www.roxio.com/static/roxio/images/products/creator/nxt9/call-action-footer-bg.jpg" },
   { id: "PL.AKM-01", provider: "🇵🇱 Akamai", times: 1, url: "https://media-assets.stryker.com/is/image/stryker/gateway_1?$max_width_1410$" },
   { id: "US.CDN77-01", provider: "🇺🇸 CDN77", times: 1, url: "https://cdn.eso.org/images/banner1920/eso2520a.jpg" },
-  { id: "FR.CNTB-01", provider: "🇫🇷 Contabo", times: 1, url: "https://airsea.no/images/main_logo.png" },
+  { id: "FR.CNTB-01", provider: "🇫🇷 Contabo", times: 1, url: "https://xdmarineshop.gr/index.php?route=index" },
   { id: "NL.SW-01", provider: "🇳🇱 Scaleway", times: 1, url: "https://www.velivole.fr/img/header.jpg" },
   { id: "US.CNST-01", provider: "🇺🇸 Constant", times: 1, url: "https://cdn.xuansiwei.com/common/lib/font-awesome/4.7.0/fontawesome-webfont.woff2?v=4.7.0" }
 '
