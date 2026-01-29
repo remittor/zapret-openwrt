@@ -485,7 +485,7 @@ if [ "$opt_update" != "" ]; then
 	mkdir $ZAP_PKG_DIR
 	ZAP_PKG_FN="$ZAP_PKG_DIR/${ZAP_PKG_URL##*/}"
 	echo "Download ZIP-file..."
-	curl -s -L --max-time 35 -H "$CURL_HEADER2" "$ZAP_PKG_URL" -o "$ZAP_PKG_FN"
+	curl -s -L --retry 5 --retry-delay 1 --retry-max-time 55 --retry-all-errors --max-time 30 -H "$CURL_HEADER2" "$ZAP_PKG_URL" -o "$ZAP_PKG_FN"
 	if [ $? -ne 0 ]; then
 		echo "ERROR: cannot download package!"
 		return 215
