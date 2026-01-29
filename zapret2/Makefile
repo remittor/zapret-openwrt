@@ -52,7 +52,7 @@ define Package/$(PKG_NAME)
 	DEPENDS:= +nftables +curl +gzip +$(LUA_DEPEND)
 	DEPENDS+= +coreutils +coreutils-sort +coreutils-sleep
 	DEPENDS+= +kmod-nft-nat +kmod-nft-offload +kmod-nft-queue
-	DEPENDS+= +libnetfilter-queue +libcap +zlib
+	DEPENDS+= +libnetfilter-queue +libmnl +libcap +zlib
 endef
 
 define Build/Prepare
@@ -197,7 +197,7 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 			$${ZAPRET_INITD} running && $${ZAPRET_INITD} stop >/dev/null 2>&1
 		fi
 	fi
-	if $${PKG_CHECK} zapret2 >/dev/null 2>&1; then
+	if $${PKG_CHECK} zapret2 2>/dev/null | grep -q . ; then
 		if [ ! -f "/opt/zapret2/sync_config.sh" ]; then
 			echo "Please uninstall incompatible \"zapret2\" package!"
 			exit 47
@@ -207,7 +207,7 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 			exit 48
 		fi
 	fi
-	if $${PKG_CHECK} luci-app-zapret2 >/dev/null 2>&1; then
+	if $${PKG_CHECK} luci-app-zapret2 2>/dev/null | grep -q . ; then
 		SVC_FILE=/www/luci-static/resources/view/zapret2/service.js
 		if [ ! -f "$${SVC_FILE}" ] || ! grep -Fq "/remittor/zapret-openwrt" "$${SVC_FILE}"; then
 			echo "Please uninstall incompatible \"luci-app-zapret2\" package!"
@@ -223,10 +223,10 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 		[ -d "$${ZAPRET_DIR}" ] && rm -rf $${ZAPRET_DIR}
 		echo "All files of the previously installed package have been removed!"
 	fi
-	if $${PKG_CHECK} zapret2-mdig >/dev/null 2>&1; then
+	if $${PKG_CHECK} zapret2-mdig 2>/dev/null | grep -q . ; then
 		$${PKG_REMOVE} zapret2-mdig
 	fi
-	if $${PKG_CHECK} zapret2-ip2net >/dev/null 2>&1; then
+	if $${PKG_CHECK} zapret2-ip2net 2>/dev/null | grep -q . ; then
 		$${PKG_REMOVE} zapret2-ip2net
 	fi
 	if [ ! -d "$${ZAPRET_DIR}" ]; then
