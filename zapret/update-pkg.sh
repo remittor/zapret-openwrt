@@ -89,6 +89,16 @@ fi
 
 # -------------------------------------------------------------------------------------------------------
 
+function check_pkg_installed
+{
+	local pkg_name="$1"
+	if [ "$PKG_MGR" = apk ]; then
+		apk info -e "$pkg_name" >/dev/null 2>&1; 
+	else
+		opkg status "$pkg_name" 2>/dev/null | grep -q .
+	fi
+}
+
 function get_distrib_param
 {
 	local parname=$1
@@ -475,7 +485,7 @@ if [ "$opt_update" != "" ]; then
 	mkdir $ZAP_PKG_DIR
 	ZAP_PKG_FN="$ZAP_PKG_DIR/${ZAP_PKG_URL##*/}"
 	echo "Download ZIP-file..."
-	curl -s -L --max-time 15 -H "$CURL_HEADER2" "$ZAP_PKG_URL" -o "$ZAP_PKG_FN"
+	curl -s -L --max-time 35 -H "$CURL_HEADER2" "$ZAP_PKG_URL" -o "$ZAP_PKG_FN"
 	if [ $? -ne 0 ]; then
 		echo "ERROR: cannot download package!"
 		return 215
@@ -529,11 +539,11 @@ if [ "$opt_update" != "" ]; then
 	if [ "$opt_forced" = true ]; then
 		pkg_mgr_update
 	fi
-	if ${PKG_CHECK} ${ZAPRET_CFG_NAME}-mdig >/dev/null 2>&1; then
+	if check_pkg_installed ${ZAPRET_CFG_NAME}-mdig; then
 		echo "Uninstall mdig..."
 		${PKG_REMOVE} ${ZAPRET_CFG_NAME}-mdig
 	fi
-	if ${PKG_CHECK} ${ZAPRET_CFG_NAME}-ip2net >/dev/null 2>&1; then
+	if check_pkg_installed ${ZAPRET_CFG_NAME}-ip2net; then
 		echo "Uninstall ip2net..."
 		${PKG_REMOVE} ${ZAPRET_CFG_NAME}-ip2net
 	fi
