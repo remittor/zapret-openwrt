@@ -547,6 +547,23 @@ if [ "$opt_update" != "" ]; then
 		echo "Uninstall ip2net..."
 		${PKG_REMOVE} ${ZAPRET_CFG_NAME}-ip2net
 	fi
+	if [ "$ZAPRET_CFG_NAME" = zapret2 -a "$PKG_MGR" = opkg ]; then
+		if [ "$ZAP_CUR_PKG_VER" != "" ]; then
+			ZAP_VER_CMP=$( pkg_version_cmp "$ZAP_CUR_PKG_VER" "0.9.20260129-r1" )
+			if [ "$ZAP_VER_CMP" = "L" ]; then
+				echo "WARN: Detect installed zapret2 with luajit depend."
+				ZAP_DEPENDS=$( opkg whatdepends luajit | awk '/^\s/{print $1}' | grep -q -v -E '^(luajit|zapret2|luci-app-zapret2)$' )
+				if [ "$ZAP_DEPENDS" != "" ]; then
+					echo "ERROR: Cannot remove package luajit! Please install package \"zapret2\" manually!"
+					return 239
+				fi
+				[ -x /etc/init.d/zapret2 ] && /etc/init.d/zapret2 stop
+				sleep 1
+				opkg remove --force-remove --force-depends luajit
+				opkg install --force-reinstall luajit2
+			fi
+		fi
+	fi
 	echo "Install downloaded packages..."
 	if [ "$PKG_MGR" != "apk" ]; then
 		opkg install --force-reinstall "$ZAP_PKG_BASE_FN"
