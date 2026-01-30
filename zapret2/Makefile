@@ -214,6 +214,10 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 			exit 55
 		fi
 	fi
+	if $${PKG_CHECK} luajit 2>/dev/null | grep -q . ; then
+		echo "ERROR: conflict package \"luajit\". Required \"luajit2\" package. Please install new package \"zapret2\" manually!"
+		exit 59
+	fi
 	if [ -f "$${ZAPRET_CFG}" ] && ! grep -q "run_on_boot" "$${ZAPRET_CFG}"; then
 		if [ -x "$${ZAPRET_INITD}" ]; then
 			$${ZAPRET_INITD} running && $${ZAPRET_INITD} stop >/dev/null 2>&1
