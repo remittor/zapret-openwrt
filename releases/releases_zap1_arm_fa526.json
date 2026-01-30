@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-30T09:46:50Z",
+  "generated_at": "2026-01-30T19:37:03Z",
   "releases": [
     {
       "tag": "v72.20260128",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 410329,
           "digest": "sha256:9dff58a3f8eca42db89eec7c5c934c5051a2d6af08582f9aaf55feb3db48b1eb",
-          "download_count": 5,
+          "download_count": 6,
           "created_at": "2026-01-28T17:35:35Z",
           "updated_at": "2026-01-28T17:35:36Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260128/zapret_v72.20260128_arm_fa526.zip"

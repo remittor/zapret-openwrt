@@ -1,6 +1,53 @@
 {
-  "generated_at": "2026-01-30T09:46:50Z",
+  "generated_at": "2026-01-30T19:37:03Z",
   "releases": [
+    {
+      "tag": "v0.9.20260130-r2",
+      "name": "zapret2 v0.9.20260130-r2",
+      "prerelease": true,
+      "created_at": "2026-01-30T19:03:22Z",
+      "updated_at": "2026-01-30T19:36:50Z",
+      "published_at": "2026-01-30T19:36:50Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.9.20260130-r2",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/348331900",
+          "id": 348331900,
+          "node_id": "RA_kwDOM-Npcs4Uwx98",
+          "name": "zapret2_v0.9.20260130-r2_arm_cortex-a15_neon-vfpv4.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 839412,
+          "digest": "sha256:ef4a7b2d6cdf739e6a217a1fda6ea8fbabc8800393b654b389cd632a56e494f8",
+          "download_count": 0,
+          "created_at": "2026-01-30T19:36:49Z",
+          "updated_at": "2026-01-30T19:36:50Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260130-r2/zapret2_v0.9.20260130-r2_arm_cortex-a15_neon-vfpv4.zip"
+        }
+      ]
+    },
     {
       "tag": "v0.9.20260130",
       "name": "zapret2 v0.9.20260130",
@@ -41,7 +88,7 @@
           "state": "uploaded",
           "size": 529024,
           "digest": "sha256:400be5411dec64d1a24f260155f7e2616fcd64757b646ffb5da0572bd589ad4d",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-01-30T09:46:39Z",
           "updated_at": "2026-01-30T09:46:39Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260130/zapret2_v0.9.20260130_arm_cortex-a15_neon-vfpv4.zip"
@@ -703,53 +750,6 @@
           "created_at": "2025-12-25T07:22:45Z",
           "updated_at": "2025-12-25T07:22:45Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225/zapret2_v0.7.20251225_arm_cortex-a15_neon-vfpv4.zip"
-        }
-      ]
-    },
-    {
-      "tag": "v0.7.20251224",
-      "name": "zapret2 v0.7.20251224",
-      "prerelease": true,
-      "created_at": "2025-12-24T07:30:59Z",
-      "updated_at": "2025-12-24T08:13:18Z",
-      "published_at": "2025-12-24T08:13:18Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.7.20251224",
-      "assets": [
-        {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/332443919",
-          "id": 332443919,
-          "node_id": "RA_kwDOM-Npcs4T0LEP",
-          "name": "zapret2_v0.7.20251224_arm_cortex-a15_neon-vfpv4.zip",
-          "label": "",
-          "uploader": {
-            "login": "github-actions[bot]",
-            "id": 41898282,
-            "node_id": "MDM6Qm90NDE4OTgyODI=",
-            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
-            "html_url": "https://github.com/apps/github-actions",
-            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
-            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
-            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
-            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
-            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
-            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
-            "type": "Bot",
-            "user_view_type": "public",
-            "site_admin": false
-          },
-          "content_type": "application/zip",
-          "state": "uploaded",
-          "size": 450933,
-          "digest": "sha256:7180b4a618f33e1746011497791befce6d55bb9195cc2553b4425bb9a56e6264",
-          "download_count": 3,
-          "created_at": "2025-12-24T08:13:17Z",
-          "updated_at": "2025-12-24T08:13:17Z",
-          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251224/zapret2_v0.7.20251224_arm_cortex-a15_neon-vfpv4.zip"
         }
       ]
     }
