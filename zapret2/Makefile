@@ -114,7 +114,8 @@ define Build/Compile
 			HOST_CC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_BITS)" \
 			CROSS="$(TARGET_CROSS)" \
 			XCFLAGS="-DLUAJIT_DISABLE_FFI" \
-			TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+			TARGET_CFLAGS="-Os -s -flto=auto $(TARGET_CFLAGS)" \
+			TARGET_AR="$(TARGET_AR) rcus" \
 			BUILDMODE=static \
 			DESTDIR=$(LUAOUT_DIR) \
 			PREFIX= \
