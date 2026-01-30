@@ -30,9 +30,18 @@ ifeq ($(LUA_JIT),1)
 	LUA_VER?=5.1
 	LUA_DEPEND:=
 	LUAJIT_VER?=2.1
-	LUAJIT_RELEASE:=2.1-20250826
-	LUAJIT_URL:=https://github.com/openresty/luajit2/archive/refs/tags/v$(LUAJIT_RELEASE).tar.gz
-	LUAJIT_TGZ:=$(DL_DIR)/$(PKG_NAME)-luajit-$(LUAJIT_RELEASE).tar.gz
+	ifeq ($(ARCH),riscv64)
+		LUAJIT_URL:=https://github.com/infiWang/luajit2/archive
+		LAUJIT_BRANCH:=v2.1-20260114-riscv64
+		LUAJIT_COMMIT=4d8cf882a3a4ed3259407ad78614a60b02dd553f
+		LUAJIT_RELEASE:=2.1-20260114-$(LUAJIT_COMMIT)
+		LUAJIT_URL_FILE:=$(LUAJIT_COMMIT).tar.gz
+	else
+		LUAJIT_URL:=https://github.com/openresty/luajit2/archive/refs/tags
+		LUAJIT_RELEASE:=2.1-20250826
+		LUAJIT_URL_FILE:=v$(LUAJIT_RELEASE).tar.gz
+	endif
+	LUAJIT_TGZ:=$(PKG_NAME)-luajit-$(LUAJIT_RELEASE).tar.gz
 	LUASRC_DIR:=$(PKG_BUILD_DIR)/luajit-$(LUAJIT_RELEASE)
 	LUAOUT_DIR:=$(PKG_BUILD_DIR)/luajit-out
 	LUA_INCLUDE:=-I$(LUAOUT_DIR)/include/luajit-$(LUAJIT_VER)
@@ -61,13 +70,15 @@ define Package/$(PKG_NAME)
 	DEPENDS+= +libnetfilter-queue +libmnl +libcap +zlib
 endef
 
+ifeq ($(LUA_JIT),1)
 define Download/$(PKG_NAME)-luajit
-	FILE:=$(PKG_NAME)-luajit-$(LUAJIT_RELEASE).tar.gz
-	URL:=https://github.com/openresty/luajit2/archive/refs/tags
-	URL_FILE:=v$(LUAJIT_RELEASE).tar.gz
+	FILE:=$(LUAJIT_TGZ)
+	URL:=$(LUAJIT_URL)
+	URL_FILE:=$(LUAJIT_URL_FILE)
 	HASH:=skip
 endef
 $(eval $(call Download,$(PKG_NAME)-luajit))
+endif
 
 define Build/Prepare
 	$(Build/Prepare/Default)
@@ -75,7 +86,7 @@ define Build/Prepare
 	rm -f $(PKG_BUILD_DIR)/ip2net/ip2net
 	rm -f $(PKG_BUILD_DIR)/mdig/mdig
 	if [ "$(LUA_JIT)" = 1 ]; then \
-		if [ ! -f "$(LUAJIT_TGZ)" ]; then \
+		if [ ! -f "$(DL_DIR)/$(LUAJIT_TGZ)" ]; then \
 			echo "ERROR: LuaJIT tarball not found:"; \
 			echo "  $(LUAJIT_TGZ)"; \
 			echo "Run: make package/$(PKG_NAME)/download"; \
@@ -83,7 +94,7 @@ define Build/Prepare
 		fi ; \
 		rm -rf $(LUASRC_DIR) ; \
 		mkdir -p $(LUASRC_DIR) ; \
-		tar -xzf "$(LUAJIT_TGZ)" --strip-components=1 -C "$(LUASRC_DIR)" ; \
+		tar -xzf "$(DL_DIR)/$(LUAJIT_TGZ)" --strip-components=1 -C "$(LUASRC_DIR)" ; \
 		rm -rf $(LUAOUT_DIR) ; \
 	fi
 endef
@@ -98,26 +109,28 @@ ifeq ($(HOST_ARCH),$(filter $(HOST_ARCH), x86_64 mips64))
 endif
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(LUASRC_DIR) \
-		HOST_CC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_BITS)" \
-		CROSS="$(TARGET_CROSS)" \
-		XCFLAGS="-DLUAJIT_DISABLE_FFI" \
-		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-		BUILDMODE=static \
-		DESTDIR=$(LUAOUT_DIR) \
-		PREFIX= \
-		TARGET_SYS=Linux
-	$(RM) -rf $(LUAOUT_DIR)
-	if [ ! -f $(LUASRC_DIR)/src/libluajit.a ]; then \
-		echo "ERROR: file libluajit.a not found!"; \
-		false; \
+	if [ "$(LUA_JIT)" = 1 ]; then \
+		$(MAKE) $(PKG_JOBS) -C $(LUASRC_DIR) \
+			HOST_CC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_BITS)" \
+			CROSS="$(TARGET_CROSS)" \
+			XCFLAGS="-DLUAJIT_DISABLE_FFI" \
+			TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+			BUILDMODE=static \
+			DESTDIR=$(LUAOUT_DIR) \
+			PREFIX= \
+			TARGET_SYS=Linux ; \
+		rm -rf $(LUAOUT_DIR) ; \
+		if [ ! -f $(LUASRC_DIR)/src/libluajit.a ]; then \
+			echo "ERROR: file libluajit.a not found!"; \
+			false; \
+		fi ; \
+		mkdir -p $(LUAOUT_DIR) ; \
+		$(MAKE) -C $(LUASRC_DIR) \
+			DESTDIR=$(LUAOUT_DIR) \
+			PREFIX= \
+			TARGET_SYS=Linux \
+			install ; \
 	fi
-	mkdir -p $(LUAOUT_DIR)
-	$(MAKE) -C $(LUASRC_DIR) \
-		DESTDIR=$(LUAOUT_DIR) \
-		PREFIX= \
-		TARGET_SYS=Linux \
-		install
 	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS) LUA_JIT=$(LUA_JIT) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
 	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(TARGET_CONFIGURE_OPTS)
 	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
