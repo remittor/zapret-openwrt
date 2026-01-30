@@ -21,22 +21,28 @@ PKG_SOURCE_DATE:=2026-01-30
 #PKG_SOURCE_URL:=https://github.com/bol-van/zapret2/archive/refs/tags/v$(PKG_VERSION).tar.gz?
 #PKG_HASH:=skip
 
+include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/host-build.mk
+
 LUA_JIT?=1
 
 ifeq ($(LUA_JIT),1)
-	LUAJIT_VER?=2.1
 	LUA_VER?=5.1
-	LUA_DEPEND:=luajit2
-	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/luajit-$(LUAJIT_VER)
-	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -lluajit-$(LUA_VER)
+	LUA_DEPEND:=
+	LUAJIT_VER?=2.1
+	LUAJIT_RELEASE:=2.1-20250826
+	LUAJIT_URL:=https://github.com/openresty/luajit2/archive/refs/tags/v$(LUAJIT_RELEASE).tar.gz
+	LUAJIT_TGZ:=$(DL_DIR)/$(PKG_NAME)-luajit-$(LUAJIT_RELEASE).tar.gz
+	LUASRC_DIR:=$(PKG_BUILD_DIR)/luajit-$(LUAJIT_RELEASE)
+	LUAOUT_DIR:=$(PKG_BUILD_DIR)/luajit-out
+	LUA_INCLUDE:=-I$(LUAOUT_DIR)/include/luajit-$(LUAJIT_VER)
+	LUA_LIBRARY:=-L$(LUAOUT_DIR)/lib -lluajit-$(LUA_VER)
 else
 	LUA_VER?=5.4
-	LUA_DEPEND:=lua$(LUA_VER)
+	LUA_DEPEND:= +lua$(LUA_VER)
 	LUA_INCLUDE:=-I$(STAGING_DIR)/usr/include/lua$(LUA_VER)
 	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -llua$(LUA_VER)
 endif
-
-include $(INCLUDE_DIR)/package.mk
 
 #TAR_OPTIONS:=--strip-components 1 $(TAR_OPTIONS)
 #TAR_CMD=$(HOST_TAR) -C $(1) $(TAR_OPTIONS)
@@ -49,23 +55,69 @@ define Package/$(PKG_NAME)
 	TITLE:=$(PKG_NAME)
 	SUBMENU:=Zapret2
 	URL:=https://github.com/bol-van/zapret2
-	DEPENDS:= +nftables +curl +gzip +$(LUA_DEPEND)
+	DEPENDS:= +nftables +curl +gzip $(LUA_DEPEND)
 	DEPENDS+= +coreutils +coreutils-sort +coreutils-sleep
 	DEPENDS+= +kmod-nft-nat +kmod-nft-offload +kmod-nft-queue
 	DEPENDS+= +libnetfilter-queue +libmnl +libcap +zlib
 endef
+
+define Download/$(PKG_NAME)-luajit
+	FILE:=$(PKG_NAME)-luajit-$(LUAJIT_RELEASE).tar.gz
+	URL:=https://github.com/openresty/luajit2/archive/refs/tags
+	URL_FILE:=v$(LUAJIT_RELEASE).tar.gz
+	HASH:=skip
+endef
+$(eval $(call Download,$(PKG_NAME)-luajit))
 
 define Build/Prepare
 	$(Build/Prepare/Default)
 	rm -f $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2
 	rm -f $(PKG_BUILD_DIR)/ip2net/ip2net
 	rm -f $(PKG_BUILD_DIR)/mdig/mdig
+	if [ "$(LUA_JIT)" = 1 ]; then \
+		if [ ! -f "$(LUAJIT_TGZ)" ]; then \
+			echo "ERROR: LuaJIT tarball not found:"; \
+			echo "  $(LUAJIT_TGZ)"; \
+			echo "Run: make package/$(PKG_NAME)/download"; \
+			false; \
+		fi ; \
+		rm -rf $(LUASRC_DIR) ; \
+		mkdir -p $(LUASRC_DIR) ; \
+		tar -xzf "$(LUAJIT_TGZ)" --strip-components=1 -C "$(LUASRC_DIR)" ; \
+		rm -rf $(LUAOUT_DIR) ; \
+	fi
 endef
 
 #define Build/Configure
 #endef
 
+ifeq ($(HOST_ARCH),$(filter $(HOST_ARCH), x86_64 mips64))
+  ifeq ($(CONFIG_ARCH_64BIT),)
+    HOST_BITS := -m32
+  endif
+endif
+
 define Build/Compile
+	$(MAKE) $(PKG_JOBS) -C $(LUASRC_DIR) \
+		HOST_CC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_BITS)" \
+		CROSS="$(TARGET_CROSS)" \
+		XCFLAGS="-DLUAJIT_DISABLE_FFI" \
+		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+		BUILDMODE=static \
+		DESTDIR=$(LUAOUT_DIR) \
+		PREFIX= \
+		TARGET_SYS=Linux
+	$(RM) -rf $(LUAOUT_DIR)
+	if [ ! -f $(LUASRC_DIR)/src/libluajit.a ]; then \
+		echo "ERROR: file libluajit.a not found!"; \
+		false; \
+	fi
+	mkdir -p $(LUAOUT_DIR)
+	$(MAKE) -C $(LUASRC_DIR) \
+		DESTDIR=$(LUAOUT_DIR) \
+		PREFIX= \
+		TARGET_SYS=Linux \
+		install
 	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS) LUA_JIT=$(LUA_JIT) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
 	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(TARGET_CONFIGURE_OPTS)
 	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
@@ -213,10 +265,6 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 			echo "Please uninstall incompatible \"luci-app-zapret2\" package!"
 			exit 55
 		fi
-	fi
-	if $${PKG_CHECK} luajit 2>/dev/null | grep -q . ; then
-		echo "ERROR: conflict package \"luajit\". Required \"luajit2\" package. Please install new package \"zapret2\" manually!"
-		exit 59
 	fi
 	if [ -f "$${ZAPRET_CFG}" ] && ! grep -q "run_on_boot" "$${ZAPRET_CFG}"; then
 		if [ -x "$${ZAPRET_INITD}" ]; then
