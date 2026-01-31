@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-30T20:06:50Z",
+  "generated_at": "2026-01-31T14:25:21Z",
   "releases": [
     {
       "tag": "v0.9.20260130-r2",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 849850,
           "digest": "sha256:32be4a7ef4b4a15e0ec7683609eb25317ba0d40633756e96f8827f4695abffa9",
-          "download_count": 1,
+          "download_count": 3,
           "created_at": "2026-01-30T19:36:49Z",
           "updated_at": "2026-01-30T19:36:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260130-r2/zapret2_v0.9.20260130-r2_arm_fa526.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 532586,
           "digest": "sha256:ddafcd42892503b2d129ba08de58ece2675d8f12a1544fab717f1fea25021abf",
-          "download_count": 2,
+          "download_count": 3,
           "created_at": "2026-01-30T09:46:39Z",
           "updated_at": "2026-01-30T09:46:39Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260130/zapret2_v0.9.20260130_arm_fa526.zip"
@@ -135,7 +135,7 @@
           "state": "uploaded",
           "size": 530303,
           "digest": "sha256:68941306000c9596d55fe07d02984c05e57008fd76e88623815b21a841142b41",
-          "download_count": 2,
+          "download_count": 3,
           "created_at": "2026-01-29T15:24:13Z",
           "updated_at": "2026-01-29T15:24:14Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260129/zapret2_v0.9.20260129_arm_fa526.zip"
@@ -703,53 +703,6 @@
           "created_at": "2025-12-25T16:28:35Z",
           "updated_at": "2025-12-25T16:28:36Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225-r2/zapret2_v0.7.20251225-r2_arm_fa526.zip"
-        }
-      ]
-    },
-    {
-      "tag": "v0.7.20251225",
-      "name": "zapret2 v0.7.20251225",
-      "prerelease": true,
-      "created_at": "2025-12-25T06:01:37Z",
-      "updated_at": "2025-12-25T07:22:46Z",
-      "published_at": "2025-12-25T07:22:46Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.7.20251225",
-      "assets": [
-        {
-          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/332765272",
-          "id": 332765272,
-          "node_id": "RA_kwDOM-Npcs4T1ZhY",
-          "name": "zapret2_v0.7.20251225_arm_fa526.zip",
-          "label": "",
-          "uploader": {
-            "login": "github-actions[bot]",
-            "id": 41898282,
-            "node_id": "MDM6Qm90NDE4OTgyODI=",
-            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
-            "html_url": "https://github.com/apps/github-actions",
-            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
-            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
-            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
-            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
-            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
-            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
-            "type": "Bot",
-            "user_view_type": "public",
-            "site_admin": false
-          },
-          "content_type": "application/zip",
-          "state": "uploaded",
-          "size": 455040,
-          "digest": "sha256:04281d9290b283a3cb5f71da0ca3feef24aad6e62d4758dcfbb6fe9714f27c90",
-          "download_count": 3,
-          "created_at": "2025-12-25T07:22:45Z",
-          "updated_at": "2025-12-25T07:22:45Z",
-          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.7.20251225/zapret2_v0.7.20251225_arm_fa526.zip"
         }
       ]
     }
