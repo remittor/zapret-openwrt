@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-zapret2
-PKG_VERSION:=0.9.20260130
-PKG_RELEASE:=2
+PKG_VERSION:=0.9.20260131
+PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 PKG_MAINTAINER:=remittor <https://github.com/remittor>
 
