@@ -809,11 +809,23 @@ return baseclass.extend({
             {
                 ticks += 1;
                 try {
+                    if (retCode < 0) {
+                        let rc = await fs.exec('/bin/cat', [ rcFile ], null);
+                        if (rc.code != 0) {
+                            fixLogEnd();
+                            resolve(callback.call(ctx, 542, 'ERROR: cannot read file "' + rcFile + '"'));
+                            return;
+                        }
+                        if (rc.stdout) {
+                            retCode = parseInt(rc.stdout.trim(), 10);
+                        }
+                    }
                     let res = await fs.exec('/bin/cat', [ logFile ], null);
                     if (res.code != 0) {
                         if (ticks > 1) {
                             console.log('ERROR: execAndRead: '+JSON.stringify(opt_list));
-                            resolve(callback.call(ctx, 541, 'ERROR: Failed on read process log: code = ' + res.code));
+                            fixLogEnd();
+                            resolve(callback.call(ctx, 546, 'ERROR: Failed on read process log: code = ' + res.code));
                             return;
                         }
                         setTimeout(epoll, 500);
@@ -830,17 +842,6 @@ return baseclass.extend({
                         });                    
                         appendLog(log, '');
                         lastLen = res.stdout.length;
-                    }
-                    if (retCode < 0) {
-                        let rc = await fs.exec('/bin/cat', [ rcFile ], null);
-                        if (rc.code != 0) {
-                            fixLogEnd();
-                            resolve(callback.call(ctx, 545, 'ERROR: cannot read file "' + rcFile + '"'));
-                            return;
-                        }
-                        if (rc.stdout) {
-                            retCode = parseInt(rc.stdout.trim(), 10);
-                        }
                     }
                     if (retCode >= 0) {
                         fixLogEnd();
