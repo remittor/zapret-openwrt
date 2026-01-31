@@ -1,5 +1,6 @@
 #!/bin/sh
 # Copyright (c) 2024 remittor
+awk -V
 PID_FILE=/tmp/zapret-script-exec.pid
 [ -f $PID_FILE ] && exit 70
 LOG_FILE=$1
