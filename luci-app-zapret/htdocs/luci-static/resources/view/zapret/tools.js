@@ -761,6 +761,11 @@ return baseclass.extend({
         },
     }),
 
+    isModalActive: function()
+    {
+        return document.body.classList.contains('modal-overlay-active');
+    },
+
     execAndRead: async function({ cmd = [ ], log = '', logArea = null, callback = null, ctx = null, hiderow = [ ], rpc_timeout = 5, rpc_root = false } = {})
     {
         function appendLog(msg, end = '\n')

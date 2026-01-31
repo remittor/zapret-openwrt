@@ -175,6 +175,10 @@ return view.extend({
 
     statusPoll: function()
     {
+        if (tools.isModalActive()) {
+            this.POLL.running = false;
+            return;  // not update page when any modal dialog is active
+        }
         this.getAppStatus().then(
             L.bind(this.setAppStatus, this)
         );
