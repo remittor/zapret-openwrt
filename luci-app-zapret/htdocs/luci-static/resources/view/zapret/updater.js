@@ -201,13 +201,17 @@ return baseclass.extend({
                 E('hr'),
                 this.logArea,
             ]),
-            E('div', { 'class': 'right' }, [
-                this.btn_check,
-                ' ',
-                this.btn_install,
-                ' ',
-                this.btn_cancel,
-            ])
+            E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-top:1px;' }, [
+                E('div', { 'class': 'left' }, [
+                    this.btn_check,
+                    ' ',
+                    this.btn_install,
+                ]),
+                E('div', { 'class': 'right' }, [
+                    ' ',
+                    this.btn_cancel,
+                ]),
+            ]),
         ]);
-    }    
+    },
 });
