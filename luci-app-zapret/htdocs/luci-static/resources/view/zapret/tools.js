@@ -766,7 +766,7 @@ return baseclass.extend({
         return document.body.classList.contains('modal-overlay-active');
     },
 
-    execAndRead: async function({ cmd = [ ], log = '', logArea = null, callback = null, ctx = null, hiderow = [ ], rpc_timeout = 5, rpc_root = false } = {})
+    execAndRead: async function({ cmd = [ ], log = '', logArea = null, callback = null, ctx = null, hiderow = [ ] } = {})
     {
         function appendLog(msg, end = '\n')
         {
@@ -780,36 +780,49 @@ return baseclass.extend({
             }
         }
         let hide_rows = Array.isArray(hiderow) ? hiderow : [ hiderow ];
-        let rpc_opt = { "timeout": rpc_timeout*1000 };
-        if (rpc_root) {
-            rpc_opt.uid = 0;  // run under root
-        }
         const logFile = log;  // file for reading: '/tmp/zapret_pkg_install.log'
         const rcFile = logFile + '.rc';
         try {
-            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null, rpc_opt);
+            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null);
             appendLog('Output file cleared!');
         } catch (e) {
             return callback.call(ctx, 500, 'ERROR: Failed to clear output file');
         }
+        let processStarted = false;
+        let opt_list = [ logFile ];
         try {
-            let opt_list = [ logFile ];
             opt_list.push(...cmd);
-            let res = await fs.exec(this.appDir+'/script-exec.sh', opt_list, null, rpc_opt);
-            if (res.code != 0) {
-                return callback.call(ctx, 525, 'ERROR: cannot run "' + cmd[0] + '" script! (error = ' + res.code + ')');
-            }
-            appendLog('Process started...');
+            //console.log('script-exec.sh ... '+JSON.stringify(opt_list));
+            let proc = new Promise((resolve) => {
+                fs.exec(this.appDir+'/script-exec.sh', opt_list, null)
+                    .then (() => { resolve(); })
+                    .catch(() => { resolve(); });
+            });
         } catch (e) {
             return callback.call(ctx, 520, 'ERROR: Failed on execute process: ' + e.message);
         }
         let lastLen = 0;
         let retCode = -1;
         return await new Promise(async (resolve, reject) => {
+            let ticks = 0;
             async function epoll()
             {
+                ticks += 1;
                 try {
-                    let res = await fs.exec('/bin/cat', [ logFile ], null, rpc_opt);
+                    let res = await fs.exec('/bin/cat', [ logFile ], null);
+                    if (res.code != 0) {
+                        if (ticks > 1) {
+                            console.log('ERROR: execAndRead: '+JSON.stringify(opt_list));
+                            resolve(callback.call(ctx, 541, 'ERROR: Failed on read process log: code = ' + res.code));
+                            return;
+                        }
+                        setTimeout(epoll, 500);
+                        return;  // skip first step with error
+                    }
+                    if (!processStarted) {
+                        appendLog('Process started...');
+                        processStarted = true;
+                    }
                     if (res.stdout && res.stdout.length > lastLen) {
                         let log = res.stdout.slice(lastLen);
                         hide_rows.forEach(re => {
@@ -819,7 +832,7 @@ return baseclass.extend({
                         lastLen = res.stdout.length;
                     }
                     if (retCode < 0) {
-                        let rc = await fs.exec('/bin/cat', [ rcFile ], null, rpc_opt);
+                        let rc = await fs.exec('/bin/cat', [ rcFile ], null);
                         if (rc.code != 0) {
                             fixLogEnd();
                             resolve(callback.call(ctx, 545, 'ERROR: cannot read file "' + rcFile + '"'));
