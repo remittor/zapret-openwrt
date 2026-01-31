@@ -158,13 +158,17 @@ return baseclass.extend({
                 E('br'), E('br'),
                 this.logArea,
             ]),
-            E('div', { 'class': 'right' }, [
-                this.btn_sitescheck,
-                ' ',
-                this.btn_dpicheck,
-                ' ',
-                this.btn_cancel,
-            ])
+            E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-top:1px;' }, [
+                E('div', { 'class': 'left' }, [
+                    this.btn_sitescheck,
+                    ' ',
+                    this.btn_dpicheck,
+                ]),
+                E('div', { 'class': 'right' }, [
+                    ' ',
+                    this.btn_cancel,
+                ]),
+            ]),
         ]);
     }    
 });

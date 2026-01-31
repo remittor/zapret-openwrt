@@ -232,6 +232,7 @@ return view.extend({
         let cancel_button = E('button', {
             'class': btn_style_neutral,
             'click': ui.hideModal,
+            'class': btn_style_warning,
         }, _('Cancel'));
 
         let resetcfg_btn = E('button', {
@@ -281,11 +282,14 @@ return view.extend({
                 nfqws_strat,
                 E('br'), E('br')
             ]),
-            E('div', { 'class': 'right' }, [
-                cancel_button,
-                ' ',
-                resetcfg_btn,
-            ])
+            E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-top:1px;' }, [
+                E('div', { 'class': 'left' }, [
+                    resetcfg_btn,
+                ]),
+                E('div', { 'class': 'right' }, [
+                    cancel_button,
+                ]),
+            ]),
         ]);
     },
 
