@@ -53,6 +53,19 @@ else
 	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -llua$(LUA_VER)
 endif
 
+UPX_VER:=5.1.0
+UPX_URL:=https://github.com/upx/upx/releases/download/v$(UPX_VER)
+UPX_URL_FILE:=upx-$(UPX_VER)-amd64_linux.tar.xz
+UPX_TAR:=$(PKG_NAME)-$(UPX_URL_FILE)
+UPX_DIR:=$(PKG_BUILD_DIR)/upx
+UPX_BIN:=$(UPX_DIR)/upx
+
+ifneq ($(filter mips64,$(ARCH)),)
+  USE_UPX := 0
+else
+  USE_UPX := 1
+endif
+
 #TAR_OPTIONS:=--strip-components 1 $(TAR_OPTIONS)
 #TAR_CMD=$(HOST_TAR) -C $(1) $(TAR_OPTIONS)
 
@@ -80,6 +93,14 @@ endef
 $(eval $(call Download,$(PKG_NAME)-luajit))
 endif
 
+define Download/$(PKG_NAME)-upx
+	FILE:=$(UPX_TAR)
+	URL:=$(UPX_URL)
+	URL_FILE:=$(UPX_URL_FILE)
+	HASH:=skip
+endef
+$(eval $(call Download,$(PKG_NAME)-upx))
+
 define Build/Prepare
 	$(Build/Prepare/Default)
 	rm -f $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2
@@ -97,6 +118,9 @@ define Build/Prepare
 		tar -xzf "$(DL_DIR)/$(LUAJIT_TGZ)" --strip-components=1 -C "$(LUASRC_DIR)" ; \
 		rm -rf $(LUAOUT_DIR) ; \
 	fi
+	rm -rf $(UPX_DIR)
+	mkdir -p $(UPX_DIR)
+	tar -xf "$(DL_DIR)/$(UPX_TAR)" --strip-components=1 -C "$(UPX_DIR)"
 endef
 
 #define Build/Configure
@@ -135,6 +159,16 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS) LUA_JIT=$(LUA_JIT) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
 	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(TARGET_CONFIGURE_OPTS)
 	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
+ifeq ($(USE_UPX),1)
+	@if [ -x "$(UPX_BIN)" ]; then \
+		echo "Packing nfqws2 with UPX"; \
+		$(UPX_BIN) --best --lzma $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
+	else \
+		echo "WARNING: UPX not found, skipping packing"; \
+	fi
+else
+	@echo "Skipping UPX for $(ARCH)"
+endif
 endef
 
 ZAPRET_DIR := /opt/zapret2
