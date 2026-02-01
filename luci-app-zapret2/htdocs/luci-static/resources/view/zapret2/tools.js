@@ -783,64 +783,84 @@ return baseclass.extend({
         const logFile = log;  // file for reading: '/tmp/zapret_pkg_install.log'
         const rcFile = logFile + '.rc';
         try {
-            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile + '*' ], null);
-            appendLog('Output file cleared!');
+            await fs.exec('/bin/busybox', [ 'rm', '-f', logFile ], null);
+            await fs.exec('/bin/busybox', [ 'rm', '-f', rcFile  ], null);
+            //appendLog('Output file cleared!');
         } catch (e) {
             return callback.call(ctx, 500, 'ERROR: Failed to clear output file');
         }
-        let processStarted = false;
+        let execRetCode = -1;
         let opt_list = [ logFile ];
         try {
             opt_list.push(...cmd);
             //console.log('script-exec.sh ... '+JSON.stringify(opt_list));
-            let proc = new Promise((resolve) => {
-                fs.exec(this.appDir+'/script-exec.sh', opt_list, null)
-                    .then (() => { resolve(); })
-                    .catch(() => { resolve(); });
+            fs.exec(this.appDir+'/script-exec.sh', opt_list, null)
+            .then( (res) => {
+                if (execRetCode < 0) {
+                    execRetCode = res.code;
+                    fixLogEnd();
+                    if (res.code == 0) {
+                        appendLog('Process started....');
+                    } else {
+                        if (res.stdout) appendLog(res.stdout);
+                        appendLog('ERROR: process not executed! ret_code = '+res.code);
+                    }
+                }
+            }).catch( (e) => { 
+                console.log('ERROR: execAndRead: process not exec: '+e.message);
+                execRetCode = -100;
             });
         } catch (e) {
             return callback.call(ctx, 520, 'ERROR: Failed on execute process: ' + e.message);
         }
         let lastLen = 0;
-        let retCode = -1;
+        let retCode = -2;  // rc file not found
         return await new Promise(async (resolve, reject) => {
             let ticks = 0;
             async function epoll()
             {
                 ticks += 1;
                 try {
+                    if (retCode < 0) {
+                        let rc = await fs.exec('/bin/cat', [ rcFile ], null);
+                        if (rc.code != 0) {
+                            if (ticks >= 2) {
+                                console.log('ERROR: execAndRead: '+JSON.stringify(opt_list));
+                                fixLogEnd();
+                                resolve(callback.call(ctx, 542, 'ERROR: Failed on read process rc-file: code = ' + rc.code));
+                                return;
+                            }
+                            console.log('WARN: execAndRead: read rc-file res.code = '+rc.code);
+                        }
+                        if (rc.code == 0) {
+                            if (rc.stdout) {
+                                retCode = parseInt(rc.stdout.trim(), 10);
+                            } else {
+                                retCode = -1;  // rc file exists, but empty
+                            }
+                        }
+                        if (retCode <= -2) {
+                            setTimeout(epoll, 500);
+                            return;  // skip first step with error
+                        }
+                    }
                     let res = await fs.exec('/bin/cat', [ logFile ], null);
                     if (res.code != 0) {
-                        if (ticks > 1) {
-                            console.log('ERROR: execAndRead: '+JSON.stringify(opt_list));
-                            resolve(callback.call(ctx, 541, 'ERROR: Failed on read process log: code = ' + res.code));
-                            return;
-                        }
-                        setTimeout(epoll, 500);
-                        return;  // skip first step with error
+                        fixLogEnd();
+                        resolve(callback.call(ctx, 546, 'ERROR: Failed on read process log: code = ' + res.code));
+                        return;
                     }
-                    if (!processStarted) {
+                    if (execRetCode < 0) {
+                        execRetCode = 9999;
                         appendLog('Process started...');
-                        processStarted = true;
                     }
-                    if (res.stdout && res.stdout.length > lastLen) {
+                    if (res.code == 0 && res.stdout && res.stdout.length > lastLen) {
                         let log = res.stdout.slice(lastLen);
                         hide_rows.forEach(re => {
                             log = log.replace(re, '');
                         });                    
                         appendLog(log, '');
                         lastLen = res.stdout.length;
-                    }
-                    if (retCode < 0) {
-                        let rc = await fs.exec('/bin/cat', [ rcFile ], null);
-                        if (rc.code != 0) {
-                            fixLogEnd();
-                            resolve(callback.call(ctx, 545, 'ERROR: cannot read file "' + rcFile + '"'));
-                            return;
-                        }
-                        if (rc.stdout) {
-                            retCode = parseInt(rc.stdout.trim(), 10);
-                        }
                     }
                     if (retCode >= 0) {
                         fixLogEnd();
