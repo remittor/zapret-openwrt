@@ -106,6 +106,7 @@ if [ "$opt_sites" = true ]; then
 	lkfl2.nalog.ru        |    |        | https://lkfl2.nalog.ru/lkfl/static/assets/main-desktop-1920-CvJsHANg.jpg
 	rutube.ru             | @  |  40000 | https://static.rutube.ru/static/wdp/fonts/Semibold/OpenSans-Semibold.woff2?20231026
 	youtube.com           | @# | 300000 | https://youtube.com
+	googlevideo.com       |    | 210000 | https://redirector.googlevideo.com/report_mapping
 	instagram.com         | @# | 300000 | https://instagram.com
 	rutracker.org         | @# |  80000 | https://rutracker.org
 	nnmclub.to            | @# | 120000 | https://nnmclub.to
