@@ -1,6 +1,16 @@
 {
-  "generated_at": "2026-02-02T11:02:13Z",
+  "generated_at": "2026-02-02T12:56:30Z",
   "releases": [
+    {
+      "tag": "v0.9.20260202",
+      "name": "zapret2 v0.9.20260202",
+      "prerelease": true,
+      "created_at": "2026-02-02T12:24:27Z",
+      "updated_at": "2026-02-02T12:56:17Z",
+      "published_at": "2026-02-02T12:56:17Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.9.20260202",
+      "assets": []
+    },
     {
       "tag": "v0.9.20260131",
       "name": "zapret2 v0.9.20260131",
