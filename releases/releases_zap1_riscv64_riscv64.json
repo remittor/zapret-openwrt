@@ -1,6 +1,16 @@
 {
-  "generated_at": "2026-01-31T15:11:43Z",
+  "generated_at": "2026-02-02T11:02:13Z",
   "releases": [
+    {
+      "tag": "v72.20260202",
+      "name": "zapret v72.20260202",
+      "prerelease": true,
+      "created_at": "2026-02-02T10:32:39Z",
+      "updated_at": "2026-02-02T11:02:01Z",
+      "published_at": "2026-02-02T11:02:01Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260202",
+      "assets": []
+    },
     {
       "tag": "v72.20260131",
       "name": "zapret v72.20260131",
@@ -41,7 +51,7 @@
           "state": "uploaded",
           "size": 213437,
           "digest": "sha256:f8063338979ea79d48a9767a4ff701bbf0f0ef6b13c6c17129e34f1c374524f0",
-          "download_count": 2,
+          "download_count": 6,
           "created_at": "2026-01-31T14:25:06Z",
           "updated_at": "2026-01-31T14:25:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260131/zapret_v72.20260131_riscv64_riscv64.zip"
@@ -88,7 +98,7 @@
           "state": "uploaded",
           "size": 213039,
           "digest": "sha256:543e17a319306e038d36ed6cfde2cc4daf8ca4121ded64142af907f20b115395",
-          "download_count": 12,
+          "download_count": 13,
           "created_at": "2026-01-28T17:35:35Z",
           "updated_at": "2026-01-28T17:35:35Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260128/zapret_v72.20260128_riscv64_riscv64.zip"
@@ -536,16 +546,6 @@
       "updated_at": "2025-12-27T09:24:46Z",
       "published_at": "2025-12-27T09:13:25Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251227",
-      "assets": []
-    },
-    {
-      "tag": "v72.20251225-r2",
-      "name": "zapret v72.20251225-r2",
-      "prerelease": true,
-      "created_at": "2025-12-25T15:04:53Z",
-      "updated_at": "2025-12-25T16:14:59Z",
-      "published_at": "2025-12-25T16:14:59Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20251225-r2",
       "assets": []
     },
     {
