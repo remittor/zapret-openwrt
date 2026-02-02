@@ -19,6 +19,10 @@ ottai.com
 ipstream.one
 vkusvill.ru
 kinopoisk.ru
+vk.ru
+vk.com
+yandex.ru
+ya.ru
 #################################### Epicgames
 easy.ac
 fab.com
