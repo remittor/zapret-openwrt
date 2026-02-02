@@ -323,4 +323,14 @@ windowsupdate.com
 microsoftonline.com
 microsoftonline-p.com
 minecraftservices.com
+#################################### Arknights: Endfield
+skport.com
+hg-cdn.com
+helpshift.com
+gryphline.com
+#################################### Samsung
+samsungosp.com
+samsungqbe.com
+amazontrust.com
+samsungcloudsolution.com
 ####################################
