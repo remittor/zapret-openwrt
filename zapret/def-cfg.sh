@@ -229,7 +229,7 @@ function set_cfg_nfqws_strat
 				--hostlist-exclude-domains=openwrt.org
 				--dpi-desync=fake,fakeddisorder
 				--dpi-desync-split-pos=10,midsld
-				--dpi-desync-fake-tls=/opt/zapret/files/fake/max.bin
+				--dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_onetrust_com.bin
 				--dpi-desync-fake-tls-mod=rnd,dupsid
 				--dpi-desync-fake-tls=0x0F0F0F0F
 				--dpi-desync-fake-tls-mod=none
@@ -318,8 +318,8 @@ function set_cfg_nfqws_strat
 				--dpi-desync-split-pos=1
 				--dpi-desync-fooling=badseq,badsum
 				--dpi-desync-repeats=8
-				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/max.bin
-				--dpi-desync-fake-tls=/opt/zapret/files/fake/max.bin
+				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_onetrust_com.bin
+				--dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_onetrust_com.bin
 				--dpi-desync-badseq-increment=0
 
 				--new
