@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-02-02T12:56:30Z",
+  "generated_at": "2026-02-07T07:07:37Z",
   "releases": [
     {
       "tag": "v0.9.20260202",
       "name": "zapret2 v0.9.20260202",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-02-02T12:24:27Z",
-      "updated_at": "2026-02-02T12:56:17Z",
+      "updated_at": "2026-02-02T19:44:34Z",
       "published_at": "2026-02-02T12:56:17Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.9.20260202",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 461277,
           "digest": "sha256:857e109789c843e7c84bf79ba4df840c49778c837200aebecd668b35cd4c3b95",
-          "download_count": 0,
+          "download_count": 5,
           "created_at": "2026-02-02T12:56:17Z",
           "updated_at": "2026-02-02T12:56:17Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260202/zapret2_v0.9.20260202_riscv64_generic.zip"
@@ -88,7 +88,7 @@
           "state": "uploaded",
           "size": 492584,
           "digest": "sha256:b04acbee17573d3a2e92b1a268f385aefd311afcdf560692b16c4272c5e06f88",
-          "download_count": 4,
+          "download_count": 5,
           "created_at": "2026-01-31T14:58:38Z",
           "updated_at": "2026-01-31T14:58:39Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260131/zapret2_v0.9.20260131_riscv64_generic.zip"
@@ -334,16 +334,6 @@
       "updated_at": "2025-12-27T14:25:01Z",
       "published_at": "2025-12-27T14:25:01Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.7.20251227",
-      "assets": []
-    },
-    {
-      "tag": "v0.7.20251226",
-      "name": "zapret2 v0.7.20251226",
-      "prerelease": true,
-      "created_at": "2025-12-26T06:00:21Z",
-      "updated_at": "2025-12-26T06:46:26Z",
-      "published_at": "2025-12-26T06:46:26Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.7.20251226",
       "assets": []
     }
   ]
