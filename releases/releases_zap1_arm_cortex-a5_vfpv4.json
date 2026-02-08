@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-07T07:58:06Z",
+  "generated_at": "2026-02-08T07:58:37Z",
   "releases": [
     {
       "tag": "v72.20260207",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 411861,
           "digest": "sha256:5964a083f36688889d026d263a1c72087d2b3c31ce1d960b60e2f77e63827fd8",
-          "download_count": 2,
+          "download_count": 3,
           "created_at": "2026-02-07T07:07:23Z",
           "updated_at": "2026-02-07T07:07:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260207/zapret_v72.20260207_arm_cortex-a5_vfpv4.zip"
