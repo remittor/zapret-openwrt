@@ -168,7 +168,7 @@ function set_cfg_nfqws_strat
 			set $cfgname.config.NFQWS2_OPT="
 				--comment=Strategy__$strat
 				
-				--blob=blob_tls_clienthello_www_google_com.bin:@/opt/zapret2/files/fake/tls_clienthello_www_google_com.bin 
+				--blob=blob_tls_clienthello_www_google_com:@/opt/zapret2/files/fake/tls_clienthello_www_google_com.bin 
 				--blob=blob_quic_initial_www_google_com:@/opt/zapret2/files/fake/quic_initial_www_google_com.bin
 				
 				--filter-tcp=443,80
