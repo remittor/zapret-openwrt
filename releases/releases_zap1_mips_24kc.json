@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T07:58:38Z",
+  "generated_at": "2026-02-08T08:26:47Z",
   "releases": [
     {
       "tag": "v72.20260207",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 418770,
           "digest": "sha256:f2f2b1d23a4918a464787a97f32cd6338947f40a018ac035f58e1c82dd5b30ba",
-          "download_count": 65,
+          "download_count": 66,
           "created_at": "2026-02-07T07:07:23Z",
           "updated_at": "2026-02-07T07:07:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260207/zapret_v72.20260207_mips_24kc.zip"

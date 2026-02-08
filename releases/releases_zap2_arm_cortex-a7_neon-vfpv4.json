@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-02-08T07:58:37Z",
+  "generated_at": "2026-02-08T08:26:46Z",
   "releases": [
     {
       "tag": "v0.9.20260208",
       "name": "zapret2 v0.9.20260208",
-      "prerelease": true,
+      "prerelease": false,
       "created_at": "2026-02-08T07:28:25Z",
-      "updated_at": "2026-02-08T07:58:26Z",
+      "updated_at": "2026-02-08T08:26:36Z",
       "published_at": "2026-02-08T07:58:26Z",
       "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.9.20260208",
       "assets": [
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 745556,
           "digest": "sha256:d9711d4816a73cfc6672964acf4e07c39c651e6b00e0e98f42a1a20dc0c5ac30",
-          "download_count": 0,
+          "download_count": 2,
           "created_at": "2026-02-08T07:58:25Z",
           "updated_at": "2026-02-08T07:58:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260208/zapret2_v0.9.20260208_arm_cortex-a7_neon-vfpv4.zip"
