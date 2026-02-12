@@ -132,6 +132,12 @@ ifeq ($(HOST_ARCH),$(filter $(HOST_ARCH), x86_64 mips64))
   endif
 endif
 
+MAKE_FLAGS += \
+	$(TARGET_CONFIGURE_OPTS) \
+	SOURCE_DATE_EPOCH=$(shell date +%s) \
+	CFLAGS="$(TARGET_CFLAGS) -DZAPRET_GH_VER=$(PKG_VERSION) -DZAPRET_GH_HASH=$(PKG_SOURCE_VERSION)" \
+	LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)"
+
 define Build/Compile
 	if [ "$(LUA_JIT)" = 1 ]; then \
 		$(MAKE) $(PKG_JOBS) -C $(LUASRC_DIR) \
@@ -156,9 +162,9 @@ define Build/Compile
 			TARGET_SYS=Linux \
 			install ; \
 	fi
-	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(TARGET_CONFIGURE_OPTS) LUA_JIT=$(LUA_JIT) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
-	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(TARGET_CONFIGURE_OPTS)
-	$(MAKE) -C $(PKG_BUILD_DIR)/mdig $(TARGET_CONFIGURE_OPTS)
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_FLAGS) LUA_JIT=$(LUA_JIT) LUA_CFLAGS="$(LUA_INCLUDE)" LUA_LIB="$(LUA_LIBRARY)"
+	$(MAKE) -C $(PKG_BUILD_DIR)/ip2net $(MAKE_FLAGS)
+	$(MAKE) -C $(PKG_BUILD_DIR)/mdig   $(MAKE_FLAGS)
 ifeq ($(USE_UPX),1)
 	@if [ -x "$(UPX_BIN)" ]; then \
 		echo "Packing nfqws2 with UPX"; \
