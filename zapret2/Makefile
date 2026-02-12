@@ -138,6 +138,8 @@ MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -DZAPRET_GH_VER=$(PKG_VERSION) -DZAPRET_GH_HASH=$(PKG_SOURCE_VERSION)" \
 	LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)"
 
+RSTRIP:=:
+
 define Build/Compile
 	if [ "$(LUA_JIT)" = 1 ]; then \
 		$(MAKE) $(PKG_JOBS) -C $(LUASRC_DIR) \
@@ -168,7 +170,7 @@ define Build/Compile
 ifeq ($(USE_UPX),1)
 	@if [ -x "$(UPX_BIN)" ]; then \
 		echo "Packing nfqws2 with UPX"; \
-		$(UPX_BIN) --best --lzma $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
+		$(UPX_BIN) --best --lzma --strip-relocs=0 $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
 	else \
 		echo "WARNING: UPX not found, skipping packing"; \
 	fi
