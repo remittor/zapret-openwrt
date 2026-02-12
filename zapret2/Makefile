@@ -170,7 +170,7 @@ define Build/Compile
 ifeq ($(USE_UPX),1)
 	@if [ -x "$(UPX_BIN)" ]; then \
 		echo "Packing nfqws2 with UPX"; \
-		$(UPX_BIN) --best --lzma --strip-relocs=0 $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
+		$(UPX_BIN) --best --lzma --strip-relocs=0 --catch-sigsegv $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
 	else \
 		echo "WARNING: UPX not found, skipping packing"; \
 	fi
