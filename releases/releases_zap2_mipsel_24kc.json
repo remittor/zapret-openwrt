@@ -1,6 +1,53 @@
 {
-  "generated_at": "2026-02-08T08:26:47Z",
+  "generated_at": "2026-02-12T19:36:09Z",
   "releases": [
+    {
+      "tag": "v0.9.20260212",
+      "name": "zapret2 v0.9.20260212",
+      "prerelease": true,
+      "created_at": "2026-02-12T19:04:00Z",
+      "updated_at": "2026-02-12T19:35:55Z",
+      "published_at": "2026-02-12T19:35:55Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.9.20260212",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/354948495",
+          "id": 354948495,
+          "node_id": "RA_kwDOM-Npcs4VKBWP",
+          "name": "zapret2_v0.9.20260212_mipsel_24kc.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 778425,
+          "digest": "sha256:6f5ab6b2a6db55556beb60f2ea33247a112ce8b8d148c2db87992e49a114b054",
+          "download_count": 0,
+          "created_at": "2026-02-12T19:35:54Z",
+          "updated_at": "2026-02-12T19:35:55Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260212/zapret2_v0.9.20260212_mipsel_24kc.zip"
+        }
+      ]
+    },
     {
       "tag": "v0.9.20260208",
       "name": "zapret2 v0.9.20260208",
@@ -41,7 +88,7 @@
           "state": "uploaded",
           "size": 762485,
           "digest": "sha256:2191408890ebe99ddd6ac313d66ef181b64af13467d74e6dd31914495586cfc1",
-          "download_count": 3,
+          "download_count": 228,
           "created_at": "2026-02-08T07:58:25Z",
           "updated_at": "2026-02-08T07:58:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260208/zapret2_v0.9.20260208_mipsel_24kc.zip"
@@ -88,7 +135,7 @@
           "state": "uploaded",
           "size": 759571,
           "digest": "sha256:7ed2a0ca9a65c5e76b79ffa66460eb34ae2910c0f1a935601e6ebe4aec2800ce",
-          "download_count": 94,
+          "download_count": 97,
           "created_at": "2026-02-02T12:56:17Z",
           "updated_at": "2026-02-02T12:56:17Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260202/zapret2_v0.9.20260202_mipsel_24kc.zip"
@@ -276,7 +323,7 @@
           "state": "uploaded",
           "size": 534470,
           "digest": "sha256:543721342979ba186db93281300c16ac08070c8f709e6a1527667a10620d202a",
-          "download_count": 31,
+          "download_count": 32,
           "created_at": "2026-01-29T15:24:13Z",
           "updated_at": "2026-01-29T15:24:14Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260129/zapret2_v0.9.20260129_mipsel_24kc.zip"
@@ -370,7 +417,7 @@
           "state": "uploaded",
           "size": 509317,
           "digest": "sha256:f301b5127b0c7a5d7f13e902cf58c034823ab5e7c8cd7e4eeaeef0fc8afd5e64",
-          "download_count": 118,
+          "download_count": 119,
           "created_at": "2026-01-25T08:23:35Z",
           "updated_at": "2026-01-25T08:23:35Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.8.20260125/zapret2_v0.8.20260125_mipsel_24kc.zip"

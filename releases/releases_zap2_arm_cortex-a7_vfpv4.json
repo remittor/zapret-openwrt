@@ -1,6 +1,53 @@
 {
-  "generated_at": "2026-02-08T08:26:46Z",
+  "generated_at": "2026-02-12T19:36:09Z",
   "releases": [
+    {
+      "tag": "v0.9.20260212",
+      "name": "zapret2 v0.9.20260212",
+      "prerelease": true,
+      "created_at": "2026-02-12T19:04:00Z",
+      "updated_at": "2026-02-12T19:35:55Z",
+      "published_at": "2026-02-12T19:35:55Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v0.9.20260212",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/354948506",
+          "id": 354948506,
+          "node_id": "RA_kwDOM-Npcs4VKBWa",
+          "name": "zapret2_v0.9.20260212_arm_cortex-a7_vfpv4.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 755087,
+          "digest": "sha256:124a0e53755b574e138880e71f1c7a407d8ac99759c56749eb985d3c30fb341a",
+          "download_count": 0,
+          "created_at": "2026-02-12T19:35:55Z",
+          "updated_at": "2026-02-12T19:35:55Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260212/zapret2_v0.9.20260212_arm_cortex-a7_vfpv4.zip"
+        }
+      ]
+    },
     {
       "tag": "v0.9.20260208",
       "name": "zapret2 v0.9.20260208",
@@ -41,7 +88,7 @@
           "state": "uploaded",
           "size": 745248,
           "digest": "sha256:4f9aceb52b21a84b1ecd9d46eb39bea04f78b18966595c0a0e5b675e062f1bd9",
-          "download_count": 2,
+          "download_count": 6,
           "created_at": "2026-02-08T07:58:25Z",
           "updated_at": "2026-02-08T07:58:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260208/zapret2_v0.9.20260208_arm_cortex-a7_vfpv4.zip"
@@ -88,7 +135,7 @@
           "state": "uploaded",
           "size": 739384,
           "digest": "sha256:e230ed8a9e987afa9b1cf06b4614506f863cca5be4b5fcd56783cb7aad87d32f",
-          "download_count": 4,
+          "download_count": 5,
           "created_at": "2026-02-02T12:56:17Z",
           "updated_at": "2026-02-02T12:56:17Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260202/zapret2_v0.9.20260202_arm_cortex-a7_vfpv4.zip"
