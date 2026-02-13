@@ -43,7 +43,7 @@ return baseclass.extend({
         if (dns_ip && dns_ip != 'default') {
             cmd.push(...[ '-d', dns_ip.trim() ]);
         }
-        cmd.push('-R');  // show recommendations
+        //cmd.push('-R');  // show recommendations
         return tools.execAndRead({
             cmd: cmd,
             log: '/tmp/'+tools.appName+'_dwc.log',
