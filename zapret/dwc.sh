@@ -26,7 +26,7 @@ TARGET_LIST_FILE="$ZAP_TMP_DIR/targets"
 [ -f "$TARGET_LIST_FILE" ] && rm -rf "$ZAP_TMP_DIR"
 [ -f "$TARGET_LIST_FILE" ] && exit 3
 
-CURL_TIMEOUT=5
+CURL_TIMEOUT=7
 CURL_MAXBODY=65536
 CURL_NOCACHE='cache-control: no-cache'
 CURL_NOCACHE2='pragma: no-cache'
@@ -133,7 +133,7 @@ TEST_SUITE='
 if [ "$opt_sites" = true ]; then
 	CURL_TIMEOUT=7
 else
-	CURL_TIMEOUT=5
+	CURL_TIMEOUT=7
 	TEST_SUITE=$( cat "$TEST_SUITE_FN" )
 fi
 
@@ -175,7 +175,7 @@ CURL_CON_TIMEOUT=$((CURL_TIMEOUT-2))
 CURL_SPEED_TIME=$((CURL_TIMEOUT-2))
 CURL_SPEED_LIMIT=1
 
-while IFS='|' read -r ID TAG COUNTRY PROVIDER BYTES URL; do
+while IFS='|' read -r ID TAG COUNTRY PROVIDER TSIZE URL; do
 	[ -z "$TAG" ] && continue
 	ID3=$( printf '%03d' "$ID" )
 	RANGETO=""
@@ -183,14 +183,13 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER BYTES URL; do
 	USERAGENT="$CURL_USERAGENT"
 	if [ "$opt_sites" = true ]; then
 		FLAGS="$PROVIDER"
-		TSIZE="$BYTES"
 		[ "$TSIZE" = "" ] && TSIZE=$CURL_MAXBODY
 		if echo "$FLAGS" | grep -q '@'; then
 			RANGETO=""
 		else
 			RANGETO="--range 0-$((TSIZE - 1))"
 		fi
-		PROVIDER="$TSIZE"
+		PROVIDER="@"
 		if echo "$FLAGS" | grep -q '#'; then
 			REDIRECT="-L"
 		fi
@@ -198,34 +197,47 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER BYTES URL; do
 			USERAGENT="curl/8.12"
 		fi
 	else
-		RANGETO="--range 0-$((CURL_MAXBODY - 1))"
+		RANGETO="--range 0-$((TSIZE - 1))"
 		COUNTRY=$( echo "$TAG" | cut -d. -f1 )
-		CNTFLAG=$( echo "$PROVIDER" | awk '{print $1}' )
 	fi
 	URL_NO_PROTO="${URL#*://}"
 	DOMAIN="${URL_NO_PROTO%%/*}"
 	URLPATH="/${URL_NO_PROTO#*/}"
 	[ "$URLPATH" = "/$URL_NO_PROTO" ] && URLPATH="/"
 	#echo "TAG=$TAG , COUNTRY=$COUNTRY , PROVIDER=$PROVIDER , DOMAIN=$DOMAIN , URL=$URL"
-	FNAME="$ZAP_TMP_DIR/$ID3=$TAG=$PROVIDER"
+	FNAME="$ZAP_TMP_DIR/$ID3=$TAG=$PROVIDER=$TSIZE"
 	(
+		echo ">>>>> Request destination IP-addr"
 		DST_IP=
 		RESOLVE_OPT=
 		if [ "$opt_dig" != "" ]; then
-			DST_IP=$( dig +time=2 +retry=1 $OPT_DIG_DNS +short "$DOMAIN" 2>/dev/null | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
+			RESP=$( dig +time=2 +retry=1 $OPT_DIG_DNS +short "$DOMAIN" 2>&1 )
+			echo "$RESP"
+			DST_IP=$( echo "$RESP" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
 		else
-			CURL_TIMEOUTS="--connect-timeout 2 --max-time 3 --speed-time 3 --speed-limit 1"
-			DST_IP=$( curl -4 -I -s $CURL_TIMEOUTS -o /dev/null -w '%{remote_ip}\n' "$URL" )
+			CURL_TIMEOUTS="--connect-timeout 3 --max-time 4 --speed-time 4 --speed-limit 1"
+			RESP=$( curl -4 -I --no-progress-meter $CURL_TIMEOUTS -w '%{remote_ip}\n' "$URL" 2>&1 )
+			echo "$RESP"
+			DST_IP=$( echo "$RESP" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | tail -1 )
 			if [ -z "$DST_IP" ]; then
-				DST_IP=$( curl -4 -s $CURL_TIMEOUTS -o /dev/null -r 0-0 -w '%{remote_ip}\n' "$URL" )
+				echo "----------------------------------"
+				RESP=$( curl -4 --no-progress-meter $CURL_TIMEOUTS -r 0-0 -w '%{remote_ip}\n' "$URL" 2>&1 )
+				echo "$RESP"
+				DST_IP=$( echo "$RESP" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | tail -1 )
 			fi
 		fi
 		if [ "$DST_IP" = "" ]; then
-			DST_IP=$( ping -c1 "$DOMAIN" 2>/dev/null | sed -n '1s/.*(\([0-9.]*\)).*/\1/p' )
+			echo ">>>>> PING"
+			RESP=$( ping -c1 "$DOMAIN" 2>&1 )
+			echo "$RESP"
+			DST_IP=$( echo "$RESP" | sed -n '1s/.*(\([0-9.]*\)).*/\1/p' )
 		fi
+		echo ">>>>> Destination IP-addr:"
+		echo "$DST_IP"
 		[ "$DST_IP" != "" ] && RESOLVE_OPT="--resolve $DOMAIN:443:$DST_IP"
 		echo "$DST_IP" > "$FNAME.ip"
 		echo "$URL" > "$FNAME.url"
+		echo ">>>>> Download target body"
 		curl "$URL" \
 			$RESOLVE_OPT \
 			$REDIRECT \
@@ -252,9 +264,8 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 	ID=$( echo "$FILENAME" | cut -d= -f1)
 	TAG=$( echo "$FILENAME" | cut -d= -f2)
 	PROVIDER=$(echo "$FILENAME" | cut -d= -f3 )
+	TSIZE=$(echo "$FILENAME" | cut -d= -f4 )
 	FNAME="$ZAP_TMP_DIR/$FILENAME"
-	REQ_SIZE=$CURL_MAXBODY
-	[ "$opt_sites" = true ] && REQ_SIZE="$PROVIDER"
 	BODY_SIZE=0
 	[ -f "$FNAME.body" ] && BODY_SIZE=$( wc -c < "$FNAME.body" )
 	IPADDR="x.x.x.x"
@@ -270,7 +281,7 @@ printf '%s\n' "$ZAP_TMP_DIR"/*.log | sort | while IFS= read -r file; do
 	elif [ ! -s "$FNAME.body" ]; then
 		status="Possibly detected"
 	else
-		if [ $BODY_SIZE -lt $REQ_SIZE ]; then
+		if [ $BODY_SIZE -lt $TSIZE ]; then
 			status="Failed (recv $BODY_SIZE bytes)"
 			res=5
 		else
