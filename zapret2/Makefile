@@ -146,7 +146,8 @@ define Build/Compile
 			HOST_CC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_BITS)" \
 			CROSS="$(TARGET_CROSS)" \
 			XCFLAGS="-DLUAJIT_DISABLE_FFI" \
-			TARGET_CFLAGS="-Os -s -flto=auto -ffunction-sections -fdata-sections -fvisibility=hidden $(TARGET_CFLAGS)" \
+			TARGET_CFLAGS="-Oz -flto=auto -ffunction-sections -fdata-sections $(TARGET_CFLAGS)" \
+			TARGET_LDFLAGS="-flto=auto $(TARGET_LDFLAGS)" \
 			TARGET_AR="$(TARGET_AR) rcus" \
 			BUILDMODE=static \
 			DESTDIR=$(LUAOUT_DIR) \
