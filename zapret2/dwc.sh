@@ -65,40 +65,43 @@ if [ -f /etc/openwrt_release ]; then
 		return 15
 	fi
 fi
- 
+
+mkdir -p "$ZAP_TMP_DIR"
+
 #echo 'Original sources: https://github.com/hyperion-cs/dpi-checkers'
 #echo 'WEB-version: https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/'
 
-TEST_SUITE='
-  { id: "US.CF-01", provider: "🇺🇸 Cloudflare", times: 1, url: "https://img.wzstats.gg/cleaver/gunFullDisplay" },
-  { id: "US.CF-02", provider: "🇺🇸 Cloudflare", times: 1, url: "https://genshin.jmp.blue/characters/all#" },
-  { id: "US.CF-03", provider: "🇺🇸 Cloudflare", times: 1, url: "https://api.frankfurter.dev/v1/2000-01-01..2002-12-31" },
-  { id: "US.CF-04", provider: "🇨🇦 Cloudflare", times: 1, url: "https://www.bigcartel.com/" },
-  { id: "US.DO-01", provider: "🇺🇸 DigitalOcean", times: 2, url: "https://genderize.io/" },
-  { id: "DE.HE-01", provider: "🇩🇪 Hetzner", times: 1, url: "https://j.dejure.org/jcg/doctrine/doctrine_banner.webp" },
-  { id: "DE.HE-02", provider: "🇩🇪 Hetzner", times: 1, url: "https://accesorioscelular.com/tienda/css/plugins.css" },
-  { id: "FI.HE-01", provider: "🇫🇮 Hetzner", times: 1, url: "https://251b5cd9.nip.io/1MB.bin" },
-  { id: "FI.HE-02", provider: "🇫🇮 Hetzner", times: 1, url: "https://nioges.com/libs/fontawesome/webfonts/fa-solid-900.woff2" },
-  { id: "FI.HE-03", provider: "🇫🇮 Hetzner", times: 1, url: "https://5fd8bdae.nip.io/1MB.bin" },
-  { id: "FI.HE-04", provider: "🇫🇮 Hetzner", times: 1, url: "https://5fd8bca5.nip.io/1MB.bin" },
-  { id: "FR.OVH-01", provider: "🇫🇷 OVH", times: 1, url: "https://eu.api.ovh.com/console/rapidoc-min.js" },
-  { id: "FR.OVH-02", provider: "🇫🇷 OVH", times: 1, url: "https://ovh.sfx.ovh/10M.bin" },
-  { id: "SE.OR-01", provider: "🇸🇪 Oracle", times: 1, url: "https://oracle.sfx.ovh/10M.bin" },
-  { id: "DE.AWS-01", provider: "🇩🇪 AWS", times: 1, url: "https://www.getscope.com/assets/fonts/fa-solid-900.woff2" },
-  { id: "US.AWS-01", provider: "🇺🇸 AWS", times: 1, url: "https://corp.kaltura.com/wp-content/cache/min/1/wp-content/themes/airfleet/dist/styles/theme.css" },
-  { id: "US.GC-01", provider: "🇺🇸 Google Cloud", times: 1, url: "https://api.usercentrics.eu/gvl/v3/en.json" },
-  { id: "US.FST-01", provider: "🇺🇸 Fastly", times: 1, url: "https://www.jetblue.com/footer/footer-element-es2015.js" },
-  { id: "CA.FST-01", provider: "🇨🇦 Fastly", times: 1, url: "https://ssl.p.jwpcdn.com/player/v/8.40.5/bidding.js" },
-  { id: "US.AKM-01", provider: "🇺🇸 Akamai", times: 1, url: "https://www.roxio.com/static/roxio/images/products/creator/nxt9/call-action-footer-bg.jpg" },
-  { id: "PL.AKM-01", provider: "🇵🇱 Akamai", times: 1, url: "https://media-assets.stryker.com/is/image/stryker/gateway_1?$max_width_1410$" },
-  { id: "US.CDN77-01", provider: "🇺🇸 CDN77", times: 1, url: "https://cdn.eso.org/images/banner1920/eso2520a.jpg" },
-  { id: "FR.CNTB-01", provider: "🇫🇷 Contabo", times: 1, url: "https://xdmarineshop.gr/index.php?route=index" },
-  { id: "NL.SW-01", provider: "🇳🇱 Scaleway", times: 1, url: "https://www.velivole.fr/img/header.jpg" },
-  { id: "US.CNST-01", provider: "🇺🇸 Constant", times: 1, url: "https://cdn.xuansiwei.com/common/lib/font-awesome/4.7.0/fontawesome-webfont.woff2?v=4.7.0" }
-'
+TEST_SUITE_URL="https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/suite.json"
+TEST_SUITE_FN="$ZAP_TMP_DIR/${TEST_SUITE_URL##*/}"
+TEST_SUITE_HDR="$TEST_SUITE_FN.hdr"
+rm -f "$TEST_SUITE_FN"
+rm -f "$TEST_SUITE_HDR"
 
-if [ "$opt_sites" = true ]; then
-	TEST_SUITE='
+#echo "Download $TEST_SUITE_URL ..."
+curl -s -L -D "$TEST_SUITE_HDR" -o "$TEST_SUITE_FN" --max-time 15 "$TEST_SUITE_URL" 2>/dev/null
+if [ ! -f "$TEST_SUITE_HDR" ] || [ -z "$TEST_SUITE_HDR" ] ; then
+	echo "ERROR: Cannot download file \"$TEST_SUITE_URL\" (connection problem)"
+	return 17
+fi
+RESP_STATUS=$( cat "$TEST_SUITE_HDR" | head -n 1 | awk '{print $2}' )
+if [ "$RESP_STATUS" != 200 ]; then
+	echo "ERROR: Cannot download file \"$TEST_SUITE_URL\" (status = $RESP_STATUS)"
+	return 18
+fi
+if [ ! -f "$TEST_SUITE_FN" ] || [ -z "$TEST_SUITE_FN" ] ; then
+	echo "ERROR: Cannot download file \"$TEST_SUITE_URL\" (resp body empty)"
+	return 19
+fi
+if [ "$(head -c 2 "$TEST_SUITE_FN" 2>/dev/null)" != "$(printf '[\n')" ]; then
+	echo "ERROR: incorrect format of \"$TEST_SUITE_URL\""
+	return 19
+fi
+if [ "$(tail -c 2 "$TEST_SUITE_FN" 2>/dev/null)" != "$(printf ']\n')" ]; then
+	echo "ERROR: incorrect format of \"$TEST_SUITE_URL\""
+	return 19
+fi
+
+TEST_SUITE='
 	gosuslugi.ru          | @  |  40000 | https://gosuslugi.ru/__jsch/static/script.js
 	esia.gosuslugi.ru     | @  |  40000 | https://esia.gosuslugi.ru/__jsch/static/script.js
 	gu-st.ru              |    |        | https://gu-st.ru/portal-st/lib-assets/fonts/Lato-Regular-v3.woff2
@@ -125,16 +128,19 @@ if [ "$opt_sites" = true ]; then
 	play.google.com       | @# | 100000 | https://gstatic.com/feedback/js/help/prod/service/lazy.min.js
 	genderize.io          | @# | 210000 | https://genderize.io
 	ottai.com             | @  |  70000 | https://seas.static.ottai.com/ottai-website/public/images/new/home/banner/uk/banner.webp
-	'
+'
+
+if [ "$opt_sites" = true ]; then
 	CURL_TIMEOUT=7
+else
+	CURL_TIMEOUT=5
+	TEST_SUITE=$( cat "$TEST_SUITE_FN" )
 fi
 
 function trim
 {
 	echo "$1" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
 }
-
-mkdir -p "$ZAP_TMP_DIR"
 
 : > "$TARGET_LIST_FILE"
 IDX=0
@@ -151,15 +157,14 @@ while IFS= read -r line; do
 		continue
 	fi
 	case "$line" in
-		*id:*provider:*url:*)
+		*id*provider*thresholdBytes*url*)
 			IDX=$((IDX + 1))
-			TAG=$( printf '%s\n' "$line" | cut -d'"' -f2 )
+			TAG=$( printf '%s\n' "$line" | cut -d'"' -f4 )
 			COUNTRY="${TAG%%.*}"
-			PROVIDER_RAW=$( printf '%s\n' "$line" | cut -d'"' -f4 )
-			PROVIDER="${PROVIDER_RAW#* }"
-			TIMES=$( printf '%s\n' "$line" | cut -d':' -f4 | cut -d',' -f1 | tr -d ' ')
-			URL=$( printf '%s\n' "$line" | cut -d'"' -f6 )
-			echo "${IDX}|${TAG}|${COUNTRY}|${PROVIDER}|${TIMES}|${URL}" >> "$TARGET_LIST_FILE"
+			PROVIDER=$( printf '%s\n' "$line" | cut -d'"' -f8 )
+			BYTES=$( printf '%s\n' "$line" | cut -d'"' -f15 | cut -d':' -f2 | cut -d',' -f1 | tr -d ' ')
+			URL=$( printf '%s\n' "$line" | cut -d'"' -f20 )
+			echo "${IDX}|${TAG}|${COUNTRY}|${PROVIDER}|${BYTES}|${URL}" >> "$TARGET_LIST_FILE"
 		;;
 	esac
 done <<EOF
@@ -170,7 +175,7 @@ CURL_CON_TIMEOUT=$((CURL_TIMEOUT-2))
 CURL_SPEED_TIME=$((CURL_TIMEOUT-2))
 CURL_SPEED_LIMIT=1
 
-while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
+while IFS='|' read -r ID TAG COUNTRY PROVIDER BYTES URL; do
 	[ -z "$TAG" ] && continue
 	ID3=$( printf '%03d' "$ID" )
 	RANGETO=""
@@ -178,7 +183,7 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER TIMES URL; do
 	USERAGENT="$CURL_USERAGENT"
 	if [ "$opt_sites" = true ]; then
 		FLAGS="$PROVIDER"
-		TSIZE="$TIMES"
+		TSIZE="$BYTES"
 		[ "$TSIZE" = "" ] && TSIZE=$CURL_MAXBODY
 		if echo "$FLAGS" | grep -q '@'; then
 			RANGETO=""
