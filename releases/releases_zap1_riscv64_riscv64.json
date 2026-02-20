@@ -1,6 +1,16 @@
 {
-  "generated_at": "2026-02-13T12:55:46Z",
+  "generated_at": "2026-02-20T20:07:49Z",
   "releases": [
+    {
+      "tag": "v72.20260220",
+      "name": "zapret v72.20260220",
+      "prerelease": true,
+      "created_at": "2026-02-20T19:37:22Z",
+      "updated_at": "2026-02-20T20:07:36Z",
+      "published_at": "2026-02-20T20:07:36Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260220",
+      "assets": []
+    },
     {
       "tag": "v72.20260207",
       "name": "zapret v72.20260207",
@@ -61,7 +71,7 @@
           "state": "uploaded",
           "size": 213437,
           "digest": "sha256:f8063338979ea79d48a9767a4ff701bbf0f0ef6b13c6c17129e34f1c374524f0",
-          "download_count": 12,
+          "download_count": 13,
           "created_at": "2026-01-31T14:25:06Z",
           "updated_at": "2026-01-31T14:25:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260131/zapret_v72.20260131_riscv64_riscv64.zip"
