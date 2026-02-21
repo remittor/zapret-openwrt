@@ -1047,9 +1047,9 @@
     "name": "zapret2 v0.9.20260221",
     "draft": false,
     "immutable": false,
-    "prerelease": true,
+    "prerelease": false,
     "created_at": "2026-02-21T04:57:27Z",
-    "updated_at": "2026-02-21T05:43:28Z",
+    "updated_at": "2026-02-21T05:49:34Z",
     "published_at": "2026-02-21T05:43:28Z",
     "assets": [
       {
@@ -2027,7 +2027,7 @@
     ],
     "tarball_url": "https://api.github.com/repos/remittor/zapret-openwrt/tarball/v0.9.20260221",
     "zipball_url": "https://api.github.com/repos/remittor/zapret-openwrt/zipball/v0.9.20260221",
-    "body": "zapret2 v0.9.20260221 for OpenWrt\n"
+    "body": "zapret2 v0.9.20260221 for OpenWrt\r\n"
   },
   {
     "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/285835205",
