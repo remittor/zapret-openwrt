@@ -192,7 +192,7 @@ return baseclass.extend({
         
         this.setStage(0);
 
-        ui.showModal(_('Check for updates and install'), [
+        ui.showModal(_('Check for upgrades and installation'), [
             E('div', { 'class': 'cbi-section' }, [
                 exclude_prereleases,
                 E('br'), E('br'),
