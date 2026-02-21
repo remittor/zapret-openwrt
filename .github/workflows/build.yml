@@ -122,6 +122,7 @@ jobs:
   build:
     needs: [ check, var ]
     #if: needs.check.outputs.is_active == 'true'
+    name: "${{ matrix.branch }}: ${{ matrix.arch }}"
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
