@@ -3,7 +3,7 @@
 # NOTE: @ih requires nft 1.0.1+ and updated kernel version. it's confirmed to work on 5.15 (openwrt 23) and not work on 5.10 (openwrt 22)
 
 # can override in config :
-NFQWS_OPT_DESYNC_STUN="${NFQWS_OPT_DESYNC_STUN:---payload stun --lua-desync=fake:blob=0x00000000000000000000000000000000:repeats=2}"
+NFQWS_OPT_DESYNC_STUN="${NFQWS_OPT_DESYNC_STUN:---payload=stun --lua-desync=fake:blob=0x00000000000000000000000000000000:repeats=2}"
 
 alloc_dnum DNUM_STUN4ALL
 alloc_qnum QNUM_STUN4ALL
