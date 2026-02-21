@@ -96,10 +96,6 @@ if [ "$(head -c 2 "$TEST_SUITE_FN" 2>/dev/null)" != "$(printf '[\n')" ]; then
 	echo "ERROR: incorrect format of \"$TEST_SUITE_URL\""
 	return 19
 fi
-if [ "$(tail -c 2 "$TEST_SUITE_FN" 2>/dev/null)" != "$(printf ']\n')" ]; then
-	echo "ERROR: incorrect format of \"$TEST_SUITE_URL\""
-	return 19
-fi
 
 TEST_SUITE='
 	gosuslugi.ru          | @  |  40000 | https://gosuslugi.ru/__jsch/static/script.js
