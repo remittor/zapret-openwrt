@@ -53,7 +53,10 @@ else
 	LUA_LIBRARY:=-L$(STAGING_DIR)/usr/lib -llua$(LUA_VER)
 endif
 
-UPX_VER:=5.1.0
+UPX_VER:=4.2.4
+ifneq ($(filter riscv64,$(ARCH)),)
+  UPX_VER:=5.1.0
+endif
 UPX_URL:=https://github.com/upx/upx/releases/download/v$(UPX_VER)
 UPX_URL_FILE:=upx-$(UPX_VER)-amd64_linux.tar.xz
 UPX_TAR:=$(PKG_NAME)-$(UPX_URL_FILE)
@@ -171,7 +174,7 @@ define Build/Compile
 ifeq ($(USE_UPX),1)
 	@if [ -x "$(UPX_BIN)" ]; then \
 		echo "Packing nfqws2 with UPX"; \
-		$(UPX_BIN) --best --lzma --strip-relocs=0 --catch-sigsegv $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
+		$(UPX_BIN) --best --lzma --strip-relocs=0 $(PKG_BUILD_DIR)/$(MAKE_PATH)/nfqws2; \
 	else \
 		echo "WARNING: UPX not found, skipping packing"; \
 	fi
