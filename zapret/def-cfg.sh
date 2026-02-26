@@ -307,6 +307,7 @@ function set_cfg_nfqws_strat
 				--dpi-desync-fake-tls=0x0F0F0F0F
 				--dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
 				--dpi-desync-fake-tls-mod=rnd,dupsid,sni=ggpht.com
+				--dpi-desync-repeats=8
 				--dpi-desync-split-seqovl=620
 				--dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin
 				--dpi-desync-fooling=badsum,badseq
