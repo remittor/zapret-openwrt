@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-21T05:49:46Z",
+  "generated_at": "2026-02-26T08:32:51Z",
   "releases": [
     {
       "tag": "v0.9.20260221",
@@ -41,7 +41,7 @@
           "state": "uploaded",
           "size": 991435,
           "digest": "sha256:ac513c8c9d17de09fb67f3f92413719c8ca11cfe0a6551d90106afebe8d1ede1",
-          "download_count": 0,
+          "download_count": 4,
           "created_at": "2026-02-21T05:43:28Z",
           "updated_at": "2026-02-21T05:43:28Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v0.9.20260221/zapret2_v0.9.20260221_mips64_octeonplus.zip"

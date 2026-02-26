@@ -1,6 +1,16 @@
 {
-  "generated_at": "2026-02-21T05:49:46Z",
+  "generated_at": "2026-02-26T08:32:51Z",
   "releases": [
+    {
+      "tag": "v72.20260226",
+      "name": "zapret v72.20260226",
+      "prerelease": true,
+      "created_at": "2026-02-26T08:01:22Z",
+      "updated_at": "2026-02-26T08:32:36Z",
+      "published_at": "2026-02-26T08:32:36Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260226",
+      "assets": []
+    },
     {
       "tag": "v72.20260221",
       "name": "zapret v72.20260221",
@@ -71,7 +81,7 @@
           "state": "uploaded",
           "size": 213437,
           "digest": "sha256:f8063338979ea79d48a9767a4ff701bbf0f0ef6b13c6c17129e34f1c374524f0",
-          "download_count": 13,
+          "download_count": 16,
           "created_at": "2026-01-31T14:25:06Z",
           "updated_at": "2026-01-31T14:25:06Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260131/zapret_v72.20260131_riscv64_riscv64.zip"
@@ -118,7 +128,7 @@
           "state": "uploaded",
           "size": 213039,
           "digest": "sha256:543e17a319306e038d36ed6cfde2cc4daf8ca4121ded64142af907f20b115395",
-          "download_count": 13,
+          "download_count": 14,
           "created_at": "2026-01-28T17:35:35Z",
           "updated_at": "2026-01-28T17:35:35Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260128/zapret_v72.20260128_riscv64_riscv64.zip"
@@ -547,16 +557,6 @@
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_riscv64_riscv64.zip"
         }
       ]
-    },
-    {
-      "tag": "v72.20260108",
-      "name": "zapret v72.20260108",
-      "prerelease": false,
-      "created_at": "2026-01-08T16:57:07Z",
-      "updated_at": "2026-01-09T14:31:44Z",
-      "published_at": "2026-01-08T18:43:45Z",
-      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260108",
-      "assets": []
     }
   ]
 }
