@@ -475,13 +475,6 @@ if [ "$opt_update" != "" ]; then
 	fi
 	ZAP_PKG_DIR=/tmp/$ZAPRET_CFG_NAME-pkg
 	rm -rf $ZAP_PKG_DIR 2>/dev/null
-	ZAP_PKG_HDRS=$( curl -s -I -L --max-time $CURL_TIMEOUT -H "$CURL_HEADER2" "$ZAP_PKG_URL" )
-	ZAP_PKG_SIZE=$( echo "$ZAP_PKG_HDRS" | grep -i 'content-length: ' | tail -n1 | awk '{print $2}' | tr -d '\r' )
-	echo "Downloded ZIP-file size = $ZAP_PKG_SIZE bytes"
-	[ "$ZAP_PKG_SIZE" = "" ] || [[ $ZAP_PKG_SIZE -lt 256 ]] && {
-		echo "ERROR: incorrect package size!"
-		return 210
-	}
 	mkdir $ZAP_PKG_DIR
 	ZAP_PKG_FN="$ZAP_PKG_DIR/${ZAP_PKG_URL##*/}"
 	echo "Download ZIP-file..."
@@ -491,10 +484,11 @@ if [ "$opt_update" != "" ]; then
 		return 215
 	fi
 	ZAP_PKG_SZ=$( wc -c < "$ZAP_PKG_FN" )
-	if [ "$ZAP_PKG_SZ" != "$ZAP_PKG_SIZE" ]; then
-		echo "ERROR: downloaded package is incorrect! (size = $ZAP_PKG_SZ)"
-		return 216
-	fi
+	echo "Downloaded ZIP-file size = $ZAP_PKG_SZ bytes"
+	[ "$ZAP_PKG_SZ" -lt 256 ] && {
+		echo "ERROR: downloaded file is too small (size = $ZAP_PKG_SZ)!"
+		return 210
+	}
 	if ! command -v unzip >/dev/null 2>&1; then
 		if [ "$opt_forced" = true ]; then
 			unzip_install
