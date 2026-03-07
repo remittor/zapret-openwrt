@@ -116,7 +116,7 @@ jobs:
       - id: set
         run: |
           echo "IPK_BRANCH=v24.10.5" >> "$GITHUB_OUTPUT"
-          echo "APK_BRANCH=v25.12.0-rc2" >> "$GITHUB_OUTPUT"
+          echo "APK_BRANCH=v25.12.0" >> "$GITHUB_OUTPUT"
           echo "XXX_BRANCH=SNAPSHOT" >> "$GITHUB_OUTPUT"
 
   build:
