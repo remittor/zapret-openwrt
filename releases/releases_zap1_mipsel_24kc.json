@@ -1,6 +1,53 @@
 {
-  "generated_at": "2026-02-27T03:32:06Z",
+  "generated_at": "2026-03-07T06:08:43Z",
   "releases": [
+    {
+      "tag": "v72.20260307",
+      "name": "zapret v72.20260307",
+      "prerelease": true,
+      "created_at": "2026-03-07T05:28:58Z",
+      "updated_at": "2026-03-07T06:07:47Z",
+      "published_at": "2026-03-07T06:07:47Z",
+      "url": "https://github.com/remittor/zapret-openwrt/releases/tag/v72.20260307",
+      "assets": [
+        {
+          "url": "https://api.github.com/repos/remittor/zapret-openwrt/releases/assets/368754633",
+          "id": 368754633,
+          "node_id": "RA_kwDOM-Npcs4V-r_J",
+          "name": "zapret_v72.20260307_mipsel_24kc.zip",
+          "label": "",
+          "uploader": {
+            "login": "github-actions[bot]",
+            "id": 41898282,
+            "node_id": "MDM6Qm90NDE4OTgyODI=",
+            "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+            "html_url": "https://github.com/apps/github-actions",
+            "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+            "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+            "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+            "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+            "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+            "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+            "type": "Bot",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "content_type": "application/zip",
+          "state": "uploaded",
+          "size": 404157,
+          "digest": "sha256:40a01bdd9a851efc4f77277bf560d53aa3a282a2ce0883040f44b7f923d0db13",
+          "download_count": 0,
+          "created_at": "2026-03-07T06:07:46Z",
+          "updated_at": "2026-03-07T06:07:47Z",
+          "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260307/zapret_v72.20260307_mipsel_24kc.zip"
+        }
+      ]
+    },
     {
       "tag": "v72.20260226",
       "name": "zapret v72.20260226",
@@ -41,7 +88,7 @@
           "state": "uploaded",
           "size": 403831,
           "digest": "sha256:d501056de155de1913f7cb2f08b2104ee26e634ca6f226e69a4cec8a9d901292",
-          "download_count": 145,
+          "download_count": 1785,
           "created_at": "2026-02-26T08:32:35Z",
           "updated_at": "2026-02-26T08:32:36Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260226/zapret_v72.20260226_mipsel_24kc.zip"
@@ -88,7 +135,7 @@
           "state": "uploaded",
           "size": 403612,
           "digest": "sha256:2fad34628746ab9fa063997f8a992e72695d538222e09b0f9ea1bc42bd473d35",
-          "download_count": 1855,
+          "download_count": 1973,
           "created_at": "2026-02-21T05:13:53Z",
           "updated_at": "2026-02-21T05:13:53Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260221/zapret_v72.20260221_mipsel_24kc.zip"
@@ -135,7 +182,7 @@
           "state": "uploaded",
           "size": 419935,
           "digest": "sha256:851cfbddb368fc88d9a00e8f7644563647173492d507055c560a425fe0b6c71f",
-          "download_count": 3981,
+          "download_count": 3987,
           "created_at": "2026-02-07T07:07:23Z",
           "updated_at": "2026-02-07T07:07:24Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260207/zapret_v72.20260207_mipsel_24kc.zip"
@@ -182,7 +229,7 @@
           "state": "uploaded",
           "size": 418291,
           "digest": "sha256:d2c8e395bd4ec63ccb710b089ca18cbf67b7ddf18ffaf026a05741b6cf243e5f",
-          "download_count": 1359,
+          "download_count": 1360,
           "created_at": "2026-02-02T11:02:00Z",
           "updated_at": "2026-02-02T11:02:00Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260202/zapret_v72.20260202_mipsel_24kc.zip"
@@ -370,7 +417,7 @@
           "state": "uploaded",
           "size": 412396,
           "digest": "sha256:f91b71ed76e5786ba395a5d5f0c2d7ae7e5f6e6153c5f723f142c9e70872928d",
-          "download_count": 1097,
+          "download_count": 1098,
           "created_at": "2026-01-25T07:31:46Z",
           "updated_at": "2026-01-25T07:31:46Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260125/zapret_v72.20260125_mipsel_24kc.zip"
@@ -464,7 +511,7 @@
           "state": "uploaded",
           "size": 408750,
           "digest": "sha256:a1189e32576e67136e2efbb5307fa2aed6abab21c37062452373937fd2ef835d",
-          "download_count": 1121,
+          "download_count": 1122,
           "created_at": "2026-01-17T14:35:50Z",
           "updated_at": "2026-01-17T14:35:50Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260117/zapret_v72.20260117_mipsel_24kc.zip"
@@ -699,7 +746,7 @@
           "state": "uploaded",
           "size": 404230,
           "digest": "sha256:dd9bf0f7ecea7fd3f3e7076354c9fd26fedce8cfe9663416408878d90a70023a",
-          "download_count": 129,
+          "download_count": 131,
           "created_at": "2026-01-11T13:04:25Z",
           "updated_at": "2026-01-11T13:04:25Z",
           "browser_download_url": "https://github.com/remittor/zapret-openwrt/releases/download/v72.20260111/zapret_v72.20260111_mipsel_24kc.zip"
