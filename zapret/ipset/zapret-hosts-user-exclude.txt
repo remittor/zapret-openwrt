@@ -23,6 +23,13 @@ vk.ru
 vk.com
 yandex.ru
 ya.ru
+####################################
+max.ru
+web.max.ru
+st.max.ru
+calls.okcdn.ru
+i.oneme.ru
+ws-api.oneme.ru
 #################################### Epicgames
 easy.ac
 fab.com
