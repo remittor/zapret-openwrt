@@ -209,17 +209,17 @@ while IFS='|' read -r ID TAG COUNTRY PROVIDER TSIZE URL; do
 		if [ "$opt_dig" != "" ]; then
 			RESP=$( dig +time=2 +retry=1 $OPT_DIG_DNS +short "$DOMAIN" 2>&1 )
 			echo "$RESP"
-			DST_IP=$( echo "$RESP" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
+			DST_IP=$( echo "$RESP" | grep -Eo '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 )
 		else
 			CURL_TIMEOUTS="--connect-timeout 3 --max-time 4 --speed-time 4 --speed-limit 1"
 			RESP=$( curl -4 -I --no-progress-meter $CURL_TIMEOUTS -w '%{remote_ip}\n' "$URL" 2>&1 )
 			echo "$RESP"
-			DST_IP=$( echo "$RESP" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | tail -1 )
+			DST_IP=$( echo "$RESP" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | tail -1 )
 			if [ -z "$DST_IP" ]; then
 				echo "----------------------------------"
 				RESP=$( curl -4 --no-progress-meter $CURL_TIMEOUTS -r 0-0 -w '%{remote_ip}\n' "$URL" 2>&1 )
 				echo "$RESP"
-				DST_IP=$( echo "$RESP" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | tail -1 )
+				DST_IP=$( echo "$RESP" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | tail -1 )
 			fi
 		fi
 		if [ "$DST_IP" = "" ]; then
