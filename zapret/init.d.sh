@@ -1,6 +1,10 @@
 #!/bin/sh /etc/rc.common
 # Copyright (c) 2024 remittor
 
+# check if script is running during the image creation process (Image Builder).
+# $IPKG_INSTROOT is used by opkg, $ROOT is used by apk:
+[ -n "$IPKG_INSTROOT" ] || [ -n "$ROOT" ] && exit 0
+
 USE_PROCD=1
 # after network
 START=21
