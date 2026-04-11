@@ -55,7 +55,6 @@ body:
         - **OpenWrt версия**: 
         - **Zapret версия**: 
         - **Роутер модель**: 
-      render: markdown
     validations:
       required: true
 
