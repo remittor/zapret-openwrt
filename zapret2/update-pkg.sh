@@ -551,7 +551,7 @@ if [ "$opt_update" != "" ]; then
 	if [ "$PKG_MGR" != "apk" ]; then
 		opkg install --force-reinstall "$ZAP_PKG_BASE_FN"
 	else
-		apk add --allow-untrusted --upgrade "$ZAP_PKG_BASE_FN"
+		apk add --allow-untrusted --upgrade --force-non-repository "$ZAP_PKG_BASE_FN"
 	fi
 	if [ $? -ne 0 ]; then
 		echo "ERROR: Failed to install package $ZAP_PKG_BASE_FN"
@@ -560,7 +560,7 @@ if [ "$opt_update" != "" ]; then
 	if [ "$PKG_MGR" != "apk" ]; then
 		opkg install --force-reinstall "$ZAP_PKG_LUCI_FN"
 	else
-		apk add --allow-untrusted --upgrade "$ZAP_PKG_LUCI_FN"
+		apk add --allow-untrusted --upgrade --force-non-repository "$ZAP_PKG_LUCI_FN"
 	fi
 	if [ $? -ne 0 ]; then
 		echo "ERROR: Failed to install package $ZAP_PKG_LUCI_FN"
