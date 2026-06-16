@@ -20,3 +20,7 @@
 * **Lightweight Efficiency:** Runs directly on your router, protecting all connected devices (TVs, smartphones, PCs) without requiring client-side software.
 * **Deep Packet Inspection Bypass:** Uses sophisticated techniques (like packet splitting, TLS SNI modification, and fragmentation) rather than tunneling, maintaining your full ISP connection speed.
 * **LuCI Integration:** Fully integrated into the OpenWrt web panel for easy configuration.
+
+## Donations
+
+[![Donations Page](https://github.com/andry81-cache/gh-content-static-cache/raw/master/common/badges/donate/donate.svg)](https://github.com/remittor/donate)
