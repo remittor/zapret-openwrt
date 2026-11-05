@@ -77,12 +77,26 @@ return baseclass.extend({
         expect: { '': {} }
     }),
 
-    callInitAction: rpc.declare({
+    callRcInit: rpc.declare({
+        object: 'rc',
+        method: 'init',
+        params: [ 'name', 'action' ],
+        reject: true
+    }),
+
+    callSetInitAction: rpc.declare({
         object: 'luci',
         method: 'setInitAction',
         params: [ 'name', 'action' ],
         expect: { result: false }
     }),
+
+    /* Current LuCI no longer has luci.setInitAction; rpcd's rc.init replaces it.
+       Fall back to the old call on systems where rc.init is missing. */
+    callInitAction: function(name, action) {
+        return this.callRcInit(name, action).then(() => true)
+            .catch(() => this.callSetInitAction(name, action));
+    },
 
     getSvcInfo: function(svc_name = null) {
         let name = (svc_name) ? svc_name : this.appName;
