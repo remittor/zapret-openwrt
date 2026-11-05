@@ -24,6 +24,7 @@
 			"uci": [ "zapret", "network" ],
 			"ubus": {
 				"luci": [ "getInitList", "setInitAction" ],
+				"rc": [ "init" ],
 				"service": [ "list" ]
 			}
 		},
